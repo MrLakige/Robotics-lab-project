@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/seventeen/catkin_ws/src/robotics/install/setup.sh
