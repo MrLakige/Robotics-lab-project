@@ -1,0 +1,10 @@
+#include <Eigen/Core>
+#include <Eigen/Geometry>
+#include <Eigen/LU>
+#include <Eigen/Cholesky>
+#include <Eigen/Householder>
+#include <Eigen/SVD>
+#include <Eigen/Eigenvalues>
+#include <Eigen/Sparse>
+#include <Eigen/Dense>
+#include <Eigen/Eigen>

@@ -1,0 +1,6 @@
+devel_space: /home/seventeen/catkin_ws/src/robotics/devel
+install: false
+install_space: /home/seventeen/catkin_ws/src/robotics/install
+profile: default
+source_space: /home/seventeen/catkin_ws/src/robotics/src
+workspace: /home/seventeen/catkin_ws/src/robotics
