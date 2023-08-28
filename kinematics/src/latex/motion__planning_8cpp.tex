@@ -1,0 +1,430 @@
+\doxysection{motion\+\_\+planning.\+cpp File Reference}
+\hypertarget{motion__planning_8cpp}{}\label{motion__planning_8cpp}\index{motion\_planning.cpp@{motion\_planning.cpp}}
+{\ttfamily \#include $<$ros/ros.\+h$>$}\newline
+{\ttfamily \#include $<$ros/package.\+h$>$}\newline
+{\ttfamily \#include $<$math.\+h$>$}\newline
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include $<$fstream$>$}\newline
+{\ttfamily \#include $<$string$>$}\newline
+{\ttfamily \#include $<$nlohmann/json.\+hpp$>$}\newline
+{\ttfamily \#include $<$vector$>$}\newline
+{\ttfamily \#include $<$control\+\_\+msgs/\+Follow\+Joint\+Trajectory\+Action.\+h$>$}\newline
+{\ttfamily \#include $<$actionlib/client/simple\+\_\+action\+\_\+client.\+h$>$}\newline
+{\ttfamily \#include $<$gazebo\+\_\+msgs/\+Model\+States.\+h$>$}\newline
+{\ttfamily \#include $<$Eigen/\+Core$>$}\newline
+{\ttfamily \#include $<$Eigen/\+Geometry$>$}\newline
+{\ttfamily \#include $<$control\+\_\+msgs/\+Gripper\+Command\+Action.\+h$>$}\newline
+{\ttfamily \#include $<$gazebo\+\_\+ros\+\_\+link\+\_\+attacher/\+Set\+Static.\+h$>$}\newline
+{\ttfamily \#include $<$gazebo\+\_\+ros\+\_\+link\+\_\+attacher/\+Attach.\+h$>$}\newline
+{\ttfamily \#include "{}geometry\+\_\+msgs/\+Pose.\+h"{}}\newline
+{\ttfamily \#include "{}controller.\+h"{}}\newline
+{\ttfamily \#include "{}../include/\+Joint\+Intollerance.\+h"{}}\newline
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structhome}{home}}
+\item 
+struct \mbox{\hyperlink{structmodel}{model}}
+\item 
+struct \mbox{\hyperlink{structlegoModel}{lego\+Model}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \mbox{\hyperlink{motion__planning_8cpp_a93bd26edda46ec582c9ec17577823af8}{INTERLOCKING\+\_\+\+OFFSET}}~0.\+019
+\item 
+\#define \mbox{\hyperlink{motion__planning_8cpp_a32b419581883e63f4e22913407b69974}{SAFE\+\_\+X}}~-\/0.\+40
+\item 
+\#define \mbox{\hyperlink{motion__planning_8cpp_adbd26c05e0ef4e04f6a462817af813e5}{SAFE\+\_\+Y}}~-\/0.\+13
+\item 
+\#define \mbox{\hyperlink{motion__planning_8cpp_aa644f8a136c44bb3f7d46f02a1f6813e}{SURFACE\+\_\+Z}}~0.\+774
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \mbox{\hyperlink{structhome}{home}} \mbox{\hyperlink{motion__planning_8cpp_a73f1c2d6e0359e2dfe36aacde6e26797}{home\+Position}}
+\item 
+typedef struct \mbox{\hyperlink{structhome}{home}} \mbox{\hyperlink{motion__planning_8cpp_adaf34cfaf69743d4157c7eee9a0a8f3b}{size\+Position}}
+\item 
+typedef struct \mbox{\hyperlink{structmodel}{model}} \mbox{\hyperlink{motion__planning_8cpp_ad81f7fac8a46794d554f6e95bd4a5003}{model}}
+\item 
+typedef struct \mbox{\hyperlink{structlegoModel}{lego\+Model}} \mbox{\hyperlink{motion__planning_8cpp_a313a49b894b93c8e0c3560f670ecfabf}{lego\+Model}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{motion__planning_8cpp_a912f732c364422f87a213033901d6b12}{for\+Models}} ()
+\begin{DoxyCompactList}\small\item\em Retrieves the center of the blocks by parsing JSON files. \end{DoxyCompactList}\item 
+string \mbox{\hyperlink{motion__planning_8cpp_a47ecb4cc53f6392a5a37d340a4c72c08}{get\+Gazebo\+Model\+Name}} (string model\+Name, geometry\+\_\+msgs\+::\+Pose vision\+Model\+Pose)
+\begin{DoxyCompactList}\small\item\em Retrieves the model name inside Gazebo (for link attacher plugin). \end{DoxyCompactList}\item 
+vector$<$ \mbox{\hyperlink{structlegoModel}{lego\+Model}} $>$ \mbox{\hyperlink{motion__planning_8cpp_a7dba2920cc050018bf4262d2a3b9dd2d}{get\+Legos\+Pos}} (bool vision=false)
+\begin{DoxyCompactList}\small\item\em Function to get the position of the lego model by reading vision topic. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{motion__planning_8cpp_a7810148ebe1bf77e5eedf5e830cff5f9}{set\+Gripper}} (float value)
+\begin{DoxyCompactList}\small\item\em Function to send and manage the gripper opening and closing. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{motion__planning_8cpp_a1d21571975bfb4f5da005c0c4c1aabab}{close\+Gripper}} (string gazebo\+Model\+Name, float closure=0.\+0)
+\begin{DoxyCompactList}\small\item\em Function to close the gripper. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{motion__planning_8cpp_a14e4f996ad38cd0f27f064aeb8450ac3}{compare\+Lego}} (const \mbox{\hyperlink{structlegoModel}{lego\+Model}} \&\mbox{\hyperlink{kinematics_8h_a0aa71a4242657b5bbd053dbeeb764303}{a}}, const \mbox{\hyperlink{structlegoModel}{lego\+Model}} \&b)
+\begin{DoxyCompactList}\small\item\em Comparator function to compare two lego models. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{motion__planning_8cpp_ab0578cac877c0d8c9f3f1622d77215f7}{open\+Gripper}} (string gazebo\+Model\+Name=NULL)
+\begin{DoxyCompactList}\small\item\em Function to open the gripper. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{motion__planning_8cpp_a8ccad88d9ca69023d571a9e42b4cc527}{set\+Model\+Fixed}} (string model\+Name)
+\begin{DoxyCompactList}\small\item\em Function to attach the block on the table and create the first level. \end{DoxyCompactList}\item 
+Eigen\+::\+Quaterniond \mbox{\hyperlink{motion__planning_8cpp_a2a1bb197facd9f66cb4d203b44b6d47a}{get\+Approach\+Quat}} (Eigen\+::\+Vector3d facing\+Direction, float approach\+Angle)
+\begin{DoxyCompactList}\small\item\em Function to realign the desired axis and angle. \end{DoxyCompactList}\item 
+Eigen\+::\+Vector3d \mbox{\hyperlink{motion__planning_8cpp_aa79979fa56ffb38b44fd9c64005966a5}{get\+Axis\+Facing\+Camera}} (Eigen\+::\+Quaterniond quat)
+\begin{DoxyCompactList}\small\item\em Function to retrieve the axis that faces the camera. \end{DoxyCompactList}\item 
+float \mbox{\hyperlink{motion__planning_8cpp_a997257652d846e1251bcf9e6532a57b4}{get\+Approach\+Angle}} (Eigen\+::\+Quaterniond model\+Quat, Eigen\+::\+Vector3d facing\+Direction)
+\begin{DoxyCompactList}\small\item\em Function to understand how to move the gripper to pick the object. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{motion__planning_8cpp_aeddb613a0996f72e0930f861756b44ea}{straighten}} (geometry\+\_\+msgs\+::\+Pose model\+Pose, string gazebo\+Model\+Name)
+\begin{DoxyCompactList}\small\item\em Function to straighten the model\textquotesingle{}s pose. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{motion__planning_8cpp_a0ddf1224851353fc92bfbff6f499fa97}{main}} (int argc, char \texorpdfstring{$\ast$}{*}argv\mbox{[}$\,$\mbox{]})
+\begin{DoxyCompactList}\small\item\em Main function for controlling the robotic arm to manipulate LEGO models. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+const double \mbox{\hyperlink{motion__planning_8cpp_ab94a203b2402bfb8f65af32a6ef297b6}{DEFAULT\+\_\+\+POS}} \mbox{[}3\mbox{]} = \{-\/0.\+1, -\/0.\+2, 1.\+2\}
+\item 
+const Eigen\+::\+Quaterniond \mbox{\hyperlink{motion__planning_8cpp_a5b28a9fc37caeaff2228920a7022da36}{DEFAULT\+\_\+\+QUAT}} = Eigen\+::\+Quaterniond(Eigen\+::\+Angle\+Axisd(M\+\_\+\+PI, Eigen\+::\+Vector3d(0,1,0)))
+\item 
+\mbox{\hyperlink{structmodel}{model}} \mbox{\hyperlink{motion__planning_8cpp_a4fc9b95fb2b00f7bca464c0ab71b1b9c}{MODELS\+\_\+\+INFO}} \mbox{[}$\,$\mbox{]}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Macro Definition Documentation}
+\Hypertarget{motion__planning_8cpp_a93bd26edda46ec582c9ec17577823af8}\label{motion__planning_8cpp_a93bd26edda46ec582c9ec17577823af8} 
+\index{motion\_planning.cpp@{motion\_planning.cpp}!INTERLOCKING\_OFFSET@{INTERLOCKING\_OFFSET}}
+\index{INTERLOCKING\_OFFSET@{INTERLOCKING\_OFFSET}!motion\_planning.cpp@{motion\_planning.cpp}}
+\doxysubsubsection{\texorpdfstring{INTERLOCKING\_OFFSET}{INTERLOCKING\_OFFSET}}
+{\footnotesize\ttfamily \#define INTERLOCKING\+\_\+\+OFFSET~0.\+019}
+
+\Hypertarget{motion__planning_8cpp_a32b419581883e63f4e22913407b69974}\label{motion__planning_8cpp_a32b419581883e63f4e22913407b69974} 
+\index{motion\_planning.cpp@{motion\_planning.cpp}!SAFE\_X@{SAFE\_X}}
+\index{SAFE\_X@{SAFE\_X}!motion\_planning.cpp@{motion\_planning.cpp}}
+\doxysubsubsection{\texorpdfstring{SAFE\_X}{SAFE\_X}}
+{\footnotesize\ttfamily \#define SAFE\+\_\+X~-\/0.\+40}
+
+\Hypertarget{motion__planning_8cpp_adbd26c05e0ef4e04f6a462817af813e5}\label{motion__planning_8cpp_adbd26c05e0ef4e04f6a462817af813e5} 
+\index{motion\_planning.cpp@{motion\_planning.cpp}!SAFE\_Y@{SAFE\_Y}}
+\index{SAFE\_Y@{SAFE\_Y}!motion\_planning.cpp@{motion\_planning.cpp}}
+\doxysubsubsection{\texorpdfstring{SAFE\_Y}{SAFE\_Y}}
+{\footnotesize\ttfamily \#define SAFE\+\_\+Y~-\/0.\+13}
+
+\Hypertarget{motion__planning_8cpp_aa644f8a136c44bb3f7d46f02a1f6813e}\label{motion__planning_8cpp_aa644f8a136c44bb3f7d46f02a1f6813e} 
+\index{motion\_planning.cpp@{motion\_planning.cpp}!SURFACE\_Z@{SURFACE\_Z}}
+\index{SURFACE\_Z@{SURFACE\_Z}!motion\_planning.cpp@{motion\_planning.cpp}}
+\doxysubsubsection{\texorpdfstring{SURFACE\_Z}{SURFACE\_Z}}
+{\footnotesize\ttfamily \#define SURFACE\+\_\+Z~0.\+774}
+
+
+
+\doxysubsection{Typedef Documentation}
+\Hypertarget{motion__planning_8cpp_a73f1c2d6e0359e2dfe36aacde6e26797}\label{motion__planning_8cpp_a73f1c2d6e0359e2dfe36aacde6e26797} 
+\index{motion\_planning.cpp@{motion\_planning.cpp}!homePosition@{homePosition}}
+\index{homePosition@{homePosition}!motion\_planning.cpp@{motion\_planning.cpp}}
+\doxysubsubsection{\texorpdfstring{homePosition}{homePosition}}
+{\footnotesize\ttfamily typedef struct \mbox{\hyperlink{structhome}{home}} \mbox{\hyperlink{motion__planning_8cpp_a73f1c2d6e0359e2dfe36aacde6e26797}{home\+Position}}}
+
+\Hypertarget{motion__planning_8cpp_a313a49b894b93c8e0c3560f670ecfabf}\label{motion__planning_8cpp_a313a49b894b93c8e0c3560f670ecfabf} 
+\index{motion\_planning.cpp@{motion\_planning.cpp}!legoModel@{legoModel}}
+\index{legoModel@{legoModel}!motion\_planning.cpp@{motion\_planning.cpp}}
+\doxysubsubsection{\texorpdfstring{legoModel}{legoModel}}
+{\footnotesize\ttfamily typedef struct \mbox{\hyperlink{structlegoModel}{lego\+Model}} \mbox{\hyperlink{structlegoModel}{lego\+Model}}}
+
+\Hypertarget{motion__planning_8cpp_ad81f7fac8a46794d554f6e95bd4a5003}\label{motion__planning_8cpp_ad81f7fac8a46794d554f6e95bd4a5003} 
+\index{motion\_planning.cpp@{motion\_planning.cpp}!model@{model}}
+\index{model@{model}!motion\_planning.cpp@{motion\_planning.cpp}}
+\doxysubsubsection{\texorpdfstring{model}{model}}
+{\footnotesize\ttfamily typedef struct \mbox{\hyperlink{structmodel}{model}} \mbox{\hyperlink{structmodel}{model}}}
+
+\Hypertarget{motion__planning_8cpp_adaf34cfaf69743d4157c7eee9a0a8f3b}\label{motion__planning_8cpp_adaf34cfaf69743d4157c7eee9a0a8f3b} 
+\index{motion\_planning.cpp@{motion\_planning.cpp}!sizePosition@{sizePosition}}
+\index{sizePosition@{sizePosition}!motion\_planning.cpp@{motion\_planning.cpp}}
+\doxysubsubsection{\texorpdfstring{sizePosition}{sizePosition}}
+{\footnotesize\ttfamily typedef struct \mbox{\hyperlink{structhome}{home}} \mbox{\hyperlink{motion__planning_8cpp_adaf34cfaf69743d4157c7eee9a0a8f3b}{size\+Position}}}
+
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{motion__planning_8cpp_a1d21571975bfb4f5da005c0c4c1aabab}\label{motion__planning_8cpp_a1d21571975bfb4f5da005c0c4c1aabab} 
+\index{motion\_planning.cpp@{motion\_planning.cpp}!closeGripper@{closeGripper}}
+\index{closeGripper@{closeGripper}!motion\_planning.cpp@{motion\_planning.cpp}}
+\doxysubsubsection{\texorpdfstring{closeGripper()}{closeGripper()}}
+{\footnotesize\ttfamily void close\+Gripper (\begin{DoxyParamCaption}\item[{string}]{gazebo\+Model\+Name,  }\item[{float}]{closure = {\ttfamily 0.0} }\end{DoxyParamCaption})}
+
+
+
+Function to close the gripper. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em gazebo\+Model\+Name} & The name of the model in Gazebo. \\
+\hline
+{\em closure} & The closure value for the gripper. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{motion__planning_8cpp_a14e4f996ad38cd0f27f064aeb8450ac3}\label{motion__planning_8cpp_a14e4f996ad38cd0f27f064aeb8450ac3} 
+\index{motion\_planning.cpp@{motion\_planning.cpp}!compareLego@{compareLego}}
+\index{compareLego@{compareLego}!motion\_planning.cpp@{motion\_planning.cpp}}
+\doxysubsubsection{\texorpdfstring{compareLego()}{compareLego()}}
+{\footnotesize\ttfamily bool compare\+Lego (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{structlegoModel}{lego\+Model}} \&}]{a,  }\item[{const \mbox{\hyperlink{structlegoModel}{lego\+Model}} \&}]{b }\end{DoxyParamCaption})}
+
+
+
+Comparator function to compare two lego models. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em a} & The first lego model. \\
+\hline
+{\em b} & The second lego model. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if the first model is greater than the second, false otherwise. 
+\end{DoxyReturn}
+\Hypertarget{motion__planning_8cpp_a912f732c364422f87a213033901d6b12}\label{motion__planning_8cpp_a912f732c364422f87a213033901d6b12} 
+\index{motion\_planning.cpp@{motion\_planning.cpp}!forModels@{forModels}}
+\index{forModels@{forModels}!motion\_planning.cpp@{motion\_planning.cpp}}
+\doxysubsubsection{\texorpdfstring{forModels()}{forModels()}}
+{\footnotesize\ttfamily void for\+Models (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Retrieves the center of the blocks by parsing JSON files. 
+
+\Hypertarget{motion__planning_8cpp_a997257652d846e1251bcf9e6532a57b4}\label{motion__planning_8cpp_a997257652d846e1251bcf9e6532a57b4} 
+\index{motion\_planning.cpp@{motion\_planning.cpp}!getApproachAngle@{getApproachAngle}}
+\index{getApproachAngle@{getApproachAngle}!motion\_planning.cpp@{motion\_planning.cpp}}
+\doxysubsubsection{\texorpdfstring{getApproachAngle()}{getApproachAngle()}}
+{\footnotesize\ttfamily float get\+Approach\+Angle (\begin{DoxyParamCaption}\item[{Eigen\+::\+Quaterniond}]{model\+Quat,  }\item[{Eigen\+::\+Vector3d}]{facing\+Direction }\end{DoxyParamCaption})}
+
+
+
+Function to understand how to move the gripper to pick the object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em model\+Quat} & The quaternion rapresenting the models orientation \\
+\hline
+{\em facing\+Direction} & The desired facing direction as a 3D vector \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The calcualted approach angle in radians 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em runtime\+\_\+error} & If the models fasing direction is invalid. \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{motion__planning_8cpp_a2a1bb197facd9f66cb4d203b44b6d47a}\label{motion__planning_8cpp_a2a1bb197facd9f66cb4d203b44b6d47a} 
+\index{motion\_planning.cpp@{motion\_planning.cpp}!getApproachQuat@{getApproachQuat}}
+\index{getApproachQuat@{getApproachQuat}!motion\_planning.cpp@{motion\_planning.cpp}}
+\doxysubsubsection{\texorpdfstring{getApproachQuat()}{getApproachQuat()}}
+{\footnotesize\ttfamily Eigen\+::\+Quaterniond get\+Approach\+Quat (\begin{DoxyParamCaption}\item[{Eigen\+::\+Vector3d}]{facing\+Direction,  }\item[{float}]{approach\+Angle }\end{DoxyParamCaption})}
+
+
+
+Function to realign the desired axis and angle. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em facing\+Direction} & The desired facing direction as a 3D vector \\
+\hline
+{\em approach\+Angle} & The desired approach angle in radiants ~\newline
+ \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The calculated quaternion for the realigning 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em runtime\+\_\+error} & If the models fasing direction is invalid. \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{motion__planning_8cpp_aa79979fa56ffb38b44fd9c64005966a5}\label{motion__planning_8cpp_aa79979fa56ffb38b44fd9c64005966a5} 
+\index{motion\_planning.cpp@{motion\_planning.cpp}!getAxisFacingCamera@{getAxisFacingCamera}}
+\index{getAxisFacingCamera@{getAxisFacingCamera}!motion\_planning.cpp@{motion\_planning.cpp}}
+\doxysubsubsection{\texorpdfstring{getAxisFacingCamera()}{getAxisFacingCamera()}}
+{\footnotesize\ttfamily Eigen\+::\+Vector3d get\+Axis\+Facing\+Camera (\begin{DoxyParamCaption}\item[{Eigen\+::\+Quaterniond}]{quat }\end{DoxyParamCaption})}
+
+
+
+Function to retrieve the axis that faces the camera. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em quat} & The quaternion presenting the orientation \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The calcualted axis vector facing the camera 
+\end{DoxyReturn}
+\Hypertarget{motion__planning_8cpp_a47ecb4cc53f6392a5a37d340a4c72c08}\label{motion__planning_8cpp_a47ecb4cc53f6392a5a37d340a4c72c08} 
+\index{motion\_planning.cpp@{motion\_planning.cpp}!getGazeboModelName@{getGazeboModelName}}
+\index{getGazeboModelName@{getGazeboModelName}!motion\_planning.cpp@{motion\_planning.cpp}}
+\doxysubsubsection{\texorpdfstring{getGazeboModelName()}{getGazeboModelName()}}
+{\footnotesize\ttfamily string get\+Gazebo\+Model\+Name (\begin{DoxyParamCaption}\item[{string}]{model\+Name,  }\item[{geometry\+\_\+msgs\+::\+Pose}]{vision\+Model\+Pose }\end{DoxyParamCaption})}
+
+
+
+Retrieves the model name inside Gazebo (for link attacher plugin). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em model\+Name} & The name of the model. \\
+\hline
+{\em vision\+Model\+Pose} & The pose of the model from vision. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The name of the model in Gazebo. 
+\end{DoxyReturn}
+
+\begin{DoxyExceptions}{Exceptions}
+{\em runtime\+\_\+error} & If the model is not found. \\
+\hline
+\end{DoxyExceptions}
+\Hypertarget{motion__planning_8cpp_a7dba2920cc050018bf4262d2a3b9dd2d}\label{motion__planning_8cpp_a7dba2920cc050018bf4262d2a3b9dd2d} 
+\index{motion\_planning.cpp@{motion\_planning.cpp}!getLegosPos@{getLegosPos}}
+\index{getLegosPos@{getLegosPos}!motion\_planning.cpp@{motion\_planning.cpp}}
+\doxysubsubsection{\texorpdfstring{getLegosPos()}{getLegosPos()}}
+{\footnotesize\ttfamily vector$<$ \mbox{\hyperlink{structlegoModel}{lego\+Model}} $>$ get\+Legos\+Pos (\begin{DoxyParamCaption}\item[{bool}]{vision = {\ttfamily false} }\end{DoxyParamCaption})}
+
+
+
+Function to get the position of the lego model by reading vision topic. 
+
+This function retrieves the position of lego models by reading from the vision topic. It waits for the specified topic message and then processes the data to populate a vector of \doxylink{structlegoModel}{lego\+Model} objects.
+
+
+\begin{DoxyParams}{Parameters}
+{\em vision} & Flag indicating whether to use vision topic for lego detection. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A vector of \doxylink{structlegoModel}{lego\+Model} objects containing lego positions. 
+\end{DoxyReturn}
+\Hypertarget{motion__planning_8cpp_a0ddf1224851353fc92bfbff6f499fa97}\label{motion__planning_8cpp_a0ddf1224851353fc92bfbff6f499fa97} 
+\index{motion\_planning.cpp@{motion\_planning.cpp}!main@{main}}
+\index{main@{main}!motion\_planning.cpp@{motion\_planning.cpp}}
+\doxysubsubsection{\texorpdfstring{main()}{main()}}
+{\footnotesize\ttfamily int main (\begin{DoxyParamCaption}\item[{int}]{argc,  }\item[{char \texorpdfstring{$\ast$}{*}}]{argv\mbox{[}$\,$\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+Main function for controlling the robotic arm to manipulate LEGO models. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em argc} & The number of command-\/line arguments. \\
+\hline
+{\em argv} & An array of command-\/line argument strings. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The exit status of the program. 
+\end{DoxyReturn}
+\Hypertarget{motion__planning_8cpp_ab0578cac877c0d8c9f3f1622d77215f7}\label{motion__planning_8cpp_ab0578cac877c0d8c9f3f1622d77215f7} 
+\index{motion\_planning.cpp@{motion\_planning.cpp}!openGripper@{openGripper}}
+\index{openGripper@{openGripper}!motion\_planning.cpp@{motion\_planning.cpp}}
+\doxysubsubsection{\texorpdfstring{openGripper()}{openGripper()}}
+{\footnotesize\ttfamily void open\+Gripper (\begin{DoxyParamCaption}\item[{string}]{gazebo\+Model\+Name = {\ttfamily NULL} }\end{DoxyParamCaption})}
+
+
+
+Function to open the gripper. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em gazebo\+Model\+Name} & The name of the model in Gazebo. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{motion__planning_8cpp_a7810148ebe1bf77e5eedf5e830cff5f9}\label{motion__planning_8cpp_a7810148ebe1bf77e5eedf5e830cff5f9} 
+\index{motion\_planning.cpp@{motion\_planning.cpp}!setGripper@{setGripper}}
+\index{setGripper@{setGripper}!motion\_planning.cpp@{motion\_planning.cpp}}
+\doxysubsubsection{\texorpdfstring{setGripper()}{setGripper()}}
+{\footnotesize\ttfamily void set\+Gripper (\begin{DoxyParamCaption}\item[{float}]{value }\end{DoxyParamCaption})}
+
+
+
+Function to send and manage the gripper opening and closing. 
+
+This function sends a command to open or close the gripper using an action client. It waits for the gripper action to complete and checks for success.
+
+
+\begin{DoxyParams}{Parameters}
+{\em value} & The desired position of the gripper (0.\+0 to 0.\+8). \\
+\hline
+\end{DoxyParams}
+\Hypertarget{motion__planning_8cpp_a8ccad88d9ca69023d571a9e42b4cc527}\label{motion__planning_8cpp_a8ccad88d9ca69023d571a9e42b4cc527} 
+\index{motion\_planning.cpp@{motion\_planning.cpp}!setModelFixed@{setModelFixed}}
+\index{setModelFixed@{setModelFixed}!motion\_planning.cpp@{motion\_planning.cpp}}
+\doxysubsubsection{\texorpdfstring{setModelFixed()}{setModelFixed()}}
+{\footnotesize\ttfamily void set\+Model\+Fixed (\begin{DoxyParamCaption}\item[{string}]{model\+Name }\end{DoxyParamCaption})}
+
+
+
+Function to attach the block on the table and create the first level. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em model\+Name} & The name of the model \\
+\hline
+\end{DoxyParams}
+\Hypertarget{motion__planning_8cpp_aeddb613a0996f72e0930f861756b44ea}\label{motion__planning_8cpp_aeddb613a0996f72e0930f861756b44ea} 
+\index{motion\_planning.cpp@{motion\_planning.cpp}!straighten@{straighten}}
+\index{straighten@{straighten}!motion\_planning.cpp@{motion\_planning.cpp}}
+\doxysubsubsection{\texorpdfstring{straighten()}{straighten()}}
+{\footnotesize\ttfamily void straighten (\begin{DoxyParamCaption}\item[{geometry\+\_\+msgs\+::\+Pose}]{model\+Pose,  }\item[{string}]{gazebo\+Model\+Name }\end{DoxyParamCaption})}
+
+
+
+Function to straighten the model\textquotesingle{}s pose. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em model\+Pose} & The pose of the model. \\
+\hline
+{\em gazebo\+Model\+Name} & The name of the model in Gazebo. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{motion__planning_8cpp_ab94a203b2402bfb8f65af32a6ef297b6}\label{motion__planning_8cpp_ab94a203b2402bfb8f65af32a6ef297b6} 
+\index{motion\_planning.cpp@{motion\_planning.cpp}!DEFAULT\_POS@{DEFAULT\_POS}}
+\index{DEFAULT\_POS@{DEFAULT\_POS}!motion\_planning.cpp@{motion\_planning.cpp}}
+\doxysubsubsection{\texorpdfstring{DEFAULT\_POS}{DEFAULT\_POS}}
+{\footnotesize\ttfamily const double DEFAULT\+\_\+\+POS\mbox{[}3\mbox{]} = \{-\/0.\+1, -\/0.\+2, 1.\+2\}}
+
+\Hypertarget{motion__planning_8cpp_a5b28a9fc37caeaff2228920a7022da36}\label{motion__planning_8cpp_a5b28a9fc37caeaff2228920a7022da36} 
+\index{motion\_planning.cpp@{motion\_planning.cpp}!DEFAULT\_QUAT@{DEFAULT\_QUAT}}
+\index{DEFAULT\_QUAT@{DEFAULT\_QUAT}!motion\_planning.cpp@{motion\_planning.cpp}}
+\doxysubsubsection{\texorpdfstring{DEFAULT\_QUAT}{DEFAULT\_QUAT}}
+{\footnotesize\ttfamily const Eigen\+::\+Quaterniond DEFAULT\+\_\+\+QUAT = Eigen\+::\+Quaterniond(Eigen\+::\+Angle\+Axisd(M\+\_\+\+PI, Eigen\+::\+Vector3d(0,1,0)))}
+
+\Hypertarget{motion__planning_8cpp_a4fc9b95fb2b00f7bca464c0ab71b1b9c}\label{motion__planning_8cpp_a4fc9b95fb2b00f7bca464c0ab71b1b9c} 
+\index{motion\_planning.cpp@{motion\_planning.cpp}!MODELS\_INFO@{MODELS\_INFO}}
+\index{MODELS\_INFO@{MODELS\_INFO}!motion\_planning.cpp@{motion\_planning.cpp}}
+\doxysubsubsection{\texorpdfstring{MODELS\_INFO}{MODELS\_INFO}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structmodel}{model}} MODELS\+\_\+\+INFO\mbox{[}$\,$\mbox{]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ \{}
+\DoxyCodeLine{\ \ \ \ \{\textcolor{stringliteral}{"{}X1-\/Y2-\/Z1"{}},\ \{0.264589,\ -\/0.293903,\ 0.777\}\},\ }
+\DoxyCodeLine{\ \ \ \ \{\textcolor{stringliteral}{"{}X2-\/Y2-\/Z2"{}},\ \{0.277866,\ -\/0.724482,\ 0.777\}\},\ }
+\DoxyCodeLine{\ \ \ \ \{\textcolor{stringliteral}{"{}X1-\/Y3-\/Z2"{}},\ \{0.268053,\ -\/0.513924,\ 0.777\}\},\ }
+\DoxyCodeLine{\ \ \ \ \{\textcolor{stringliteral}{"{}X1-\/Y2-\/Z2"{}},\ \{0.429198,\ -\/0.293903,\ 0.777\}\},\ }
+\DoxyCodeLine{\ \ \ \ \{\textcolor{stringliteral}{"{}X1-\/Y2-\/Z2-\/CHAMFER"{}},\ \{0.592619,\ -\/0.293903,\ 0.777\}\},\ }
+\DoxyCodeLine{\ \ \ \ \{\textcolor{stringliteral}{"{}X1-\/Y4-\/Z2"{}},\ \{0.108812,\ -\/0.716057,\ 0.777\}\},\ }
+\DoxyCodeLine{\ \ \ \ \{\textcolor{stringliteral}{"{}X1-\/Y1-\/Z2"{}},\ \{0.088808,\ -\/0.295820,\ 0.777\}\},\ }
+\DoxyCodeLine{\ \ \ \ \{\textcolor{stringliteral}{"{}X1-\/Y2-\/Z2-\/TWINFILLET"{}},\ \{0.103547,\ -\/0.501132,\ 0.777\}\},\ }
+\DoxyCodeLine{\ \ \ \ \{\textcolor{stringliteral}{"{}X1-\/Y3-\/Z2-\/FILLET"{}},\ \{0.433739,\ -\/0.507130,\ 0.777\}\},\ }
+\DoxyCodeLine{\ \ \ \ \{\textcolor{stringliteral}{"{}X1-\/Y4-\/Z1"{}},\ \{0.589908,\ -\/0.501033,\ 0.777\}\},\ }
+\DoxyCodeLine{\ \ \ \ \{\textcolor{stringliteral}{"{}X2-\/Y2-\/Z2-\/FILLET"{}},\ \{0.442505,\ -\/0.727271,\ 0.777\}\}}
+\DoxyCodeLine{\}}
+
+\end{DoxyCode}

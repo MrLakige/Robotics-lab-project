@@ -1,0 +1,154 @@
+\doxysection{/home/seventeen/trento\+\_\+lab\+\_\+home/robot\+\_\+project/kinematics/include/kinematics.h File Reference}
+\hypertarget{kinematics_8h}{}\label{kinematics_8h}\index{/home/seventeen/trento\_lab\_home/robot\_project/kinematics/include/kinematics.h@{/home/seventeen/trento\_lab\_home/robot\_project/kinematics/include/kinematics.h}}
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include "{}Eigen/\+Dense"{}}\newline
+{\ttfamily \#include $<$cmath$>$}\newline
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structreturnValues}{return\+Values}}
+\end{DoxyCompactItemize}
+\doxysubsubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+Matrix4d \mbox{\hyperlink{kinematics_8h_a195e50d7ebfbb9b40143adfe95df0b25}{AH}} (int n, Vector\+Xd \&th)
+\begin{DoxyCompactList}\small\item\em Compute the homogeneous transformation matrix of the N-\/th joint of the Robotic arm (using the Denavit-\/\+Hartenberg transformation). \end{DoxyCompactList}\item 
+Matrix4d \mbox{\hyperlink{kinematics_8h_a2c348e84b47543ec591639276aded398}{forward\+Kinematics}} (double th\mbox{[}6\mbox{]})
+\begin{DoxyCompactList}\small\item\em Compute the forward kinematics of the robotic arm, allowing retrieval of the gripper position with respect to the base. \end{DoxyCompactList}\item 
+Matrix$<$ double, 6, 8 $>$ \mbox{\hyperlink{kinematics_8h_a8792f24766a212d5277628e4a8336cd3}{inverse\+Kinematics}} (Matrix4d \&desired\+\_\+position)
+\begin{DoxyCompactList}\small\item\em Compute the inverse kinematics of the robotic arm, allowing retrieval of joint positions. \end{DoxyCompactList}\item 
+Matrix$<$ double, 6, 1 $>$ \mbox{\hyperlink{kinematics_8h_a1d7a10fab31bbdeadd77aab6d9c74bb3}{get\+Joints}} (double x, double y, double z, Matrix3d rot)
+\begin{DoxyCompactList}\small\item\em Function to retrieve one of the possible solutions to reach the desired gripper position. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structreturnValues}{return\+Values}} \mbox{\hyperlink{kinematics_8h_aca35fdf9e66726efcb56a5c39dc096d2}{get\+Pose}} (std\+::vector$<$ double $>$ joints)
+\begin{DoxyCompactList}\small\item\em Function to retrieve the gripper position and orientation given joint angles. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+const double \mbox{\hyperlink{kinematics_8h_a9b47e698ccc58136b6d27f5c69715c9f}{d}} \mbox{[}6\mbox{]} = \{0.\+089159, 0.\+00000, 0.\+00000, 0.\+10915, 0.\+09465, 0.\+0903 + 0.\+1628\}
+\item 
+const double \mbox{\hyperlink{kinematics_8h_a0aa71a4242657b5bbd053dbeeb764303}{a}} \mbox{[}6\mbox{]} = \{0.\+00000, -\/0.\+42500, -\/0.\+39225, 0.\+00000, 0.\+00000, 0.\+0000\}
+\item 
+const double \mbox{\hyperlink{kinematics_8h_a555fb1b756eb7a7521515f52ecbd9249}{alph}} \mbox{[}6\mbox{]} = \{M\+\_\+\+PI/2, 0, 0, M\+\_\+\+PI/2, -\/M\+\_\+\+PI/2, 0\}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\Hypertarget{kinematics_8h_a195e50d7ebfbb9b40143adfe95df0b25}\label{kinematics_8h_a195e50d7ebfbb9b40143adfe95df0b25} 
+\index{kinematics.h@{kinematics.h}!AH@{AH}}
+\index{AH@{AH}!kinematics.h@{kinematics.h}}
+\doxysubsubsection{\texorpdfstring{AH()}{AH()}}
+{\footnotesize\ttfamily Matrix4d AH (\begin{DoxyParamCaption}\item[{int}]{n,  }\item[{Vector\+Xd \&}]{th }\end{DoxyParamCaption})}
+
+
+
+Compute the homogeneous transformation matrix of the N-\/th joint of the Robotic arm (using the Denavit-\/\+Hartenberg transformation). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em n} & The joint index (1-\/based) for which to compute the transformation matrix. \\
+\hline
+{\em th} & The vector of joint angles. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The transformation matrix for the N-\/th joint. 
+\end{DoxyReturn}
+\Hypertarget{kinematics_8h_a2c348e84b47543ec591639276aded398}\label{kinematics_8h_a2c348e84b47543ec591639276aded398} 
+\index{kinematics.h@{kinematics.h}!forwardKinematics@{forwardKinematics}}
+\index{forwardKinematics@{forwardKinematics}!kinematics.h@{kinematics.h}}
+\doxysubsubsection{\texorpdfstring{forwardKinematics()}{forwardKinematics()}}
+{\footnotesize\ttfamily Matrix4d forward\+Kinematics (\begin{DoxyParamCaption}\item[{double}]{th\mbox{[}6\mbox{]} }\end{DoxyParamCaption})}
+
+
+
+Compute the forward kinematics of the robotic arm, allowing retrieval of the gripper position with respect to the base. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em th} & An array of 6 joint angles. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The transformation matrix representing the gripper\textquotesingle{}s position and orientation. 
+\end{DoxyReturn}
+\Hypertarget{kinematics_8h_a1d7a10fab31bbdeadd77aab6d9c74bb3}\label{kinematics_8h_a1d7a10fab31bbdeadd77aab6d9c74bb3} 
+\index{kinematics.h@{kinematics.h}!getJoints@{getJoints}}
+\index{getJoints@{getJoints}!kinematics.h@{kinematics.h}}
+\doxysubsubsection{\texorpdfstring{getJoints()}{getJoints()}}
+{\footnotesize\ttfamily Matrix$<$ double, 6, 1 $>$ get\+Joints (\begin{DoxyParamCaption}\item[{double}]{x,  }\item[{double}]{y,  }\item[{double}]{z,  }\item[{Matrix3d}]{rot }\end{DoxyParamCaption})}
+
+
+
+Function to retrieve one of the possible solutions to reach the desired gripper position. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em x} & X-\/coordinate of the desired position. \\
+\hline
+{\em y} & Y-\/coordinate of the desired position. \\
+\hline
+{\em z} & Z-\/coordinate of the desired position. \\
+\hline
+{\em rot} & Rotation matrix representing the desired orientation. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A vector of joint angles representing a solution to achieve the desired position. 
+\end{DoxyReturn}
+\Hypertarget{kinematics_8h_aca35fdf9e66726efcb56a5c39dc096d2}\label{kinematics_8h_aca35fdf9e66726efcb56a5c39dc096d2} 
+\index{kinematics.h@{kinematics.h}!getPose@{getPose}}
+\index{getPose@{getPose}!kinematics.h@{kinematics.h}}
+\doxysubsubsection{\texorpdfstring{getPose()}{getPose()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structreturnValues}{return\+Values}} get\+Pose (\begin{DoxyParamCaption}\item[{std\+::vector$<$ double $>$}]{joints }\end{DoxyParamCaption})}
+
+
+
+Function to retrieve the gripper position and orientation given joint angles. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em joints} & A vector containing the joint angles. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+An instance of the \doxylink{structreturnValues}{return\+Values} struct containing the gripper\textquotesingle{}s position and orientation. 
+\end{DoxyReturn}
+\Hypertarget{kinematics_8h_a8792f24766a212d5277628e4a8336cd3}\label{kinematics_8h_a8792f24766a212d5277628e4a8336cd3} 
+\index{kinematics.h@{kinematics.h}!inverseKinematics@{inverseKinematics}}
+\index{inverseKinematics@{inverseKinematics}!kinematics.h@{kinematics.h}}
+\doxysubsubsection{\texorpdfstring{inverseKinematics()}{inverseKinematics()}}
+{\footnotesize\ttfamily Matrix$<$ double, 6, 8 $>$ inverse\+Kinematics (\begin{DoxyParamCaption}\item[{Matrix4d \&}]{desired\+\_\+position }\end{DoxyParamCaption})}
+
+
+
+Compute the inverse kinematics of the robotic arm, allowing retrieval of joint positions. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em desired\+\_\+position} & The desired gripper position and orientation. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A matrix containing multiple solutions for joint angles to achieve the desired position. 
+\end{DoxyReturn}
+
+
+\doxysubsection{Variable Documentation}
+\Hypertarget{kinematics_8h_a0aa71a4242657b5bbd053dbeeb764303}\label{kinematics_8h_a0aa71a4242657b5bbd053dbeeb764303} 
+\index{kinematics.h@{kinematics.h}!a@{a}}
+\index{a@{a}!kinematics.h@{kinematics.h}}
+\doxysubsubsection{\texorpdfstring{a}{a}}
+{\footnotesize\ttfamily const double a\mbox{[}6\mbox{]} = \{0.\+00000, -\/0.\+42500, -\/0.\+39225, 0.\+00000, 0.\+00000, 0.\+0000\}}
+
+\Hypertarget{kinematics_8h_a555fb1b756eb7a7521515f52ecbd9249}\label{kinematics_8h_a555fb1b756eb7a7521515f52ecbd9249} 
+\index{kinematics.h@{kinematics.h}!alph@{alph}}
+\index{alph@{alph}!kinematics.h@{kinematics.h}}
+\doxysubsubsection{\texorpdfstring{alph}{alph}}
+{\footnotesize\ttfamily const double alph\mbox{[}6\mbox{]} = \{M\+\_\+\+PI/2, 0, 0, M\+\_\+\+PI/2, -\/M\+\_\+\+PI/2, 0\}}
+
+\Hypertarget{kinematics_8h_a9b47e698ccc58136b6d27f5c69715c9f}\label{kinematics_8h_a9b47e698ccc58136b6d27f5c69715c9f} 
+\index{kinematics.h@{kinematics.h}!d@{d}}
+\index{d@{d}!kinematics.h@{kinematics.h}}
+\doxysubsubsection{\texorpdfstring{d}{d}}
+{\footnotesize\ttfamily const double d\mbox{[}6\mbox{]} = \{0.\+089159, 0.\+00000, 0.\+00000, 0.\+10915, 0.\+09465, 0.\+0903 + 0.\+1628\}}
+

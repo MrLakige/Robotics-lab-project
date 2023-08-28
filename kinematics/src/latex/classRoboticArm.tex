@@ -1,0 +1,243 @@
+\doxysection{Robotic\+Arm Class Reference}
+\hypertarget{classRoboticArm}{}\label{classRoboticArm}\index{RoboticArm@{RoboticArm}}
+
+
+{\ttfamily \#include $<$controller.\+h$>$}
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classRoboticArm_a6cd6609b9be9f23744b1760820b6b026}{Robotic\+Arm}} ()
+\begin{DoxyCompactList}\small\item\em Constructor for the \doxylink{classRoboticArm}{Robotic\+Arm} class. Initializes the arm\textquotesingle{}s features, topics, and publishers. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classRoboticArm_a6fbc538d06a374bce6615758b7c819c1}{move}} (double dx=0, double dy=0, double dz=0, const Eigen\+::\+Quaterniond \&delta\+Quat=Quaterniond(1, 0, 0, 0), bool blocking=true)
+\begin{DoxyCompactList}\small\item\em Move the robotic arm by a specified amount. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classRoboticArm_a9065b77d6131fa934068a9e182a66293}{move\+To}} (double x=std\+::nan("{}"{}), double y=std\+::nan("{}"{}), double z=std\+::nan("{}"{}), const Eigen\+::\+Quaterniond \&target\+Quat=Quaterniond(1, 0, 0, 0), double z\+Raise=0.\+0, bool blocking=true)
+\begin{DoxyCompactList}\small\item\em Move the robotic arm to a desired position. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classRoboticArm_a7fbab5ad358cb9f8133b9b7883811d18}{send\+Joints}} (double x, double y, double z, const Eigen\+::\+Quaterniond \&quat, double duration=1.\+0)
+\begin{DoxyCompactList}\small\item\em Send joint trajectory points to the robotic arm. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classRoboticArm_aa697f117a76589db32e84c2efd64d53f}{wait\+For\+Position}} (double tollerance\+Pos=0.\+01, double tollerance\+Vel=0.\+01, double timeout=2.\+0)
+\begin{DoxyCompactList}\small\item\em Wait for the robotic arm to reach the desired position. \end{DoxyCompactList}\item 
+control\+\_\+msgs\+::\+Joint\+Trajectory\+Controller\+State \mbox{\hyperlink{classRoboticArm_a80f500c23952d03554cf928b525b061c}{get\+Controller\+State}} (std\+::string \mbox{\hyperlink{classRoboticArm_a0dddd30f4dbca90927e07b5c24e2ccdc}{controller\+Topic}}, double timeout=0)
+\begin{DoxyCompactList}\small\item\em Get the current state of the controller. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+double \mbox{\hyperlink{classRoboticArm_ad3ad2bdda1d9e25d14c727de1f9a40b1}{gripper\+State}}
+\item 
+std\+::string \mbox{\hyperlink{classRoboticArm_a0dddd30f4dbca90927e07b5c24e2ccdc}{controller\+Topic}}
+\item 
+std\+::string \mbox{\hyperlink{classRoboticArm_afe80ece009ac9762ba1552aa0a5cc325}{joints\+Names}} \mbox{[}6\mbox{]}
+\item 
+trajectory\+\_\+msgs\+::\+Joint\+Trajectory \mbox{\hyperlink{classRoboticArm_a1ef175b953ea3769e3a8117c03ec341f}{default\+\_\+joint\+\_\+trajectory}}
+\item 
+control\+\_\+msgs\+::\+Joint\+Trajectory\+Controller\+State \mbox{\hyperlink{classRoboticArm_a08990903dbee8673e45dfdea9ac53ca2}{Joint\+State}}
+\item 
+std\+::vector$<$ double $>$ \mbox{\hyperlink{classRoboticArm_aaec21bbf6e515671fd45c482ab29b054}{Pose}}
+\item 
+std\+::pair$<$ Eigen\+::\+Vector3d, Quaterniond $>$ \mbox{\hyperlink{classRoboticArm_a873eade76b844c1e1c24ab1818d9a25b}{gripper\+Pose}}
+\item 
+ros\+::\+Node\+Handle \mbox{\hyperlink{classRoboticArm_a6edb2f29fd6390175b8b8a1c26b6335a}{nh}}
+\item 
+ros\+::\+Publisher \mbox{\hyperlink{classRoboticArm_ab7bd93a5de6e43b2248b80ae723e5497}{joints\+Pub}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{classRoboticArm_a6cd6609b9be9f23744b1760820b6b026}\label{classRoboticArm_a6cd6609b9be9f23744b1760820b6b026} 
+\index{RoboticArm@{RoboticArm}!RoboticArm@{RoboticArm}}
+\index{RoboticArm@{RoboticArm}!RoboticArm@{RoboticArm}}
+\doxysubsubsection{\texorpdfstring{RoboticArm()}{RoboticArm()}}
+{\footnotesize\ttfamily Robotic\+Arm\+::\+Robotic\+Arm (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Constructor for the \doxylink{classRoboticArm}{Robotic\+Arm} class. Initializes the arm\textquotesingle{}s features, topics, and publishers. 
+
+
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{classRoboticArm_a80f500c23952d03554cf928b525b061c}\label{classRoboticArm_a80f500c23952d03554cf928b525b061c} 
+\index{RoboticArm@{RoboticArm}!getControllerState@{getControllerState}}
+\index{getControllerState@{getControllerState}!RoboticArm@{RoboticArm}}
+\doxysubsubsection{\texorpdfstring{getControllerState()}{getControllerState()}}
+{\footnotesize\ttfamily control\+\_\+msgs\+::\+Joint\+Trajectory\+Controller\+State Robotic\+Arm\+::get\+Controller\+State (\begin{DoxyParamCaption}\item[{std\+::string}]{controller\+Topic,  }\item[{double}]{timeout = {\ttfamily 0} }\end{DoxyParamCaption})}
+
+
+
+Get the current state of the controller. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em controller\+Topic} & Topic of the controller. \\
+\hline
+{\em timeout} & Timeout duration in seconds. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Controller state message. 
+\end{DoxyReturn}
+\Hypertarget{classRoboticArm_a6fbc538d06a374bce6615758b7c819c1}\label{classRoboticArm_a6fbc538d06a374bce6615758b7c819c1} 
+\index{RoboticArm@{RoboticArm}!move@{move}}
+\index{move@{move}!RoboticArm@{RoboticArm}}
+\doxysubsubsection{\texorpdfstring{move()}{move()}}
+{\footnotesize\ttfamily void Robotic\+Arm\+::move (\begin{DoxyParamCaption}\item[{double}]{dx = {\ttfamily 0},  }\item[{double}]{dy = {\ttfamily 0},  }\item[{double}]{dz = {\ttfamily 0},  }\item[{const Eigen\+::\+Quaterniond \&}]{delta\+Quat = {\ttfamily Quaterniond(1,~0,~0,~0)},  }\item[{bool}]{blocking = {\ttfamily true} }\end{DoxyParamCaption})}
+
+
+
+Move the robotic arm by a specified amount. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em dx} & Change in x-\/coordinate. \\
+\hline
+{\em dy} & Change in y-\/coordinate. \\
+\hline
+{\em dz} & Change in z-\/coordinate. \\
+\hline
+{\em delta\+Quat} & Change in orientation as a Quaternion. \\
+\hline
+{\em blocking} & If true, the function will block until movement is complete. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classRoboticArm_a9065b77d6131fa934068a9e182a66293}\label{classRoboticArm_a9065b77d6131fa934068a9e182a66293} 
+\index{RoboticArm@{RoboticArm}!moveTo@{moveTo}}
+\index{moveTo@{moveTo}!RoboticArm@{RoboticArm}}
+\doxysubsubsection{\texorpdfstring{moveTo()}{moveTo()}}
+{\footnotesize\ttfamily void Robotic\+Arm\+::move\+To (\begin{DoxyParamCaption}\item[{double}]{x = {\ttfamily std\+:\+:nan("{}"{})},  }\item[{double}]{y = {\ttfamily std\+:\+:nan("{}"{})},  }\item[{double}]{z = {\ttfamily std\+:\+:nan("{}"{})},  }\item[{const Eigen\+::\+Quaterniond \&}]{target\+Quat = {\ttfamily Quaterniond(1,~0,~0,~0)},  }\item[{double}]{z\+Raise = {\ttfamily 0.0},  }\item[{bool}]{blocking = {\ttfamily true} }\end{DoxyParamCaption})}
+
+
+
+Move the robotic arm to a desired position. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em x} & Desired x-\/coordinate. \\
+\hline
+{\em y} & Desired y-\/coordinate. \\
+\hline
+{\em z} & Desired z-\/coordinate. \\
+\hline
+{\em target\+Quat} & Target orientation as a Quaternion. \\
+\hline
+{\em z\+Raise} & Additional z-\/coordinate raise. \\
+\hline
+{\em blocking} & If true, the function will block until movement is complete. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classRoboticArm_a7fbab5ad358cb9f8133b9b7883811d18}\label{classRoboticArm_a7fbab5ad358cb9f8133b9b7883811d18} 
+\index{RoboticArm@{RoboticArm}!sendJoints@{sendJoints}}
+\index{sendJoints@{sendJoints}!RoboticArm@{RoboticArm}}
+\doxysubsubsection{\texorpdfstring{sendJoints()}{sendJoints()}}
+{\footnotesize\ttfamily void Robotic\+Arm\+::send\+Joints (\begin{DoxyParamCaption}\item[{double}]{x,  }\item[{double}]{y,  }\item[{double}]{z,  }\item[{const Eigen\+::\+Quaterniond \&}]{quat,  }\item[{double}]{duration = {\ttfamily 1.0} }\end{DoxyParamCaption})}
+
+
+
+Send joint trajectory points to the robotic arm. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em x} & Desired x-\/coordinate. \\
+\hline
+{\em y} & Desired y-\/coordinate. \\
+\hline
+{\em z} & Desired z-\/coordinate. \\
+\hline
+{\em quat} & Target orientation as a Quaternion. \\
+\hline
+{\em duration} & Duration of the movement. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{classRoboticArm_aa697f117a76589db32e84c2efd64d53f}\label{classRoboticArm_aa697f117a76589db32e84c2efd64d53f} 
+\index{RoboticArm@{RoboticArm}!waitForPosition@{waitForPosition}}
+\index{waitForPosition@{waitForPosition}!RoboticArm@{RoboticArm}}
+\doxysubsubsection{\texorpdfstring{waitForPosition()}{waitForPosition()}}
+{\footnotesize\ttfamily void Robotic\+Arm\+::wait\+For\+Position (\begin{DoxyParamCaption}\item[{double}]{tollerance\+Pos = {\ttfamily 0.01},  }\item[{double}]{tollerance\+Vel = {\ttfamily 0.01},  }\item[{double}]{timeout = {\ttfamily 2.0} }\end{DoxyParamCaption})}
+
+
+
+Wait for the robotic arm to reach the desired position. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em tollerance\+Pos} & Position tolerance. \\
+\hline
+{\em tollerance\+Vel} & Velocity tolerance. \\
+\hline
+{\em timeout} & Timeout duration in seconds. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{classRoboticArm_a0dddd30f4dbca90927e07b5c24e2ccdc}\label{classRoboticArm_a0dddd30f4dbca90927e07b5c24e2ccdc} 
+\index{RoboticArm@{RoboticArm}!controllerTopic@{controllerTopic}}
+\index{controllerTopic@{controllerTopic}!RoboticArm@{RoboticArm}}
+\doxysubsubsection{\texorpdfstring{controllerTopic}{controllerTopic}}
+{\footnotesize\ttfamily std\+::string Robotic\+Arm\+::controller\+Topic}
+
+\Hypertarget{classRoboticArm_a1ef175b953ea3769e3a8117c03ec341f}\label{classRoboticArm_a1ef175b953ea3769e3a8117c03ec341f} 
+\index{RoboticArm@{RoboticArm}!default\_joint\_trajectory@{default\_joint\_trajectory}}
+\index{default\_joint\_trajectory@{default\_joint\_trajectory}!RoboticArm@{RoboticArm}}
+\doxysubsubsection{\texorpdfstring{default\_joint\_trajectory}{default\_joint\_trajectory}}
+{\footnotesize\ttfamily trajectory\+\_\+msgs\+::\+Joint\+Trajectory Robotic\+Arm\+::default\+\_\+joint\+\_\+trajectory}
+
+\Hypertarget{classRoboticArm_a873eade76b844c1e1c24ab1818d9a25b}\label{classRoboticArm_a873eade76b844c1e1c24ab1818d9a25b} 
+\index{RoboticArm@{RoboticArm}!gripperPose@{gripperPose}}
+\index{gripperPose@{gripperPose}!RoboticArm@{RoboticArm}}
+\doxysubsubsection{\texorpdfstring{gripperPose}{gripperPose}}
+{\footnotesize\ttfamily std\+::pair$<$Eigen\+::\+Vector3d, Quaterniond$>$ Robotic\+Arm\+::gripper\+Pose}
+
+\Hypertarget{classRoboticArm_ad3ad2bdda1d9e25d14c727de1f9a40b1}\label{classRoboticArm_ad3ad2bdda1d9e25d14c727de1f9a40b1} 
+\index{RoboticArm@{RoboticArm}!gripperState@{gripperState}}
+\index{gripperState@{gripperState}!RoboticArm@{RoboticArm}}
+\doxysubsubsection{\texorpdfstring{gripperState}{gripperState}}
+{\footnotesize\ttfamily double Robotic\+Arm\+::gripper\+State}
+
+\Hypertarget{classRoboticArm_afe80ece009ac9762ba1552aa0a5cc325}\label{classRoboticArm_afe80ece009ac9762ba1552aa0a5cc325} 
+\index{RoboticArm@{RoboticArm}!jointsNames@{jointsNames}}
+\index{jointsNames@{jointsNames}!RoboticArm@{RoboticArm}}
+\doxysubsubsection{\texorpdfstring{jointsNames}{jointsNames}}
+{\footnotesize\ttfamily std\+::string Robotic\+Arm\+::joints\+Names\mbox{[}6\mbox{]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}shoulder\_pan\_joint"{}},}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}shoulder\_lift\_joint"{}},}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}elbow\_joint"{}},}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}wrist\_1\_joint"{}},}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}wrist\_2\_joint"{}},}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}wrist\_3\_joint"{}}}
+\DoxyCodeLine{\ \ \ \ \}}
+
+\end{DoxyCode}
+\Hypertarget{classRoboticArm_ab7bd93a5de6e43b2248b80ae723e5497}\label{classRoboticArm_ab7bd93a5de6e43b2248b80ae723e5497} 
+\index{RoboticArm@{RoboticArm}!jointsPub@{jointsPub}}
+\index{jointsPub@{jointsPub}!RoboticArm@{RoboticArm}}
+\doxysubsubsection{\texorpdfstring{jointsPub}{jointsPub}}
+{\footnotesize\ttfamily ros\+::\+Publisher Robotic\+Arm\+::joints\+Pub}
+
+\Hypertarget{classRoboticArm_a08990903dbee8673e45dfdea9ac53ca2}\label{classRoboticArm_a08990903dbee8673e45dfdea9ac53ca2} 
+\index{RoboticArm@{RoboticArm}!JointState@{JointState}}
+\index{JointState@{JointState}!RoboticArm@{RoboticArm}}
+\doxysubsubsection{\texorpdfstring{JointState}{JointState}}
+{\footnotesize\ttfamily control\+\_\+msgs\+::\+Joint\+Trajectory\+Controller\+State Robotic\+Arm\+::\+Joint\+State}
+
+\Hypertarget{classRoboticArm_a6edb2f29fd6390175b8b8a1c26b6335a}\label{classRoboticArm_a6edb2f29fd6390175b8b8a1c26b6335a} 
+\index{RoboticArm@{RoboticArm}!nh@{nh}}
+\index{nh@{nh}!RoboticArm@{RoboticArm}}
+\doxysubsubsection{\texorpdfstring{nh}{nh}}
+{\footnotesize\ttfamily ros\+::\+Node\+Handle Robotic\+Arm\+::nh}
+
+\Hypertarget{classRoboticArm_aaec21bbf6e515671fd45c482ab29b054}\label{classRoboticArm_aaec21bbf6e515671fd45c482ab29b054} 
+\index{RoboticArm@{RoboticArm}!Pose@{Pose}}
+\index{Pose@{Pose}!RoboticArm@{RoboticArm}}
+\doxysubsubsection{\texorpdfstring{Pose}{Pose}}
+{\footnotesize\ttfamily std\+::vector$<$double$>$ Robotic\+Arm\+::\+Pose}
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+/home/seventeen/trento\+\_\+lab\+\_\+home/robot\+\_\+project/kinematics/include/\mbox{\hyperlink{controller_8h}{controller.\+h}}\item 
+\mbox{\hyperlink{controller_8cpp}{controller.\+cpp}}\end{DoxyCompactItemize}

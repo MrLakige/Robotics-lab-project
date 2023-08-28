@@ -1,0 +1,54 @@
+\doxysection{controller.\+h}
+\hypertarget{controller_8h_source}{}\label{controller_8h_source}\index{/home/seventeen/trento\_lab\_home/robot\_project/kinematics/include/controller.h@{/home/seventeen/trento\_lab\_home/robot\_project/kinematics/include/controller.h}}
+\mbox{\hyperlink{controller_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#ifndef\ CONTOLLER\_H}}
+\DoxyCodeLine{00002\ \textcolor{preprocessor}{\#define\ CONTOLLER\_H}}
+\DoxyCodeLine{00003\ }
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <cmath>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <algorithm>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ "{}ros/ros.h"{}}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ "{}EigenLib.h"{}}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ "{}\mbox{\hyperlink{kinematics_8h}{kinematics.h}}"{}}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ "{}control\_msgs/JointTrajectoryControllerState.h"{}}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ "{}trajectory\_msgs/JointTrajectory.h"{}}}
+\DoxyCodeLine{00011\ \textcolor{preprocessor}{\#include\ "{}geometry\_msgs/Pose.h"{}}}
+\DoxyCodeLine{00012\ }
+\DoxyCodeLine{00013\ \textcolor{keyword}{class\ }\mbox{\hyperlink{classRoboticArm}{RoboticArm}}\ \{}
+\DoxyCodeLine{00014\ }
+\DoxyCodeLine{00015\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00016\ }
+\DoxyCodeLine{00017\ \ \ \ \ \mbox{\hyperlink{classRoboticArm_a6cd6609b9be9f23744b1760820b6b026}{RoboticArm}}();}
+\DoxyCodeLine{00018\ }
+\DoxyCodeLine{00019\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classRoboticArm_a6fbc538d06a374bce6615758b7c819c1}{move}}(\textcolor{keywordtype}{double}\ dx=0,\ \textcolor{keywordtype}{double}\ dy=0,\ \textcolor{keywordtype}{double}\ dz=0,\ \textcolor{keyword}{const}\ Eigen::Quaterniond\&\ deltaQuat=Quaterniond(1,\ 0,\ 0,\ 0),\ \textcolor{keywordtype}{bool}\ blocking=\textcolor{keyword}{true});}
+\DoxyCodeLine{00020\ }
+\DoxyCodeLine{00021\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classRoboticArm_a9065b77d6131fa934068a9e182a66293}{moveTo}}(\textcolor{keywordtype}{double}\ x\ =\ std::nan(\textcolor{stringliteral}{"{}"{}}),\ \textcolor{keywordtype}{double}\ y\ =\ std::nan(\textcolor{stringliteral}{"{}"{}}),\ \textcolor{keywordtype}{double}\ z\ =\ std::nan(\textcolor{stringliteral}{"{}"{}}),\ \textcolor{keyword}{const}\ Eigen::Quaterniond\&\ targetQuat\ =\ Quaterniond(1,\ 0,\ 0,\ 0),\ \textcolor{keywordtype}{double}\ zRaise\ =\ 0.0,\ \textcolor{keywordtype}{bool}\ blocking\ =\ \textcolor{keyword}{true});}
+\DoxyCodeLine{00022\ }
+\DoxyCodeLine{00023\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classRoboticArm_a7fbab5ad358cb9f8133b9b7883811d18}{sendJoints}}(\textcolor{keywordtype}{double}\ x,\ \textcolor{keywordtype}{double}\ y,\ \textcolor{keywordtype}{double}\ z,\ \textcolor{keyword}{const}\ Eigen::Quaterniond\&\ quat,\ \textcolor{keywordtype}{double}\ duration=1.0);}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00025\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{classRoboticArm_aa697f117a76589db32e84c2efd64d53f}{waitForPosition}}(\textcolor{keywordtype}{double}\ \ tollerancePos=0.01,\ \textcolor{keywordtype}{double}\ tolleranceVel=0.01,\ \textcolor{keywordtype}{double}\ timeout=2.0);}
+\DoxyCodeLine{00026\ }
+\DoxyCodeLine{00027\ \ \ \ \ control\_msgs::JointTrajectoryControllerState\ \mbox{\hyperlink{classRoboticArm_a80f500c23952d03554cf928b525b061c}{getControllerState}}(std::string\ \mbox{\hyperlink{classRoboticArm_a0dddd30f4dbca90927e07b5c24e2ccdc}{controllerTopic}},\ \textcolor{keywordtype}{double}\ timeout=0);}
+\DoxyCodeLine{00028\ }
+\DoxyCodeLine{00029\ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{classRoboticArm_ad3ad2bdda1d9e25d14c727de1f9a40b1}{gripperState}};}
+\DoxyCodeLine{00030\ \ \ \ \ std::string\ \mbox{\hyperlink{classRoboticArm_a0dddd30f4dbca90927e07b5c24e2ccdc}{controllerTopic}};}
+\DoxyCodeLine{00031\ \ \ \ \ std::string\ \mbox{\hyperlink{classRoboticArm_afe80ece009ac9762ba1552aa0a5cc325}{jointsNames}}[6]\ \ =\ \{}
+\DoxyCodeLine{00032\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}shoulder\_pan\_joint"{}},}
+\DoxyCodeLine{00033\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}shoulder\_lift\_joint"{}},}
+\DoxyCodeLine{00034\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}elbow\_joint"{}},}
+\DoxyCodeLine{00035\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}wrist\_1\_joint"{}},}
+\DoxyCodeLine{00036\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}wrist\_2\_joint"{}},}
+\DoxyCodeLine{00037\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \textcolor{stringliteral}{"{}wrist\_3\_joint"{}}}
+\DoxyCodeLine{00038\ \ \ \ \ \};}
+\DoxyCodeLine{00039\ \ \ \ \ trajectory\_msgs::JointTrajectory\ \mbox{\hyperlink{classRoboticArm_a1ef175b953ea3769e3a8117c03ec341f}{default\_joint\_trajectory}};}
+\DoxyCodeLine{00040\ \ \ \ \ control\_msgs::JointTrajectoryControllerState\ \mbox{\hyperlink{classRoboticArm_a08990903dbee8673e45dfdea9ac53ca2}{JointState}};}
+\DoxyCodeLine{00041\ \ \ \ \ std::vector<double>\ \mbox{\hyperlink{classRoboticArm_aaec21bbf6e515671fd45c482ab29b054}{Pose}};}
+\DoxyCodeLine{00042\ \ \ \ \ std::pair<Eigen::Vector3d,\ Quaterniond>\ \mbox{\hyperlink{classRoboticArm_a873eade76b844c1e1c24ab1818d9a25b}{gripperPose}};}
+\DoxyCodeLine{00043\ \ \ \ \ ros::NodeHandle\ \mbox{\hyperlink{classRoboticArm_a6edb2f29fd6390175b8b8a1c26b6335a}{nh}};}
+\DoxyCodeLine{00044\ \ \ \ \ ros::Publisher\ \mbox{\hyperlink{classRoboticArm_ab7bd93a5de6e43b2248b80ae723e5497}{jointsPub}};}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \};}
+\DoxyCodeLine{00047\ }
+\DoxyCodeLine{00048\ \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}
