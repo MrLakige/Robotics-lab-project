@@ -12,7 +12,7 @@ from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
 from rospkg import RosPack # get abs path
 from os import path # get home path
-from gazebo_msgs.msg import ModelStates1
+from gazebo_msgs.msg import ModelStates
 from geometry_msgs.msg import *
 from pyquaternion import Quaternion as PyQuaternion
 
@@ -30,6 +30,7 @@ model_orientation = None
 
 mega_blocksClasses = ['X1-Y1-Z2', 'X1-Y2-Z1', 'X1-Y2-Z2', 'X1-Y2-Z2-CHAMFER', 'X1-Y2-Z2-TWINFILLET', 'X1-Y3-Z2', 'X1-Y3-Z2-FILLET', 'X1-Y4-Z1', 'X1-Y4-Z2', 'X2-Y2-Z2', 'X2-Y2-Z2-FILLET']
 
+# input argument
 argv = sys.argv
 a_show = '-show' in argv
 
@@ -103,11 +104,11 @@ def process_item(imgs, item):
     rgb, hsv, depth, img_draw = imgs
     #obtaining Yolo informations (class, coordinates, center)
     x1, y1, x2, y2, cn, cl, nm = item.values()
-    mar = 15
+    mar = 10
     x1, y1 = max(mar, x1), max(mar, y1)
     x2, y2 = min(rgb.shape[1]-mar, x2), min(rgb.shape[0]-mar, y2)
     boxMin = np.array((x1-mar, y1-mar))
-    x1, y1, x2, y2 = np.int0((x1, y1, x2, y2))
+    x1, y1, x2, y2 = np.int64((x1, y1, x2, y2))
 
     boxCenter = (y2 + y1) // 2, (x2 + x1) // 2
     color = get_mega_blocks_color(boxCenter, rgb)
@@ -168,7 +169,7 @@ def process_item(imgs, item):
         elif pinN == -1:
             nm = "{} -> {}".format(nm, "Target")
         else:
-            print("[Warning] Error in classification")
+            print("[Warning] Error 1 in classification")
     elif not isCorrect:
         ax = 1
         if cl in (0, 2, 5, 8) and pinN <= 4:    # X1-Y*-Z2, *1,2,3,4
@@ -178,7 +179,7 @@ def process_item(imgs, item):
         elif cl == 9 and pinN == 1:     # X2-Y2-Z2
             cl = 2                      # -> X1
             ax = 0
-        else: print("[Warning] Error in classification")
+        else: print("[Warning] Error 2 in classification")
     nm = mega_blocksClasses[cl]
 
     if n != 1:
@@ -214,10 +215,10 @@ def process_item(imgs, item):
     
     
     if l_size[0] <=3 or l_size[1] <=3:
-        cv.drawContours(img_draw, np.int0([l_box]), 0, (0,0,0), 2)
+        cv.drawContours(img_draw, np.int64([l_box]), 0, (0,0,0), 2)
         return None # filter out artifacts
     
-    if a_show: cv.drawContours(img_draw, np.int0([l_box]), 0, color, 2)
+    if a_show: cv.drawContours(img_draw, np.int64([l_box]), 0, color, 2)
     
 
     # silouette distorption
@@ -242,8 +243,8 @@ def process_item(imgs, item):
     l_center = (top_box[0] + top_box[2]) / 2
 
     if a_show:
-        cv.drawContours(img_draw, np.int0([top_box]), 0, (5,5,5), 2)
-        cv.circle(img_draw, np.int0(top_box[iver]),1, (0,0,255),1,cv.LINE_AA)    
+        cv.drawContours(img_draw, np.int64([top_box]), 0, (5,5,5), 2)
+        cv.circle(img_draw, np.int64(top_box[iver]),1, (0,0,255),1,cv.LINE_AA)    
 
 
 
@@ -284,13 +285,13 @@ def process_item(imgs, item):
             dirY /= np.linalg.norm(dirY)
             dirY = np.array((*dirY, 0))
             dirX = np.cross(dirZ, dirY)
-            if a_show: cv.circle(img_draw, np.int0(edgePin[iverFar]), 5, (70,10,50), 1)
-            #cv.line(img_draw, np.int0(l_center), np.int0(l_center+np.array([int(vx*100),int(vy*100)])),(0,0,255), 3)
+            if a_show: cv.circle(img_draw, np.int64(edgePin[iverFar]), 5, (70,10,50), 1)
+            #cv.line(img_draw, np.int64(l_center), np.int64(l_center+np.array([int(vx*100),int(vy*100)])),(0,0,255), 3)
         if ax == 1:
             dirY = np.array((0,0,1))
             dirX = np.cross(dirZ, dirY)
 
-        if a_show: cv.line(img_draw, *np.int0(edgePin), (255,255,0), 2)
+        if a_show: cv.line(img_draw, *np.int64(edgePin), (255,255,0), 2)
 
     l_center = point_inverse_distortption(l_center, l_height)
 
@@ -312,18 +313,18 @@ def process_item(imgs, item):
         unit_z = 0.031
         unit_x = 22 * 0.8039 / dist_tavolo
         x_to_z = lenFrame * unit_z/unit_x
-        center = np.int0(l_center)
+        center = np.int64(l_center)
 
         origin_from_top = origin - l_center
      
         endX = point_distorption(lenFrame * dirX[:2], x_to_z * dirX[2], origin_from_top)
-        frameX = (center, center + np.int0(endX))
+        frameX = (center, center + np.int64(endX))
 
         endY = point_distorption(lenFrame * dirY[:2], x_to_z * dirY[2], origin_from_top)
-        frameY = (center, center + np.int0(endY))
+        frameY = (center, center + np.int64(endY))
         
         endZ = point_distorption(lenFrame * dirZ[:2], x_to_z * dirZ[2], origin_from_top)
-        frameZ = (center, center + np.int0(endZ))
+        frameZ = (center, center + np.int64(endZ))
         
         cv.line(img_draw, *frameX, (0,0,255), 2)
         cv.line(img_draw, *frameY, (0,255,0), 2)
@@ -375,7 +376,7 @@ def process_item(imgs, item):
     msg.pose = Pose(Point(*xyz), Quaternion(x=rot.x,y=rot.y,z=rot.z,w=rot.w))
     
     #pub.publish(msg)
-    #print(msg)
+    print(msg)
     return msg
 
 
@@ -402,20 +403,31 @@ def process_image(rgb, depth):
         results = [process_item(imgs, item) for item in pandino]
     
     # ----
-
+    print("parsing message")
     msg = ModelStates()
     for point in results:
         if point is not None:
             msg.name.append(point.name)
             msg.pose.append(point.pose)
     pub.publish(msg)
+    print("message sent")
 
 
     if a_show:
-        cv.imshow("vision-results.png", img_draw)
-        cv.waitKey()
+        show_image("vision-results.png", img_draw, False, True)
 
     pass
+
+def show_image(title, image, resize=True, wait=False):
+    if resize:
+        cv.namedWindow(title, cv.WINDOW_NORMAL)
+        cv.resizeWindow(title, 700, 400)
+    cv.imshow(title, image)
+    if wait:
+        print("waiting a key...")
+        cv.waitKey(0)
+        print("exit")
+        #cv.destroyAllWindows()
 
 def process_CB(image_rgb, image_depth):
     t_start = time.time()
@@ -423,6 +435,10 @@ def process_CB(image_rgb, image_depth):
     rgb = CvBridge().imgmsg_to_cv2(image_rgb, "bgr8")                                                
     depth = CvBridge().imgmsg_to_cv2(image_depth, "32FC1")
     
+    if a_show:
+        show_image("rgb input", rgb)
+        show_image("depth input", depth)
+
     process_image(rgb, depth)
 
     print("Time:", time.time() - t_start)
@@ -439,9 +455,14 @@ def start_node():
     
     print("Subscribing to camera images")
     #topics subscription
-    rgb = message_filters.Subscriber("/camera/color/image_raw", Image)
-    depth = message_filters.Subscriber("/camera/depth/image_raw", Image)
+    #from zedcam
+    #rgb = message_filters.Subscriber("/camera/color/image_raw", Image)
+    #depth = message_filters.Subscriber("/camera/depth/image_raw", Image)
     
+    # from rviz
+    rgb = message_filters.Subscriber("/ur5/zed_node/left_raw/image_raw_color", Image)
+    depth = message_filters.Subscriber("/ur5/zed_node/depth/depth_registered", Image)
+
     #publisher results
     pub=rospy.Publisher("mega_blocks_detections", ModelStates, queue_size=1)
 
@@ -450,7 +471,7 @@ def start_node():
     
     #images synchronization
     syncro = message_filters.TimeSynchronizer([rgb, depth], 1, reset=True)
-    syncro.registerCallback(process_CB)
+    syncro.registerCallback(process_CB) # image recognition call subroutine
     
     #keep node always alive
     rospy.spin() 
