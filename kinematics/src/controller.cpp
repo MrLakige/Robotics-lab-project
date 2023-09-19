@@ -6,6 +6,7 @@
 #include "kinematics.h"
 #include "control_msgs/JointTrajectoryControllerState.h"
 #include "trajectory_msgs/JointTrajectory.h"
+#include "geometry_msgs/Point.h"
 #include "geometry_msgs/Pose.h"
 #include "controller.h"
 
@@ -21,8 +22,8 @@ RoboticArm::RoboticArm(){
         default_joint_trajectory.joint_names[i] = jointsNames[i];
     }
     JointState = getControllerState(controllerTopic);
-    Pose = getPose(JointState.actual.positions).xYZ;
-    Eigen::Vector3d pose = Eigen::Vector3d::Map(&Pose[0], 3);
+    const std::vector<double>& poseData = getPose(JointState.actual.positions).xYZ;
+    Eigen::Vector3d pose = Eigen::Vector3d::Map(poseData.data());
     gripperPose.first = pose;
     Matrix3d PoseQuat = getPose(JointState.actual.positions).rot;
     Eigen::Quaterniond q(PoseQuat);
@@ -59,45 +60,57 @@ void RoboticArm::move(double dx, double dy, double dz, const Quaterniond& deltaQ
  * @param blocking If true, the function will block until movement is complete.
  */
 void RoboticArm::moveTo(double x, double y , double z, const Quaterniond& targetQuat, double zRaise, bool blocking){
-    
+    printf("moveto1\n");
     auto smooth = [](double percentValue, double period=M_PI){ //used to make the transition smooth 
+        printf("moveto2\n");
         return (1 - std::cos(percentValue * period)) / 2;
     };
-
+    printf("moveto3\n");
     Eigen::Vector3d startingPose = gripperPose.first;
+    printf("moveto4\n");
     Quaterniond startingQuaterniond = gripperPose.second;
+    printf("moveto5\n");
 
     if (std::isnan(x)){
+        printf("moveto6\n");
         x = startingPose[0];
     }
 
     if (std::isnan(y)){
+        printf("moveto7\n");
         y = startingPose[1];
     }
 
     if (std::isnan(z)){
+        printf("moveto8\n");
         z = startingPose[2];
     }
-
+    printf("moveto9\n");
     //define distnace between starting pose and final pose
     double dx, dy, dz;
     dx = x - startingPose[0];
     dy = y - startingPose[1];
     dz = z - startingPose[2];
+    printf("moveto10\n");
 
     double lenght = std::sqrt(dx*dx + dy*dy + dz*dz)*300 + 80;
     double speed = lenght;
 
     int steps = static_cast<int>(lenght);
-    double step = 1/steps;
+    long double step = 1./steps;
+    printf("steps: %Lf\n", step);
 
     for(double i = 0; i<= 1.0+step; i+=step){
+        printf("moveto11\n");
         double i2 = smooth(i, 2*M_PI);
         double i1 = smooth(i);
-
+        printf("moveto12\n");
         Quaterniond grip = startingQuaterniond.slerp(i1, targetQuat); //maintain smooth the rotation movement
+        printf("moveto13\n");
         sendJoints(startingPose[0] + i1*dx, startingPose[1]+i1*dy, startingPose[2]+i1*dz + i2*zRaise, grip, 1.0/speed*0.9);
+        printf("moveto14\n");
         ros::Duration(1.0/speed).sleep();
+        printf("moveto15\n");
     }
     if(blocking){
         waitForPosition(0.005, 0.08);
@@ -117,20 +130,29 @@ void RoboticArm::moveTo(double x, double y , double z, const Quaterniond& target
  * @param duration Duration of the movement.
  */
 void RoboticArm::sendJoints(double x, double y, double z, const Quaterniond& quat, double duration){
-    std::vector<double> jointState;
+    printf("sendJ1\n");
     Matrix<double, 6, 1> mat = getJoints(x, y, z, quat.toRotationMatrix());
-    Eigen::Map<Eigen::Matrix<double, 6, 1>>(jointState.data(), mat.rows(), 1 ) = mat.col(0);
+    printf("sendJ2\n");
+    std::vector<double> jointState(mat.data(), mat.data()+mat.size());
+    printf("sendJ3\n");
     
     trajectory_msgs::JointTrajectory trajectory = default_joint_trajectory;
+    printf("sendJ4\n");
 
     for(int i = 0; i<2; i++){
+        printf("sendJ5\n");
         trajectory_msgs::JointTrajectoryPoint points;
         points.positions = jointState;
+        printf("sendJ6\n");
         points.velocities = {0, 0, 0, 0, 0, 0};
+        printf("sendJ7\n");
         points.time_from_start = ros::Duration(duration);
+        printf("sendJ8\n");
 
         trajectory.points = {points};
+        printf("sendJ9\n");
         jointsPub.publish(trajectory);
+        printf("sendJ10\n");
     }
 }
 
@@ -142,8 +164,9 @@ void RoboticArm::sendJoints(double x, double y, double z, const Quaterniond& qua
  */
 void RoboticArm::waitForPosition(double  tollerancePos, double tolleranceVel, double timeout){
     ros::Time endTime = ros::Time::now() + ros::Duration(timeout);
+    printf("%s\n", controllerTopic.c_str());
     while(ros::Time::now()< endTime){
-        control_msgs::JointTrajectoryControllerState msg = getControllerState(controllerTopic, 10);
+        control_msgs::JointTrajectoryControllerState msg = getControllerState(controllerTopic, 1800);
         double v = std::accumulate(msg.actual.velocities.begin(), msg.actual.velocities.end(), 0.0);
         if( v < tolleranceVel){
             for(size_t i = 0; i< msg.actual.positions.size(); i++){
@@ -166,12 +189,15 @@ void RoboticArm::waitForPosition(double  tollerancePos, double tolleranceVel, do
 control_msgs::JointTrajectoryControllerState RoboticArm::getControllerState(std::string controllerTopic, double timeout){
     boost::shared_ptr<control_msgs::JointTrajectoryControllerState const> sharedPtr;
     control_msgs::JointTrajectoryControllerState msg;
-
+    
     sharedPtr  = ros::topic::waitForMessage<control_msgs::JointTrajectoryControllerState>(controllerTopic + "/state", ros::Duration(timeout));
     if (sharedPtr == NULL){
         ROS_INFO("No JointTrajectoryControllerState messages received");
+        printf("Ok13\n");
     }else{
+        printf("nonOk13\n");
         msg = *sharedPtr;
+        printf("nonOk14\n");
     }
     return msg;
 }

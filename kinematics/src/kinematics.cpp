@@ -45,7 +45,7 @@ Matrix4d AH(int n, VectorXd& th){
  * @return The transformation matrix representing the gripper's position and orientation.
  */
 Matrix4d forwardKinematics(double th[6]){
-    VectorXd thV = Eigen::Map<Eigen::VectorXd>(th, 1, 6);
+    VectorXd thV = Eigen::Map<Eigen::VectorXd>(th, 6);
     Matrix4d A_1 = AH(1, thV);
     Matrix4d A_2  =AH(2, thV);
     Matrix4d A_3 = AH(3, thV);

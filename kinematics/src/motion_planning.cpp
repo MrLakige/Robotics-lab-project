@@ -1,3 +1,7 @@
+/**
+ * @brief This file contains the main logic for controlling a robotic arm to manipulate LEGO models.
+ */
+
 #include <ros/ros.h>
 #include <ros/package.h>
 #include <math.h>
@@ -18,7 +22,7 @@
 #include "controller.h"
 #include "../include/JointIntollerance.h"
 
-//using namespace std;
+using namespace std;
 
 //Compensate for the interlocking height
 #define INTERLOCKING_OFFSET 0.019
@@ -39,13 +43,13 @@ typedef struct home{
 }homePosition, sizePosition;
 
 typedef struct model{
-    std::string modelName;
+    string modelName;
     homePosition homePos;
     sizePosition sizePos;
 }model;
 
 typedef struct legoModel{
-    std::string legoName;
+    string legoName;
     geometry_msgs::Pose legoPose;
 }legoModel;
 
@@ -67,13 +71,17 @@ model MODELS_INFO[] = {
  * @brief Retrieves the center of the blocks by parsing JSON files.
  */
 void forModels(){
+    ROS_INFO("Ciao come stai\n");
     for(int i =0; i< 11;i++){
         char file[100];
-        sprintf(file, "../models/%s/model.json", MODELS_INFO[i].modelName.c_str());
-
-        std::ifstream myFile(file);
+        sprintf(file, "/home/seventeen/robotics_ws/src/kinematics/models/%s/model.json", MODELS_INFO[i].modelName.c_str());
+        printf("files 1 %s\n", file);
+        ifstream myFile(file);
+        if(!ifstream(file)){
+            ROS_ERROR("File not found1: %s", strerror(errno));
+        }
         if(!myFile){
-            ROS_ERROR("File not found");
+            ROS_ERROR("File not found2");
         }
    
         nlohmann::json data;
@@ -87,8 +95,8 @@ void forModels(){
                     corner(j,i) = data["corners"][i][j];
                 }
             }
-        }catch(const std::exception& e){
-            std::cerr << "errore durante il parsing del json: "<< e.what() << std::endl;
+        }catch(const exception& e){
+            cerr << "errore durante il parsing del json: "<< e.what() << endl;
             return;
         }
 
@@ -109,14 +117,14 @@ void forModels(){
  * @return The name of the model in Gazebo.
  * @throws runtime_error If the model is not found.
  */
-std::string getGazeboModelName(std::string modelName, geometry_msgs::Pose visionModelPose){
+string getGazeboModelName(string modelName, geometry_msgs::Pose visionModelPose){
     gazebo_msgs::ModelStates::ConstPtr mdoels = ros::topic::waitForMessage<gazebo_msgs::ModelStates>("/gazebo/model_states");
     float epsilon = 0.05;
     
     int size = sizeof(MODELS_INFO)/sizeof(MODELS_INFO[0]);
 
     for(size_t i=0; i<size; i++){
-        if(MODELS_INFO[i].modelName.find(modelName) == std::string::npos){
+        if(MODELS_INFO[i].modelName.find(modelName) == string::npos){
             continue;
         }
 
@@ -126,7 +134,7 @@ std::string getGazeboModelName(std::string modelName, geometry_msgs::Pose vision
         }
     }
 
-    throw std::runtime_error("Model not found at the definede position, Error 404, Object not found !!!");
+    throw runtime_error("Model not found at the definede position, Error 404, Object not found !!!");
 }
 
 /**
@@ -139,8 +147,8 @@ std::string getGazeboModelName(std::string modelName, geometry_msgs::Pose vision
  * @param vision Flag indicating whether to use vision topic for lego detection.
  * @return A vector of legoModel objects containing lego positions.
  */
-std::vector<legoModel> getLegosPos(bool vision=false){
-    std::vector<legoModel> legoVector;
+vector<legoModel> getLegosPos(bool vision=false){
+    vector<legoModel> legoVector;
     //get legos position reading vision topic
     if(vision){
         gazebo_msgs::ModelStates::ConstPtr legos = ros::topic::waitForMessage<gazebo_msgs::ModelStates>("/lego_detections");
@@ -151,7 +159,7 @@ std::vector<legoModel> getLegosPos(bool vision=false){
         int size = sizeof(MODELS_INFO)/sizeof(MODELS_INFO[0]);
 
         for(size_t i=0; i<size; i++){
-            if(MODELS_INFO[i].modelName.find("X") == std::string::npos){
+            if(MODELS_INFO[i].modelName.find("X") == string::npos){
                 continue;
             }
             
@@ -209,7 +217,7 @@ void setGripper(float value){
  * @param gazeboModelName The name of the model in Gazebo.
  * @param closure The closure value for the gripper.
  */
-void closeGripper(std::string gazeboModelName, float closure=0.0){
+void closeGripper(string gazeboModelName, float closure=0.0){
     ros::NodeHandle nH;
     ros::ServiceClient attachSrv = nH.serviceClient<gazebo_ros_link_attacher::Attach>("/link_attacher_node/attach");
     setGripper(0.81-closure*10);
@@ -241,7 +249,7 @@ bool compareLego(const legoModel& a, const legoModel& b){
  *
  * @param gazeboModelName The name of the model in Gazebo.
  */
-void openGripper(std::string gazeboModelName=NULL){
+void openGripper(string gazeboModelName=NULL){
     ros::NodeHandle nH;
     ros::ServiceClient detachSrv = nH.serviceClient<gazebo_ros_link_attacher::Attach>("/link_attacher_node/detach");
     setGripper(0.0);
@@ -261,7 +269,7 @@ void openGripper(std::string gazeboModelName=NULL){
  * 
  * @param modelName The name of the model
  */
-void setModelFixed(std::string modelName){
+void setModelFixed(string modelName){
     ros::NodeHandle nH;
     
     ros::ServiceClient serStaticSrv = nH.serviceClient<gazebo_ros_link_attacher::SetStatic>("/link_attacher_node/setstatic");
@@ -306,7 +314,7 @@ Eigen::Quaterniond getApproachQuat(Eigen::Vector3d facingDirection, float approa
                 yawAngle = -M_PI/2;
             }
         }else{
-            throw std::runtime_error("Invalid model state in facing direction");
+            throw runtime_error("Invalid model state in facing direction");
         }
     }
 
@@ -332,7 +340,7 @@ Eigen::Vector3d getAxisFacingCamera(Eigen::Quaterniond quat){
     Eigen::Vector3d newAxisY = quat*axisY;
     Eigen::Vector3d newAxisZ = quat*axisZ;
 
-    float angle = acos(std::min(std::max(newAxisZ.dot(axisZ), -1.0) , 1.0)); //retrieve angle between Zaxis and ZoriginalAxis
+    float angle = acos(min(max(newAxisZ.dot(axisZ), -1.0) , 1.0)); //retrieve angle between Zaxis and ZoriginalAxis
 
     if(angle< M_PI/3){ 
         return Eigen::Vector3d(0.0, 0.0, 1.0); //angle facing Camera
@@ -370,8 +378,8 @@ float getApproachAngle(Eigen::Quaterniond modelQuat, Eigen::Vector3d facingDirec
             Eigen::Vector3d newAxisZ = modelQuat*Eigen::Vector3d(0.0, 0.0, 1.0);
 
             //scalar product to understand which angle needed to approach the object
-            float dot = std::min(std::max(newAxisZ.dot(axisX), -1.0) , 1.0); 
-            float det = std::min(std::max(newAxisZ.dot(axisY), -1.0) , 1.0);
+            float dot = min(max(newAxisZ.dot(axisX), -1.0) , 1.0); 
+            float det = min(max(newAxisZ.dot(axisY), -1.0) , 1.0);
             
             return atan2(det, dot);
         }else{
@@ -381,7 +389,7 @@ float getApproachAngle(Eigen::Quaterniond modelQuat, Eigen::Vector3d facingDirec
                 //float yaw = -fmod((atan2(rotationMatrix(1, 0), rotationMatrix(0, 0)) - M_PI / 2),M_PI -M_PI);
                 return yaw;
             }else{
-                throw std::runtime_error("Invalid model state in facing direction");
+                throw runtime_error("Invalid model state in facing direction");
             }
         }
     }
@@ -394,7 +402,7 @@ float getApproachAngle(Eigen::Quaterniond modelQuat, Eigen::Vector3d facingDirec
  * @param modelPose The pose of the model.
  * @param gazeboModelName The name of the model in Gazebo.
  */
-void straighten(geometry_msgs::Pose modelPose, std::string gazeboModelName){
+void straighten(geometry_msgs::Pose modelPose, string gazeboModelName){
     RoboticArm roboticArm;
     float x = modelPose.position.x;
     float y = modelPose.position.y;
@@ -505,37 +513,43 @@ void straighten(geometry_msgs::Pose modelPose, std::string gazeboModelName){
  */
 int main(int argc, char* argv[]){
     ROS_INFO("Initializing node of kinematics");
-    ros::init(argc, argv, "sendJoints");
-    
+    ros::init(argc, argv, "kinematics");
+    printf("ok\n");
     RoboticArm roboticArm;
+    perror("after robotics arm\n");
     forModels();
 
-    actionlib::SimpleActionClient<control_msgs::GripperCommandAction> actionGripper("/gripper_controller/gripper_cmd", true);
+    closeGripper(MODELS_INFO[0].modelName, 10);
+    //actionlib::SimpleActionClient<control_msgs::GripperCommandAction> actionGripper("/gripper_controller_cmd", true);
+    actionlib::SimpleActionClient<control_msgs::GripperCommandAction> actionGripper("/move_gripper", true);
     ROS_INFO("Waiting for action of gripper controller");
     actionGripper.waitForServer();
 
     ros::NodeHandle nH;
     
     ros::ServiceClient serStaticSrv = nH.serviceClient<gazebo_ros_link_attacher::SetStatic>("/link_attacher_node/setstatic");
-    ros::ServiceClient attachSrv = nH.serviceClient<gazebo_ros_link_attacher::Attach>("link_attacher_node/attach");
+    ros::ServiceClient attachSrv = nH.serviceClient<gazebo_ros_link_attacher::Attach>("/link_attacher_node/attach");
     ros::ServiceClient detachSrv = nH.serviceClient<gazebo_ros_link_attacher::Attach>("/link_attacher_node/detach");
 
     serStaticSrv.waitForExistence();
+    ROS_INFO("After setstatic client");
     attachSrv.waitForExistence();
+    ROS_INFO("After attach client");
     detachSrv.waitForExistence();
+    ROS_INFO("After detach client");
 
     roboticArm.moveTo(DEFAULT_POS[0], DEFAULT_POS[1], DEFAULT_POS[2], DEFAULT_QUAT, 0.0, true);
 
     ROS_INFO("Waiting for detection of the models");
     ros::Duration(0.5);
 
-    std::vector<legoModel> legos = getLegosPos(true);
+    vector<legoModel> legos = getLegosPos(true);
     sort(legos.begin(), legos.end(), compareLego);
     
     for(int i=0;i<legos.size();i++){
         openGripper();
         model model;
-        std::string gazeboModelName;
+        string gazeboModelName;
         try{
             for(int j=0; j<11; j++){
                 if((MODELS_INFO[j].modelName.compare(legos.at(i).legoName))==0){
@@ -544,7 +558,7 @@ int main(int argc, char* argv[]){
                     model.sizePos = MODELS_INFO[j].sizePos;
                 }
             }
-        }catch(std::invalid_argument& e){
+        }catch(invalid_argument& e){
             ROS_ERROR("Model name was not recognized!");
             continue;
         }
@@ -553,7 +567,7 @@ int main(int argc, char* argv[]){
         }catch ( ros::Exception &e )
         {
             ROS_ERROR("Error occured: %s ", e.what());
-            std::cerr << e.what() << std::endl;
+            cerr << e.what() << endl;
             continue;
         }
         straighten(legos.at(i).legoPose, model.modelName);

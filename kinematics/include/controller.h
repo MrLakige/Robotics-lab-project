@@ -9,6 +9,7 @@
 #include "control_msgs/JointTrajectoryControllerState.h"
 #include "trajectory_msgs/JointTrajectory.h"
 #include "geometry_msgs/Pose.h"
+#include "geometry_msgs/Point.h"
 
 class RoboticArm {
 
@@ -24,7 +25,7 @@ public:
 
     void waitForPosition(double  tollerancePos=0.01, double tolleranceVel=0.01, double timeout=2.0);
 
-    control_msgs::JointTrajectoryControllerState getControllerState(std::string controllerTopic, double timeout=0);
+    control_msgs::JointTrajectoryControllerState getControllerState(std::string controllerTopic, double timeout=0.1);
 
     double gripperState;
     std::string controllerTopic;
@@ -38,7 +39,7 @@ public:
     };
     trajectory_msgs::JointTrajectory default_joint_trajectory;
     control_msgs::JointTrajectoryControllerState JointState;
-    std::vector<double> Pose;
+    std::vector<double> pose;
     std::pair<Eigen::Vector3d, Quaterniond> gripperPose;
     ros::NodeHandle nh;
     ros::Publisher jointsPub;
