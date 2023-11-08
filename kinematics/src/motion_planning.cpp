@@ -1,188 +1,97 @@
-/**
- * @brief This file contains the main logic for controlling a robotic arm to manipulate LEGO models.
- */
-
-#include <ros/ros.h>
-#include <ros/package.h>
-#include <math.h>
-#include <iostream>
-#include <fstream> 
-#include <string> //#include <string.h>
-#include <nlohmann/json.hpp>
-#include <vector>
-#include <control_msgs/FollowJointTrajectoryAction.h>
+#include <array>
+#include "std_msgs/Header.h"
+#include "trajectory_msgs/JointTrajectory.h"
+#include "trajectory_msgs/JointTrajectoryPoint.h"
+#include <std_msgs/Float64MultiArray.h> 
+#include "sensor_msgs/JointState.h"
 #include <actionlib/client/simple_action_client.h>
-#include <gazebo_msgs/ModelStates.h>
+#include <control_msgs/GripperCommandAction.h>
+#include "std_msgs/String.h"
+#include <ros/ros.h>
 #include <Eigen/Core>
 #include <Eigen/Geometry>
-#include <control_msgs/GripperCommandAction.h>
-#include <gazebo_ros_link_attacher/SetStatic.h>
+#include <Eigen/Dense>
+#include <cmath>
+#include <gazebo_ros_link_attacher/AttachRequest.h>
+#include <gazebo_ros_link_attacher/AttachResponse.h>
 #include <gazebo_ros_link_attacher/Attach.h>
-#include "geometry_msgs/Pose.h"
-#include "controller.h"
-#include "../include/JointIntollerance.h"
+#include <gazebo_msgs/ModelStates.h>
+#include "../include/directKinematics.h"
+#include "../include/inverseKinematics.h"
+
 
 using namespace std;
 
-//Compensate for the interlocking height
-#define INTERLOCKING_OFFSET 0.019
-#define SAFE_X -0.40
-#define SAFE_Y -0.13
-#define SURFACE_Z  0.774
-
-//Default position of the gripper
-const double DEFAULT_POS[3] = {-0.1, -0.2, 1.2};
-//Default orientation of the gripper
-const Eigen::Quaterniond DEFAULT_QUAT = Eigen::Quaterniond(Eigen::AngleAxisd(M_PI, Eigen::Vector3d(0,1,0)));
-//robotics::JointIntollerance defaultPathTollerance = {"pathTollerance", 0.0, 10, //Matrix4d AH(int n, double th[6]){0.0};
-
-typedef struct home{
-    float x;
-    float y;
-    float z;
-}homePosition, sizePosition;
-
 typedef struct model{
     string modelName;
-    homePosition homePos;
-    sizePosition sizePos;
+    double  gripperOp;
+    double  x;
+    double  y;
 }model;
 
-typedef struct legoModel{
-    string legoName;
-    geometry_msgs::Pose legoPose;
-}legoModel;
-
 model MODELS_INFO[] = {
-    {"X1-Y2-Z1", {0.264589, -0.293903, 0.777}}, 
-    {"X2-Y2-Z2", {0.277866, -0.724482, 0.777}}, 
-    {"X1-Y3-Z2", {0.268053, -0.513924, 0.777}}, 
-    {"X1-Y2-Z2", {0.429198, -0.293903, 0.777}}, 
-    {"X1-Y2-Z2-CHAMFER", {0.592619, -0.293903, 0.777}}, 
-    {"X1-Y4-Z2", {0.108812, -0.716057, 0.777}}, 
-    {"X1-Y1-Z2", {0.088808, -0.295820, 0.777}}, 
-    {"X1-Y2-Z2-TWINFILLET", {0.103547, -0.501132, 0.777}}, 
-    {"X1-Y3-Z2-FILLET", {0.433739, -0.507130, 0.777}}, 
-    {"X1-Y4-Z1", {0.589908, -0.501033, 0.777}}, 
-    {"X2-Y2-Z2-FILLET", {0.442505, -0.727271, 0.777}}
+    {"X1-Y2-Z1", 0.5, 0.264589, -0.293903}, 
+    {"X2-Y2-Z2", 0.22, 0.277866, -0.724482}, 
+    {"X1-Y3-Z2", 0.5, 0.268053, -0.513924}, 
+    {"X1-Y2-Z2", 0.5, 0.429198, -0.293903}, 
+    {"X1-Y2-Z2-CHAMFER", 0.5, 0.592619, -0.293903}, 
+    {"X1-Y4-Z2", 0.5, 0.108812, -0.716057}, 
+    {"X1-Y1-Z2", 0.5, 0.088808, -0.295820}, 
+    {"X1-Y2-Z2-TWINFILLET", 0.5, 0.103547, -0.50113}, 
+    {"X1-Y3-Z2-FILLET", 0.5, 0.433739, -0.507130}, 
+    {"X1-Y4-Z1", 0.5, 0.589908, -0.501033}, 
+    {"X2-Y2-Z2-FILLET", 0.22, 0.442505, -0.727271}
 };
 
-/**
- * @brief Retrieves the center of the blocks by parsing JSON files.
- */
-void forModels(){
-    ROS_INFO("Ciao come stai\n");
-    for(int i =0; i< 11;i++){
-        char file[100];
-        sprintf(file, "/home/seventeen/robotics_ws/src/kinematics/models/%s/model.json", MODELS_INFO[i].modelName.c_str());
-        printf("files 1 %s\n", file);
-        ifstream myFile(file);
-        if(!ifstream(file)){
-            ROS_ERROR("File not found1: %s", strerror(errno));
-        }
-        if(!myFile){
-            ROS_ERROR("File not found2");
-        }
-   
-        nlohmann::json data;
-        myFile >> data;
+array<model, 15> detectedObjs;
 
-        Eigen::MatrixXd corner(3,8);
+Eigen::Matrix<double,6,1> current_pos = {-0.9, -2, -1.3, 0.0, 0.0, 0};
 
-        try{
-            for(int i=0; i<8; i++){
-                for(int j=0; j<3; j++){
-                    corner(j,i) = data["corners"][i][j];
-                }
-            }
-        }catch(const exception& e){
-            cerr << "errore durante il parsing del json: "<< e.what() << endl;
-            return;
-        }
+// Rotatin matrix to euler angles
 
-        float x = corner.col(0).maxCoeff() - corner.col(0).minCoeff();
-        float y = corner.col(1).maxCoeff() - corner.col(1).minCoeff();
-        float z = corner.col(2).maxCoeff() - corner.col(2).minCoeff();
+Eigen::Vector3d rotMatToEuler(Eigen::Matrix3d rotMatrix){
+    double sy = sqrt(pow(rotMatrix(0,0),2) + pow(rotMatrix(1,0),2));
 
-        MODELS_INFO[i].sizePos.x = x;
-        MODELS_INFO[i].sizePos.y = y;
-        MODELS_INFO[i].sizePos.z = z;
-    }
-}
+    bool singular = sy < 1e-6;
+    double x, y, z;
 
-/**
- * @brief Retrieves the model name inside Gazebo (for link attacher plugin).
- * @param modelName The name of the model.
- * @param visionModelPose The pose of the model from vision.
- * @return The name of the model in Gazebo.
- * @throws runtime_error If the model is not found.
- */
-string getGazeboModelName(string modelName, geometry_msgs::Pose visionModelPose){
-    gazebo_msgs::ModelStates::ConstPtr mdoels = ros::topic::waitForMessage<gazebo_msgs::ModelStates>("/gazebo/model_states");
-    float epsilon = 0.05;
-    
-    int size = sizeof(MODELS_INFO)/sizeof(MODELS_INFO[0]);
-
-    for(size_t i=0; i<size; i++){
-        if(MODELS_INFO[i].modelName.find(modelName) == string::npos){
-            continue;
-        }
-
-        float ds = abs(MODELS_INFO[i].homePos.x - visionModelPose.position.x) + abs(MODELS_INFO[i].homePos.y - visionModelPose.position.y);
-        if(ds <= epsilon){
-            return MODELS_INFO[i].modelName;
-        }
-    }
-
-    throw runtime_error("Model not found at the definede position, Error 404, Object not found !!!");
-}
-
-/**
- * @brief Function to get the position of the lego model by reading vision topic.
- *
- * This function retrieves the position of lego models by reading from the vision topic.
- * It waits for the specified topic message and then processes the data to populate
- * a vector of legoModel objects.
- *
- * @param vision Flag indicating whether to use vision topic for lego detection.
- * @return A vector of legoModel objects containing lego positions.
- */
-vector<legoModel> getLegosPos(bool vision=false){
-    vector<legoModel> legoVector;
-    //get legos position reading vision topic
-    if(vision){
-        gazebo_msgs::ModelStates::ConstPtr legos = ros::topic::waitForMessage<gazebo_msgs::ModelStates>("/lego_detections");
+    if(!singular){
+        x = atan2(rotMatrix(2,1), rotMatrix(2,2));
+        y = atan2(-rotMatrix(2,0), sy);
+        z = atan2(rotMatrix(1,0), rotMatrix(0,0));
     }else{
-        gazebo_msgs::ModelStates::ConstPtr mdoels = ros::topic::waitForMessage<gazebo_msgs::ModelStates>("/gazebo/model_states");
-        gazebo_msgs::ModelStates legos = gazebo_msgs::ModelStates();
-
-        int size = sizeof(MODELS_INFO)/sizeof(MODELS_INFO[0]);
-
-        for(size_t i=0; i<size; i++){
-            if(MODELS_INFO[i].modelName.find("X") == string::npos){
-                continue;
-            }
-            
-            legoModel tmp;
-            tmp.legoName = MODELS_INFO[i].modelName;
-            tmp.legoPose.position.x = MODELS_INFO[i].homePos.x;
-            tmp.legoPose.position.y = MODELS_INFO[i].homePos.y;
-            tmp.legoPose.position.z = MODELS_INFO[i].homePos.z;
-            legoVector.push_back(tmp);
-        }
+        x = atan2(-rotMatrix(1,2), rotMatrix(1,1));
+        y = atan2(-rotMatrix(2,0), sy);
+        z = 0;
     }
-    return legoVector;
+
+    return Eigen::Vector3d(x,y,z);
 }
-/**
- * @brief Function to send and manage the gripper opening and closing.
- *
- * This function sends a command to open or close the gripper using an action client.
- * It waits for the gripper action to complete and checks for success.
- *
- * @param value The desired position of the gripper (0.0 to 0.8).
- */
+
+//Euler angles to rotatin matrix
+
+Eigen::Matrix3d eulerToRotMat(Eigen::Vector3d theta){
+    Eigen::Matrix3d Rx {
+                        {1,  0,  0,}, 
+                        {0,  cos(theta(0)), -sin(theta(0))},
+                        {0, sin(theta(0)), cos(theta(0))}
+                        };
+    Eigen::Matrix3d Ry {
+                        {cos(theta(1)),  0,  sin(theta(1))}, 
+                        {0, 1,  0},
+                        {-sin(theta(1)), 0, cos(theta(1))}
+                        };
+    Eigen::Matrix3d Rz {
+                        {cos(theta(2)),  -sin(theta(2)), 0}, 
+                        {sin(theta(2)),  cos(theta(2)), 0},
+                        {0, 0,  1}
+                        };
+    Eigen::Matrix3d rotMatrix = Rz*Ry*Rx;
+    return rotMatrix;
+}
+
 void setGripper(float value){
-    actionlib::SimpleActionClient<control_msgs::GripperCommandAction> actionGripper("gripper_controller/gripper_action", true);
+    actionlib::SimpleActionClient<control_msgs::GripperCommandAction> actionGripper("gripper_controller/gripper_cmd", true);
 
     // Wait for the action server to start
     if (!actionGripper.waitForServer(ros::Duration(10.0))) {
@@ -211,401 +120,198 @@ void setGripper(float value){
     }
 }
 
-/**
- * @brief Function to close the gripper.
- *
- * @param gazeboModelName The name of the model in Gazebo.
- * @param closure The closure value for the gripper.
- */
-void closeGripper(string gazeboModelName, float closure=0.0){
+Eigen::Vector3d xe(double t, Eigen::Vector3d xe0, Eigen::Vector3d xef){
+    return (t*xef + (1-t)*xe0);
+}
+
+Eigen::Vector3d phie(double t, Eigen::Vector3d phie0, Eigen::Vector3d phief){
+    return (t*phief + (1-t)*phie0);
+}
+
+void moveTo(Eigen::Vector3d xef, Eigen::Vector3d phief, ros::Publisher pub, double threshold){
+    trajectory_msgs::JointTrajectory traj;
+    //traj.header.seq;
+    //traj.header.stamp;
+    //traj.header.frame_id;
+    traj.joint_names = {
+                "shoulder_pan_joint",
+                "shoulder_lift_joint",
+                "elbow_joint",
+                "wrist_1_joint",
+                "wrist_2_joint",
+                "wrist_3_joint"
+    };
+
+    ros::Rate loop_rate(10);
+
+    Eigen::Matrix<double,6,1> TH0 = {-0.9, -2, -1.3, 0.0, 0.0, 0}; //SISTEMARE CON I VALORI DI FOCCHI
+    directK directK = ur5DirectKinematics(TH0);  
+    Eigen::Vector3d phie0 = rotMatToEuler(directK.Re).transpose();
+
+    if(xef(1) > 0.2){
+        xef(1) -= 0.01;
+    }else{
+        xef(1) -= 0.025;
+    }
+
+    if(xef(1) > 0.1){
+        xef(0) += 0.01;
+    }else{         
+        if(xef(1) > -0.15){
+            xef(0) += 0.005;
+        }
+    }
+
+    if(xef(0) > 0.6 && xef(1) > 0.1){
+        xef(0) += 0.005;
+    }
+
+    xef = xef.transpose();
+    phief = phief.transpose();
+
+    Eigen::Vector3d x = xe(1, directK.pe, xef); //Using only one point -> final position
+    Eigen::Vector3d phi = phie(1, phie0, phief);
+
+    phi = phi.transpose();
+
+    Eigen::AngleAxisd rollAngle(phi(0), Eigen::Vector3d::UnitZ());
+    Eigen::AngleAxisd yawAngle(phi(1), Eigen::Vector3d::UnitY());
+    Eigen::AngleAxisd pitchAngle(phi(2), Eigen::Vector3d::UnitX());
+
+    Eigen::Quaternion<double> q = rollAngle * yawAngle * pitchAngle;
+
+    Eigen::Matrix3d rotationMatrix = q.matrix();
+
+    Eigen::Matrix<double, 6, 8> Th= ur5inverseKinematics(x, rotationMatrix);  
+    while (ros::ok()){
+        // Check if the arm is in close range, threshold of wanted position
+        if ((TH0(0)>Th(6,0)-threshold and TH0(0)<Th(6,0)+threshold) and (TH0(1)>Th(6,1)-threshold and TH0(1)<Th(6,1)+threshold) and (TH0(2)>Th(6,2)-threshold and TH0(2) < Th(6,2)+threshold) and (TH0(3)>Th(6,3)-threshold and TH0(3) < Th(6,3)+threshold) and (TH0(4)>Th(6,4)-threshold and TH0(4) < Th(6,4)+threshold) and (TH0(5)>Th(6,5)-threshold and TH0(5) < Th(6,5)+threshold)){
+            break;
+        }
+
+        traj.header.stamp = ros::Time::now();
+        trajectory_msgs::JointTrajectoryPoint pts;
+
+        pts.positions = {Th(6,0), Th(6,1), Th(6,2), Th(6,3), Th(6,4), Th(6,5)};
+        pts.time_from_start = ros::Duration(0.2);
+
+        // Set the points to the trajectory
+        traj.points.push_back(pts);
+        // Publish the message to the topic
+        pub.publish(traj);
+    }
+}
+
+void jointState(sensor_msgs::JointState msg){
+    current_pos(0) = msg.position[3];
+    current_pos(1) = msg.position[2];
+    current_pos(2) = msg.position[0];
+    current_pos(3) = msg.position[4];
+    current_pos(4) = msg.position[5];
+    current_pos(5) = msg.position[6];
+}
+
+int main(int argc, char** argv){
+    ros::init(argc, argv, "send_joints");
     ros::NodeHandle nH;
     ros::ServiceClient attachSrv = nH.serviceClient<gazebo_ros_link_attacher::Attach>("/link_attacher_node/attach");
-    setGripper(0.81-closure*10);
-    ros::Duration(0.5).sleep();
-
-    if(!gazeboModelName.empty()){
-        gazebo_ros_link_attacher::Attach req;
-        req.request.model_name_1 = gazeboModelName;
-        req.request.link_name_1 = "link";
-        req.request.model_name_2 = "robot";
-        req.request.link_name_2 = "wrist_3_link";
-        attachSrv.call(req);
-    }
-}
-
-/**
- * @brief Comparator function to compare two lego models.
- *
- * @param a The first lego model.
- * @param b The second lego model.
- * @return True if the first model is greater than the second, false otherwise.
- */
-bool compareLego(const legoModel& a, const legoModel& b){
-    return std::tie(a.legoPose.position.x, a.legoPose.position.y) > std::tie(b.legoPose.position.x, b.legoPose.position.y);
-}
-
-/**
- * @brief Function to open the gripper.
- *
- * @param gazeboModelName The name of the model in Gazebo.
- */
-void openGripper(string gazeboModelName=NULL){
-    ros::NodeHandle nH;
-    ros::ServiceClient detachSrv = nH.serviceClient<gazebo_ros_link_attacher::Attach>("/link_attacher_node/detach");
-    setGripper(0.0);
-
-    if(!gazeboModelName.empty()){
-        gazebo_ros_link_attacher::Attach req;
-        req.request.model_name_1 = gazeboModelName;
-        req.request.link_name_1 = "link";
-        req.request.model_name_2 = "robot";
-        req.request.link_name_2 = "wrist_3_link";
-        detachSrv.call(req);
-    }
-}
-
-/**
- * @brief Function to attach the block on the table and create the first level.
- * 
- * @param modelName The name of the model
- */
-void setModelFixed(string modelName){
-    ros::NodeHandle nH;
-    
-    ros::ServiceClient serStaticSrv = nH.serviceClient<gazebo_ros_link_attacher::SetStatic>("/link_attacher_node/setstatic");
-    ros::ServiceClient attachSrv = nH.serviceClient<gazebo_ros_link_attacher::Attach>("link_attacher_node/attach");
-
-    gazebo_ros_link_attacher::Attach req;
-    req.request.model_name_1 = modelName;
-    req.request.link_name_1 = "link";
-    req.request.model_name_2 = "ground_plane";
-    req.request.link_name_2 = "link";
-    attachSrv.call(req);
-
-    gazebo_ros_link_attacher::SetStatic req2;
-    req2.request.model_name = modelName;
-    req2.request.link_name = "link";
-    req2.request.set_static = true;
-    serStaticSrv.call(req2);
-}
-
-/**
- * @brief Function to realign the desired axis and angle.
- * 
- * @param facingDirection The desired facing direction as a 3D vector
- * @param approachAngle The desired approach angle in radiants  
- * @return The calculated quaternion for the realigning
- * @throws runtime_error If the models fasing direction is invalid.
- */
-Eigen::Quaterniond getApproachQuat(Eigen::Vector3d facingDirection, float approachAngle){
-    Eigen::Quaterniond quat= DEFAULT_QUAT;
-    float pitchAngle;
-    float yawAngle;
-
-    if(facingDirection == Eigen::Vector3d(0.0, 0.0, 1.0) || facingDirection == Eigen::Vector3d(0.0, 0.0, -1.0)){ //already aligned to Z axis
-        pitchAngle = 0.0;
-        yawAngle = 0.0;
-    }else{
-        if(facingDirection == Eigen::Vector3d(1.0, 0.0, 0.0) || facingDirection == Eigen::Vector3d(0.0, 1.0, 0.0)){ //not aligned to Z axis, so adjust it to be so
-            pitchAngle = 0.2;
-            if(abs(approachAngle)< M_PI/2){
-                yawAngle = M_PI/2;
-            }else{
-                yawAngle = -M_PI/2;
-            }
-        }else{
-            throw runtime_error("Invalid model state in facing direction");
-        }
-    }
-
-    quat = quat*Eigen::Quaterniond( 0.0, 1.0, 0.0, pitchAngle);
-    quat = quat*Eigen::Quaterniond( 0.0, 0.0, 1.0, yawAngle);
-    quat = Eigen::Quaterniond( 0.0, 0.0, 1.0, approachAngle+M_PI/2)*quat;
-
-    return quat;
-}
-
-/**
- * @brief Function to retrieve the axis that faces the camera.
- * 
- * @param quat The quaternion presenting the orientation
- * @return The calcualted axis vector facing the camera
- */
-Eigen::Vector3d getAxisFacingCamera(Eigen::Quaterniond quat){
-    Eigen::Vector3d axisX =  Eigen::Vector3d(1.0, 0.0, 0.0);
-    Eigen::Vector3d axisY =  Eigen::Vector3d(0.0, 1.0, 0.0);
-    Eigen::Vector3d axisZ =  Eigen::Vector3d(0.0, 0.0, 1.0);
-
-    Eigen::Vector3d newAxisX = quat*axisX;
-    Eigen::Vector3d newAxisY = quat*axisY;
-    Eigen::Vector3d newAxisZ = quat*axisZ;
-
-    float angle = acos(min(max(newAxisZ.dot(axisZ), -1.0) , 1.0)); //retrieve angle between Zaxis and ZoriginalAxis
-
-    if(angle< M_PI/3){ 
-        return Eigen::Vector3d(0.0, 0.0, 1.0); //angle facing Camera
-    }else{
-        if(angle< M_PI/3*2*1.2){ // 60° <angle <144° 
-            if(abs(newAxisX(2))>abs(newAxisY(2))){ //check which axis is nearer to Z axis 
-                return Eigen::Vector3d(1.0, 0.0, 0.0);
-            }else{
-                return Eigen::Vector3d(0.0, 1.0, 0.0);
-            }
-        }else{
-            return Eigen::Vector3d(0.0, 0.0, -1.0); //angle far from Z axis
-        }
-    }
-}
-
-/**
- * @brief Function to understand how to move the gripper to pick the object.
- * 
- * @param modelQuat The quaternion rapresenting the models orientation
- * @param facingDirection The desired facing direction as a 3D vector
- * @return The calcualted approach angle in radians
- * @throws runtime_error If the models fasing direction is invalid.
- */
-float getApproachAngle(Eigen::Quaterniond modelQuat, Eigen::Vector3d facingDirection){
-    if(facingDirection == Eigen::Vector3d(0.0, 0.0, 1.0)){ //alogned with z axis
-        Eigen::Matrix3d rotationMatrix = modelQuat.toRotationMatrix();
-        float yaw = atan2(rotationMatrix(1, 0), rotationMatrix(0, 0)) - M_PI / 2;
-        return yaw;
-    }else{
-        if(facingDirection == Eigen::Vector3d(1.0, 0.0, 0.0) || facingDirection == Eigen::Vector3d(0.0, 1.0, 0.0)){ //alogned with x or y axis
-            Eigen::Vector3d axisX = Eigen::Vector3d(0.0, 1.0, 0.0);
-            Eigen::Vector3d axisY = Eigen::Vector3d(-1.0, 0.0, 0.0);
-
-            Eigen::Vector3d newAxisZ = modelQuat*Eigen::Vector3d(0.0, 0.0, 1.0);
-
-            //scalar product to understand which angle needed to approach the object
-            float dot = min(max(newAxisZ.dot(axisX), -1.0) , 1.0); 
-            float det = min(max(newAxisZ.dot(axisY), -1.0) , 1.0);
-            
-            return atan2(det, dot);
-        }else{
-            if(facingDirection == Eigen::Vector3d(0.0, 0.0, -1.0)){
-                Eigen::Matrix3d rotationMatrix = modelQuat.toRotationMatrix();
-                float yaw = -fmod((atan2(rotationMatrix(1, 0), rotationMatrix(0, 0)) - M_PI / 2),M_PI) -M_PI;
-                //float yaw = -fmod((atan2(rotationMatrix(1, 0), rotationMatrix(0, 0)) - M_PI / 2),M_PI -M_PI);
-                return yaw;
-            }else{
-                throw runtime_error("Invalid model state in facing direction");
-            }
-        }
-    }
-}
-
-
-/**
- * @brief Function to straighten the model's pose.
- *
- * @param modelPose The pose of the model.
- * @param gazeboModelName The name of the model in Gazebo.
- */
-void straighten(geometry_msgs::Pose modelPose, string gazeboModelName){
-    RoboticArm roboticArm;
-    float x = modelPose.position.x;
-    float y = modelPose.position.y;
-    float z = modelPose.position.z;
-    sizePosition modelSize;
-
-    Eigen::Quaterniond modelQuat = Eigen::Quaterniond(modelPose.orientation.x, modelPose.orientation.y, modelPose.orientation.z, modelPose.orientation.w);
-    for(int i=0; i<11; i++){
-        if((MODELS_INFO[i].modelName.compare(gazeboModelName))==0){
-            modelSize = MODELS_INFO[i].sizePos;
-        }
-    }
-    /*
-        Calculate approach quaternion and target quaternion
-    */
-
-    Eigen::Vector3d facingDirection = getAxisFacingCamera(modelQuat);
-    float approachAngle = getApproachAngle(modelQuat, facingDirection);
-
-    ROS_INFO("Lego is facing (%f, %f, %f)", facingDirection[0], facingDirection[1], facingDirection[2]);
-    ROS_INFO("Angle of approach is %f", approachAngle);
-
-    Eigen::Quaterniond approachQuat = getApproachQuat(facingDirection, approachAngle);
-
-    roboticArm.moveTo(x, y, std::nan(""), approachQuat);
-
-    Eigen::Quaterniond regripQuat = DEFAULT_QUAT;
-    Eigen::Quaterniond targetQuat;
-
-    if(facingDirection == Eigen::Vector3d(1.0, 0.0, 0.0) || facingDirection == Eigen::Vector3d(0.0, 1.0, 0.0)){
-        targetQuat = DEFAULT_QUAT;
-        float pitchAngle = -M_PI/2 + 0.2;
-
-        if (abs(approachAngle)< M_PI/2){
-            targetQuat = targetQuat*Eigen::Quaterniond( 0.0, 0.0, 1.0, M_PI/2);
-        }else{
-            targetQuat = targetQuat*Eigen::Quaterniond( 0.0, 0.0, 1.0, -M_PI/2);
-        }
-        targetQuat = Eigen::Quaterniond( 0.0, 1.0, 0.0, pitchAngle)*targetQuat;
-
-        if(facingDirection == Eigen::Vector3d(0.0, 1.0, 0.0)){
-            regripQuat = Eigen::Quaterniond( 0.0, 0.0, 1.0, M_PI/2)*regripQuat;
-        }
-    }else{
-        /*
-            Pre-positioning
-        */
-        if(facingDirection == Eigen::Vector3d(0.0, 0.0, -1.0)){
-            roboticArm.moveTo(std::nan(""), std::nan(""), z, approachQuat);
-            closeGripper(gazeboModelName, modelSize.x); //x --> larghezza modello
-
-            Eigen::Quaterniond tmpQuat = Eigen::Quaterniond( 0.0, 0.0, 1.0, 2*M_PI/6)*DEFAULT_QUAT;
-            roboticArm.moveTo(SAFE_X, SAFE_Y, z+0.05, tmpQuat, 0.1);
-            roboticArm.moveTo(std::nan(""), std::nan(""), z);
-            
-            openGripper(gazeboModelName);
-
-            approachQuat = tmpQuat*Eigen::Quaterniond( 1.0, 0.0, 0.0, M_PI/2);
-            targetQuat = approachQuat*Eigen::Quaterniond( 0.0, 0.0, 1.0, -M_PI);
-            regripQuat = tmpQuat*Eigen::Quaterniond( 0.0, 0.0, 1.0, M_PI);
-        }else{
-            targetQuat = DEFAULT_QUAT;
-            targetQuat = targetQuat*Eigen::Quaterniond( 0.0, 0.0, 1.0, -M_PI/2);
-        }
-    }
-    /*
-        Grip the model
-    */
-    float closure;
-    if(facingDirection == Eigen::Vector3d(0.0, 0.0, 1.0) || facingDirection == Eigen::Vector3d(0.0, 0.0, -1.0)){
-        closure = modelSize.x;
-        z = SURFACE_Z + modelSize.z/2;
-    }else{
-        if(facingDirection == Eigen::Vector3d(1.0, 0.0, 0.0)){
-            closure = modelSize.y;
-            z = SURFACE_Z + modelSize.x/2;
-        }else{
-            if(facingDirection == Eigen::Vector3d(0.0, 1.0, 0.0)){
-                closure = modelSize.x;
-                z = SURFACE_Z + modelSize.y/2;
-            }
-        }
-    }
-    roboticArm.moveTo(std::nan(""), std::nan(""), z, approachQuat);
-    closeGripper(gazeboModelName, closure);
-
-    /*
-        Straighten model if needed
-    */
-    if(facingDirection != Eigen::Vector3d(0.0, 0.0, 1.0)){
-        z = SURFACE_Z + modelSize.z/2;
-        roboticArm.moveTo(std::nan(""), std::nan(""), z+0.05, targetQuat, 0.1);
-        roboticArm.move(0.0, 0.0, -0.05);
-        openGripper(gazeboModelName);
-
-        // Re grip the model
-        roboticArm.moveTo(std::nan(""), std::nan(""), z, regripQuat, 0.1);
-        closeGripper(gazeboModelName, modelSize.x);
-    }
-}
-
-/**
- * @brief Main function for controlling the robotic arm to manipulate LEGO models.
- *
- * @param argc The number of command-line arguments.
- * @param argv An array of command-line argument strings.
- * @return The exit status of the program.
- */
-int main(int argc, char* argv[]){
-    ROS_INFO("Initializing node of kinematics");
-    ros::init(argc, argv, "kinematics");
-    printf("ok\n");
-    RoboticArm roboticArm;
-    perror("after robotics arm\n");
-    forModels();
-
-    closeGripper(MODELS_INFO[0].modelName, 10);
-    //actionlib::SimpleActionClient<control_msgs::GripperCommandAction> actionGripper("/gripper_controller_cmd", true);
-    actionlib::SimpleActionClient<control_msgs::GripperCommandAction> actionGripper("/move_gripper", true);
-    ROS_INFO("Waiting for action of gripper controller");
-    actionGripper.waitForServer();
-
-    ros::NodeHandle nH;
-    
-    ros::ServiceClient serStaticSrv = nH.serviceClient<gazebo_ros_link_attacher::SetStatic>("/link_attacher_node/setstatic");
-    ros::ServiceClient attachSrv = nH.serviceClient<gazebo_ros_link_attacher::Attach>("/link_attacher_node/attach");
-    ros::ServiceClient detachSrv = nH.serviceClient<gazebo_ros_link_attacher::Attach>("/link_attacher_node/detach");
-
-    serStaticSrv.waitForExistence();
-    ROS_INFO("After setstatic client");
     attachSrv.waitForExistence();
-    ROS_INFO("After attach client");
+    ros::ServiceClient detachSrv = nH.serviceClient<gazebo_ros_link_attacher::Attach>("/link_attacher_node/detach");
     detachSrv.waitForExistence();
-    ROS_INFO("After detach client");
-
-    roboticArm.moveTo(DEFAULT_POS[0], DEFAULT_POS[1], DEFAULT_POS[2], DEFAULT_QUAT, 0.0, true);
-
-    ROS_INFO("Waiting for detection of the models");
-    ros::Duration(0.5);
-
-    vector<legoModel> legos = getLegosPos(true);
-    sort(legos.begin(), legos.end(), compareLego);
     
-    for(int i=0;i<legos.size();i++){
-        openGripper();
-        model model;
-        string gazeboModelName;
-        try{
-            for(int j=0; j<11; j++){
-                if((MODELS_INFO[j].modelName.compare(legos.at(i).legoName))==0){
-                    model.modelName = MODELS_INFO[j].modelName;
-                    model.homePos = MODELS_INFO[j].homePos;
-                    model.sizePos = MODELS_INFO[j].sizePos;
-                }
-            }
-        }catch(invalid_argument& e){
-            ROS_ERROR("Model name was not recognized!");
-            continue;
-        }
-        try{
-            gazeboModelName = getGazeboModelName(model.modelName, legos.at(i).legoPose);
-        }catch ( ros::Exception &e )
-        {
-            ROS_ERROR("Error occured: %s ", e.what());
-            cerr << e.what() << endl;
-            continue;
-        }
-        straighten(legos.at(i).legoPose, model.modelName);
-        roboticArm.move(0, 0, 0.15);
+    ros::Publisher pub = nH.advertise<std_msgs::Float64MultiArray>("/trajectory_controller/command", 10);
+    ros::Subscriber sub = nH.subscribe("/joint_states", 1000, jointState);    
 
-        /*
-            Go to destination
-        */
-        float x = model.homePos.x;
-        float y = model.homePos.y;
-        float z = model.homePos.z;
+    std_msgs::String yolo = *(ros::topic::waitForMessage<std_msgs::String>("/yolo"));
 
-        z+= model.sizePos.z /2+0.004;
+    // --- RIGA 167 ---
+    /* if (yolo[1] != "''" && !detectedObjs.empty()){
+        //DA ADATTARE AL MESSAGGIO DI MICHELE
+    } 
 
-        ROS_INFO("Moving model {%s} to (%f, %f, %f)", model.modelName.c_str(), x, y, z);
+    int j=0;
+    for (int i=0; i< yolo.size(); i++){
+        detectedObjs[i]. = yolo[i]; //DA ADATTARE AL MESSAGGIO DI MICHELE
+        j++;
+    }*/
 
-        roboticArm.moveTo(x, y, z, DEFAULT_QUAT*Eigen::Quaterniond( 0.0, 0.0, 1.0, M_PI/2));
-        // Lower the object and release
-        roboticArm.moveTo(x, y, z);
-        setModelFixed(gazeboModelName);
-        openGripper(gazeboModelName);
-        roboticArm.move(0, 0, 0.15);
+    sleep(0.2);
+    ros::Time startTime = ros::Time::now();
 
-        //if(roboticArm.gripperPose[0][1]> -0.3 && roboticArm.gripperPose[0][0]> 0){
-        if(roboticArm.gripperPose.first[1]> -0.3 && roboticArm.gripperPose.first[0]> 0){
-            roboticArm.moveTo(DEFAULT_POS[0], DEFAULT_POS[1], DEFAULT_POS[2], DEFAULT_QUAT);
-        }
-        for(int j=0; j<11; j++){
-            if((MODELS_INFO[j].modelName.compare(legos.at(i).legoName))==0){
-                MODELS_INFO[j].homePos.z += model.sizePos.z - INTERLOCKING_OFFSET;
+    double thresholdP = 0.008; //precise threshold
+    double thresholdG = 0.1; //generic threshold
+
+    for(int i=0; i<detectedObjs.size(); i++){
+        double x = detectedObjs[i].x;
+        double y = detectedObjs[i].y;
+        setGripper(0.0);
+
+        Eigen::Vector3d xef = {x, y, 0.36};
+        Eigen::Vector3d phief = {detectedObjs[i].gripperOp, M_PI, 0};
+
+        moveTo(xef, phief, pub, thresholdG);
+
+        xef = {x, y, 0.218};
+        
+        moveTo(xef, phief, pub, thresholdP);
+
+        gazebo_msgs::ModelStates ms = *(ros::topic::waitForMessage<gazebo_msgs::ModelStates>("/gazebo/model_states"));
+
+        int minDist = 10;
+        int minIndex = 6;
+
+        for(int k=6; k<ms.name.size(); k++){
+            double dist = sqrt(pow(ms.pose[i].position.x-x, 2)+ pow(ms.pose[i].position.y-y, 2));
+            if (dist < minDist){
+                minDist = dist;
+                minIndex = i;
             }
         }
+        
+        ROS_INFO("Attaching gripper and lego");
+        gazebo_ros_link_attacher::Attach req;
+        req.request.model_name_1 = "robot";
+        req.request.link_name_1 = "wrist_3_link";
+        req.request.model_name_2 = ms.name[minIndex];
+        req.request.link_name_2 = "link";
+        attachSrv.call(req);
+
+        //setGripper(detectedObjs[i].opening); //FAR MANDARE A MINCHELE ANCHE L'APERTURA DEL GRIPPER IN BASE ALL'OGGETTO
+        sleep(1);
+
+        xef = {x, y, 0.36};
+        moveTo(xef, phief, pub, thresholdG);
+
+        double xf = detectedObjs[i].x; //nel codice prende i dati dei MODELS_INFO, in caso non funzionasse, aggiungere ciclo per ricavare indice dell'oggetto riconosciuto
+        double yf = detectedObjs[i].y;
+        xef = {xf, yf, 0.36};
+        phief = {0, M_PI, 0};
+
+        moveTo(xef, phief, pub, thresholdG);
+
+        xef = {xf, yf, 0.25};
+        moveTo(xef, phief, pub, thresholdP);
+
+        ROS_INFO("Detaching gripper and lego");
+        req.request.model_name_1 = "robot";
+        req.request.link_name_1 = "wrist_3_link";
+        req.request.model_name_2 = ms.name[minIndex];
+        req.request.link_name_2 = "link";
+        
+        setGripper(0.0);
+
+        detachSrv.call(req);
+        sleep(2.5);
+
+        xef = {xf, yf, 0.3};
+        moveTo(xef, phief, pub, thresholdG);     
     }
-    
-    ROS_INFO("Moving to Default Position");
-    roboticArm.moveTo(DEFAULT_POS[0], DEFAULT_POS[1], DEFAULT_POS[2], DEFAULT_QUAT);
-    openGripper();
-    ros::Duration(0.4);
+
+    ros::Time endTime = ros::Time::now();
+    ros::Duration dt = endTime-startTime;
+    std::stringstream ss;
+    ss << dt.sec << "." << dt.nsec;
+    std::cout << ss.str() << std::endl;
 
     return 0;
 }

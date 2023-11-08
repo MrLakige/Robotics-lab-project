@@ -41,6 +41,6 @@ class Gripper{
         float mapToGripperJoints(int diameter);
         Eigen::Vector2d getDesGripperJoints();
         void move_gripper(int diameter, std::string status);
-}
+};
 
 #endif

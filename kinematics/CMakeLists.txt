@@ -27,7 +27,7 @@ catkin_package(
 include_directories(include ${catkin_INCLUDE_DIRS} ${GAZEBO_INCLUDE_DIRS} ${EIGEN3_INCLUDE_DIR})
 
 
-add_executable(${PROJECT_NAME} src/motion_planning.cpp src/controller.cpp src/kinematics.cpp)
+add_executable(${PROJECT_NAME} src/motion_planning.cpp src/controller.cpp src/kinematics.cpp src/directKinematics.cpp src/inverseKinematics.cpp src/gripper.cpp src/prova.cpp)
 
 target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES})
 
