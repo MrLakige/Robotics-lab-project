@@ -7,14 +7,20 @@ import message_filters
 import rospy
 import sys
 import time
+import os
+import quaternion
 
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
 from rospkg import RosPack # get abs path
 from os import path # get home path
-from gazebo_msgs.msg import ModelStates
+#from gazebo_msgs.msg import ModelStates
+
 from geometry_msgs.msg import *
 from pyquaternion import Quaternion as PyQuaternion
+
+print(os.getcwd())
+from vision.msg import ModelStates
 
 # Global variables
 path_yolo = path.join(path.expanduser('~'), 'yolov5')
@@ -33,6 +39,8 @@ mega_blocksClasses = ['X1-Y1-Z2', 'X1-Y2-Z1', 'X1-Y2-Z2', 'X1-Y2-Z2-CHAMFER', 'X
 # input argument
 argv = sys.argv
 a_show = '-show' in argv
+o_oriented = '-oriented' in argv
+
 
 # Utility Functions
 
@@ -375,9 +383,76 @@ def process_item(imgs, item):
     rot = rot.inverse
     msg.pose = Pose(Point(*xyz), Quaternion(x=rot.x,y=rot.y,z=rot.z,w=rot.w))
     
-    #pub.publish(msg)
+    dimx, dimy, dimz = 0
+    match nm:
+        case 'X1-Y1-Z2':
+            dimx= 32.0
+            dimy= 32.0
+            dimz= 57.0
+            #if(o_oriented):
+            #    if(or_nm == 'sopra' or_nm == 'sotto'):
+            #       
+            #
+            #    elif(or_nm == 'lato'):
+              
+        case 'X1-Y2-Z1': 
+            dimx= 32.0
+            dimy= 63.0
+            dimz= 38.0
+       
+        case 'X1-Y2-Z2':
+            dimx= 32.0
+            dimy= 63.0
+            dimz= 57.0
+            
+        case 'X1-Y2-Z2-CHAMFER': 
+            dimx= 32.0
+            dimy= 63.0
+            dimz= 57.0
+
+        case 'X1-Y2-Z2-TWINFILLET':
+            dimx= 32.0
+            dimy= 63.0
+            dimz= 57.0
+            
+        case 'X1-Y3-Z2':
+            dimx= 32.0
+            dimy= 95.0
+            dimz= 57.0
+            
+        case 'X1-Y3-Z2-FILLET':
+            dimx= 32.0
+            dimy= 95.0
+            dimz= 57.0
+            
+        case 'X1-Y4-Z1': 
+            dimx= 32.0
+            dimy= 127.0
+            dimz= 38.0
+            
+        case 'X1-Y4-Z2':
+            dimx= 32.0
+            dimy= 127.0
+            dimz= 57.0
+            
+        case 'X2-Y2-Z2': 
+            dimx= 63.0
+            dimy= 63.0
+            dimz= 57.0
+            
+        case 'X2-Y2-Z2-FILLET': 
+            dimx= 63.0
+            dimy= 63.0
+            dimz= 57.0
+            
+    msg.dimensionx = dimx
+    msg.dimensiony = dimy
+    msg.dimensiony = dimy
+
+    print("message: ")
     print(msg)
-    return msg
+    pub.publish(msg)
+    #return msg
 
 
 #image processing
@@ -400,17 +475,20 @@ def process_image(rgb, depth):
     # ----
     if depth is not None:
         imgs = (rgb, hsv, depth, img_draw)
-        results = [process_item(imgs, item) for item in pandino]
+        #results = [process_item(imgs, item) for item in pandino]
+        [process_item(imgs, item) for item in pandino]
     
     # ----
-    print("parsing message")
-    msg = ModelStates()
-    for point in results:
-        if point is not None:
-            msg.name.append(point.name)
-            msg.pose.append(point.pose)
-    pub.publish(msg)
-    print("message sent")
+    #print("parsing message")
+    #msg = ModelStates()
+    #for point in results:
+    #    if point is not None:
+    #        msg.name.append(point.name)
+    #        msg.pose.append(point.pose)
+    #print("message: ")
+    #print(msg)
+    #pub.publish(msg)
+    #print("message sent")
 
 
     if a_show:
