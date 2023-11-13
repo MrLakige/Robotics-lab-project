@@ -383,68 +383,54 @@ def process_item(imgs, item):
     rot = rot.inverse
     msg.pose = Pose(Point(*xyz), Quaternion(x=rot.x,y=rot.y,z=rot.z,w=rot.w))
     
-    dimx, dimy, dimz = 0
-    match nm:
-        case 'X1-Y1-Z2':
-            dimx= 32.0
-            dimy= 32.0
-            dimz= 57.0
-            #if(o_oriented):
-            #    if(or_nm == 'sopra' or_nm == 'sotto'):
-            #       
-            #
-            #    elif(or_nm == 'lato'):
-              
-        case 'X1-Y2-Z1': 
-            dimx= 32.0
-            dimy= 63.0
-            dimz= 38.0
-       
-        case 'X1-Y2-Z2':
-            dimx= 32.0
-            dimy= 63.0
-            dimz= 57.0
-            
-        case 'X1-Y2-Z2-CHAMFER': 
-            dimx= 32.0
-            dimy= 63.0
-            dimz= 57.0
+    if a_show:
+        print("Block Orientation:")
+        print("Direction X:", dirX)
+        print("Direction Y:", dirY)
+        print("Direction Z:", dirZ)
+        print("Rotation Quaternion:", rot)
 
-        case 'X1-Y2-Z2-TWINFILLET':
-            dimx= 32.0
-            dimy= 63.0
-            dimz= 57.0
-            
-        case 'X1-Y3-Z2':
-            dimx= 32.0
-            dimy= 95.0
-            dimz= 57.0
-            
-        case 'X1-Y3-Z2-FILLET':
-            dimx= 32.0
-            dimy= 95.0
-            dimz= 57.0
-            
-        case 'X1-Y4-Z1': 
-            dimx= 32.0
-            dimy= 127.0
-            dimz= 38.0
-            
-        case 'X1-Y4-Z2':
-            dimx= 32.0
-            dimy= 127.0
-            dimz= 57.0
-            
-        case 'X2-Y2-Z2': 
-            dimx= 63.0
-            dimy= 63.0
-            dimz= 57.0
-            
-        case 'X2-Y2-Z2-FILLET': 
-            dimx= 63.0
-            dimy= 63.0
-            dimz= 57.0
-            
+    block_dimensions = {
+        'X1-Y1-Z2': (32.0, 32.0, 57.0),
+        'X1-Y2-Z1': (32.0, 63.0, 38.0),
+        'X1-Y2-Z2': (32.0, 63.0, 57.0),
+        'X1-Y2-Z2-CHAMFER': (32.0, 63.0, 57.0),
+        'X1-Y2-Z2-TWINFILLET': (32.0, 63.0, 57.0),
+        'X1-Y3-Z2': (32.0, 95.0, 57.0),
+        'X1-Y3-Z2-FILLET': (32.0, 95.0, 57.0),
+        'X1-Y4-Z1': (32.0, 127.0, 38.0),
+        'X1-Y4-Z2': (32.0, 127.0, 57.0),
+        'X2-Y2-Z2': (63.0, 63.0, 57.0),
+        'X2-Y2-Z2-FILLET': (63.0, 63.0, 57.0),
+    }
+    dimx, dimy, dimz = block_dimensions.get(nm, (0, 0, 0))
+
+    def calculate_rotation_angle(axis):
+        return np.degrees(np.arctan2(axis[1], axis[0]))
+    
+    angle_x = calculate_rotation_angle(dirX)
+    angle_z = calculate_rotation_angle(dirZ)
+
+    is_rotated_90_to_180_x = np.isclose(angle_x, [90, 180], atol=1.0).any()
+    is_rotated_90_z = np.isclose(angle_z, [85, 95], atol=1.0).any() #is about 90 degrees
+    is_rotated_270_to_360_x = np.isclose(angle_x, [270, 360], atol=1.0).any()
+
+
+    if(is_rotated_90_z):
+        app=dimz
+        dimz=dimy
+        dimy=app
+        if(is_rotated_90_to_180_x or is_rotated_270_to_360_x):
+            app=dimx
+            dimx=dimz
+            dimz=app
+    else:
+        if(is_rotated_90_to_180_x or is_rotated_270_to_360_x):
+            app=dimx
+            dimx=dimy
+            dimy=app
+
+
     msg.dimensionx = dimx
     msg.dimensiony = dimy
     msg.dimensiony = dimy
