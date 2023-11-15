@@ -20,7 +20,7 @@ from geometry_msgs.msg import *
 from pyquaternion import Quaternion as PyQuaternion
 
 print(os.getcwd())
-from vision.msg import ModelStates
+from vision.msg import Block
 
 # Global variables
 path_yolo = path.join(path.expanduser('~'), 'yolov5')
@@ -357,8 +357,8 @@ def process_item(imgs, item):
         dotclamp = max(-1, min(1, np.dot(vec, np.array(ax))))
         return wise * np.arccos(dotclamp)
 
-    msg = ModelStates()
-    msg.name = nm
+    msg = Block()
+    msg.class_id = nm
     #fov = 1.047198
     #rap = np.tan(fov)
     #print("rap: ", rap)
@@ -382,12 +382,20 @@ def process_item(imgs, item):
     rot = qz3 * qy2 * qz1
     rot = rot.inverse
     msg.pose = Pose(Point(*xyz), Quaternion(x=rot.x,y=rot.y,z=rot.z,w=rot.w))
-    
+    #msg.posx = rdirX
+    #msg.posy = rdirY
+    #msg.posz = rdirZ
+
+    msg.quatx = qz1
+    msg.quaty = qy2
+    msg.quatz = qz3
+    msg.quatw = rot
+
     if a_show:
         print("Block Orientation:")
-        print("Direction X:", dirX)
-        print("Direction Y:", dirY)
-        print("Direction Z:", dirZ)
+        print("Direction X:", rdirX)
+        print("Direction Y:", rdirY)
+        print("Direction Z:", rdirZ)
         print("Rotation Quaternion:", rot)
 
     block_dimensions = {
@@ -408,8 +416,8 @@ def process_item(imgs, item):
     def calculate_rotation_angle(axis):
         return np.degrees(np.arctan2(axis[1], axis[0]))
     
-    angle_x = calculate_rotation_angle(dirX)
-    angle_z = calculate_rotation_angle(dirZ)
+    angle_x = calculate_rotation_angle(rdirX)
+    angle_z = calculate_rotation_angle(rdirZ)
 
     is_rotated_90_to_180_x = np.isclose(angle_x, [90, 180], atol=1.0).any()
     is_rotated_90_z = np.isclose(angle_z, [85, 95], atol=1.0).any() #is about 90 degrees
@@ -515,7 +523,7 @@ def start_node():
 
     print("Starting Node Vision 1.0")
 
-    rospy.init_node('vision') 
+    rospy.init_node('vision', anonymous=True) 
     
     print("Subscribing to camera images")
     #topics subscription
@@ -528,7 +536,7 @@ def start_node():
     depth = message_filters.Subscriber("/ur5/zed_node/depth/depth_registered", Image)
 
     #publisher results
-    pub=rospy.Publisher("mega_blocks_detections", ModelStates, queue_size=1)
+    pub=rospy.Publisher("/mega_blocks_detections", Block, queue_size=100)
 
     print("Localization is starting.. ")
     print("(Waiting for images..)", end='\r'), print(end='\033[K')
