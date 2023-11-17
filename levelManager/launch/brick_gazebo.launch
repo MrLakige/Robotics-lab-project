@@ -1,0 +1,80 @@
+<?xml version="1.0" ?>
+<launch>
+
+	<arg name="pos1_x" default="0.5" />
+	<arg name="pos1_y" default="0.0" />
+	<arg name="pos1_z" default="0.0" />
+	<arg name="pos2_x" default="1." />
+	<arg name="pos2_y" default="0.0" />
+	<arg name="pos2_z" default="0.0" />
+	<arg name="pos3_x" default="1.5" />
+	<arg name="pos3_y" default="0.0" />
+	<arg name="pos3_z" default="0.0" />
+	<arg name="pos4_x" default="2." />
+	<arg name="pos4_y" default="0.0" />
+	<arg name="pos4_z" default="0.0" />
+	<arg name="pos5_x" default="2.5" />
+	<arg name="pos5_y" default="0.0" />
+	<arg name="pos5_z" default="0.0" />
+	<arg name="pos6_x" default="3." />
+	<arg name="pos6_y" default="0.0" />
+	<arg name="pos6_z" default="0.0" />
+	<arg name="pos7_x" default="3.5" />
+	<arg name="pos7_y" default="0.0" />
+	<arg name="pos7_z" default="0.0" />
+        <arg name="pos8_x" default="4." />
+	<arg name="pos8_y" default="0.0" />
+	<arg name="pos8_z" default="0.0" />
+	<arg name="pos9_x" default="4.5" />
+	<arg name="pos9_y" default="0.0" />
+	<arg name="pos9_z" default="0.0" />
+	<arg name="pos10_x" default="5." />
+	<arg name="pos10_y" default="0.0" />
+	<arg name="pos10_z" default="0.0" />
+	<arg name="pos11_x" default="5.5" />
+	<arg name="pos11_y" default="0.0" />
+	<arg name="pos11_z" default="0.0" />
+       
+  	<include file="$(find brick_description)/launch/upload.launch"/>
+
+     	<!-- 2 launch gzserver (with empty world)/ gzcclient: Starts Gazebo and load the empty world if requested to do so - -->
+        <include file="$(find gazebo_ros)/launch/empty_world.launch" >
+                <arg name="paused" default="false" />
+                <arg name="use_sim_time" default="true" />
+                <arg name="gui" value="true" />
+                <arg name="headless" default="false" />
+                <arg name="debug" default="false" />
+                <arg name="verbose" value="true" />
+        </include>
+
+        <node name="spawn_gazebo_model1" pkg="gazebo_ros" type="spawn_model" args="-urdf -param brick1_description -model brick1 -x $(arg pos1_x) -y $(arg pos2_y) -z $(arg pos2_z)"/>
+	<node name="spawn_gazebo_model2" pkg="gazebo_ros" type="spawn_model" args="-urdf -param brick2_description -model brick2 -x $(arg pos2_x) -y $(arg pos2_y) -z $(arg pos2_z)"/>
+	
+
+	<!-- I need to do this here because there is no world link already to refer-->	
+	<!-- <node pkg="tf" type="static_transform_publisher" name="brick1_tf_broadcaster" args="-$(arg pos1_x)  -$(arg pos1_y) -$(arg pos1_z)  0 0 0    /brick1 /world   1000"/> -->
+	<!-- If you use together with ur5 comment the previous line  and decomment the next-->
+	<node pkg="tf" type="static_transform_publisher" name="X1-Y1-Z2_tf_broadcaster" args="$(arg pos1_x)  $(arg pos1_y) $(arg pos1_z)  0 0 0   /X1-Y1-Z2 /world 1000"/>
+
+	
+	<node pkg="tf" type="static_transform_publisher" name="X1-Y2-Z1_tf_broadcaster" args="$(arg pos2_x)  $(arg pos2_y) $(arg pos2_z)  0 0 0   /world  /X1-Y2-Z1 1000"/>
+	<node pkg="tf" type="static_transform_publisher" name="X1-Y2-Z2_tf_broadcaster" args="$(arg pos3_x)  $(arg pos3_y) $(arg pos3_z)  0 0 0   /world  /X1-Y2-Z2 1000"/>
+	<node pkg="tf" type="static_transform_publisher" name="X1-Y2-Z2-CHAMFER_tf_broadcaster" args="$(arg pos4_x)  $(arg pos4_y) $(arg pos4_z)  0 0 0   /world  /X1-Y2-Z2-CHAMFER 1000"/>
+	<node pkg="tf" type="static_transform_publisher" name="X1-Y2-Z2-TWINFILLET_tf_broadcaster" args="$(arg pos5_x)  $(arg pos5_y) $(arg pos5_z)  0 0 0   /world  /X1-Y2-Z2-TWINFILLET 1000"/>
+	<node pkg="tf" type="static_transform_publisher" name="X1-Y3-Z2_tf_broadcaster" args="$(arg pos6_x)  $(arg pos6_y) $(arg pos6_z)  0 0 0   /world  /X1-Y3-Z2 1000"/>
+	<node pkg="tf" type="static_transform_publisher" name="X1-Y3-Z2-FILLET_tf_broadcaster" args="$(arg pos7_x)  $(arg pos7_y) $(arg pos7_z)  0 0 0   /world  /X1-Y3-Z2-FILLET 1000"/>
+	<node pkg="tf" type="static_transform_publisher" name="X1-Y4-Z1_tf_broadcaster" args="$(arg pos8_x)  $(arg pos8_y) $(arg pos8_z)  0 0 0   /world  /X1-Y4-Z1 1000"/>
+	<node pkg="tf" type="static_transform_publisher" name="X1-Y4-Z2_tf_broadcaster" args="$(arg pos9_x)  $(arg pos9_y) $(arg pos9_z)  0 0 0   /world  /X1-Y4-Z2 1000"/>
+	<node pkg="tf" type="static_transform_publisher" name="X2-Y2-Z2_tf_broadcaster" args="$(arg pos10_x)  $(arg pos10_y) $(arg pos10_z)  0 0 0   /world  /X2-Y2-Z2 1000"/>
+	<node pkg="tf" type="static_transform_publisher" name="X2-Y2-Z2-FILLET_tf_broadcaster" args="$(arg pos11_x)  $(arg pos11_y) $(arg pos11_z)  0 0 0   /world  /X2-Y2-Z2-FILLET 1000"/>
+
+	   
+
+	<arg name="rviz_conf" default="$(find brick_description)/rviz/conf.rviz"/>
+	
+	<!-- run rviz -->
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rviz_conf) -f world"/>
+
+
+
+</launch>

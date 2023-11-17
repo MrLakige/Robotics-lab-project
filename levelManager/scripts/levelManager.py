@@ -3,8 +3,8 @@ from pandas import array
 from gazebo_msgs.srv import SpawnModel, DeleteModel
 from geometry_msgs.msg import *
 from gazebo_msgs.msg import ModelStates
-from tf.transformations import quaternion_from_euler
-import rospy, rospkg, rosservice
+from tf import *
+import rospy, rospkg, rosservice, roslaunch
 import sys
 import time
 import random
@@ -12,42 +12,34 @@ import numpy as np
 
 import xml.etree.ElementTree as ET
 
-#DEFAULT PARAMETERS
-packageName = "levelManager"
-spawnName = '_spawn'
-level = None
-selectBrick = None
-maxLego = 11
-spawn_pos = (-0.35, -0.42, 0.74)  		#center of spawn area
-spawn_dim = (0.32, 0.23)    			#spawning area
-min_space = 0.010    					#min space between lego bricks
-min_distance = 0.15   					#min distance between lego bricks
-
 path = rospkg.RosPack().get_path("levelManager")
 
-buildings = ['costruzione-1', 'costruzione-2']
+costruzioni = ['costruzione-1', 'costruzione-2']
 
-#function to randomly select the building
-def randomBuilding():
-	return random.choice(buildings)
+def randomCostruzione():
+	return random.choice(costruzioni)
 
-#function to get the pose from model elements
 def getPose(modelEl):
 	strpose = modelEl.find('pose').text
 	return [float(x) for x in strpose.split(" ")]
 
-#function to the name and type from the mdoel element
-def getNameType(modelEl):
+def get_Name_Type(modelEl):
 	if modelEl.tag == 'model':
 		name = modelEl.attrib['name']
 	else:
 		name = modelEl.find('name').text
 	return name, name.split('_')[0]
+	
 
-#function to get the lego model for a building
-def getLegoForBuilding(select=None):
-	nome_cost = randomBuilding()
-	if select is not None: nome_cost = buildings[select]
+def get_Parent_Child(jointEl):
+	parent = jointEl.find('parent').text.split('::')[0]
+	child = jointEl.find('child').text.split('::')[0]
+	return parent, child
+
+
+def getLego4Costruzione(select=None):
+	nome_cost = randomCostruzione()
+	if select is not None: nome_cost = costruzioni[select]
 	print("spawning", nome_cost)
 
 	tree = ET.parse(f'{path}/lego_models/{nome_cost}/model.sdf')
@@ -62,25 +54,37 @@ def getLegoForBuilding(select=None):
 	models = ModelStates()
 	for bEl in brickEls:
 		pose = getPose(bEl)
-		models.name.append(getNameType(bEl)[1])
+		models.name.append(get_Name_Type(bEl)[1])
 		rot = Quaternion(*quaternion_from_euler(*pose[3:]))
 		models.pose.append(Pose(Point(*pose[:3]), rot))
 
 	rospy.init_node("levelManager")
-	instuction = rospy.Publisher("costruzioneinstuction", ModelStates, queue_size=1)
-	instuction.publish(models)
+	istruzioni = rospy.Publisher("costruzioneIstruzioni", ModelStates, queue_size=1)
+	istruzioni.publish(models)
 
 	return models
 
-#functin to change the color of the model
+
 def changeModelColor(model_xml, color):
 	root = ET.XML(model_xml)
 	root.find('.//material/script/name').text = color
 	return ET.tostring(root, encoding='unicode')	
 
-#function to parse command line arguments
+
+#DEFAULT PARAMETERS
+package_name = "levelManager"
+spawn_name = '_spawn'
+level = None
+selectBrick = None
+maxLego = 11
+spawn_pos = (0,72, 0,4875, 0.92)  		#center of spawn area
+spawn_dim = (0.4, 0.465)    			#spawning area
+min_space = 0.010    					#min space between lego
+min_distance = 0.15   					#min distance between lego
+
+#function parsing arguments
 def readArgs():
-	global packageName
+	global package_name
 	global level
 	global selectBrick
 	try:
@@ -108,7 +112,6 @@ def readArgs():
 		exit()
 		pass
 
-#dictionary mapping brick - types - to dimentions
 brickDict = { \
 		'X1-Y1-Z2': (0,(0.031,0.031,0.057)), \
 		'X1-Y2-Z1': (1,(0.031,0.063,0.038)), \
@@ -123,7 +126,6 @@ brickDict = { \
 		'X2-Y2-Z2-FILLET': (10,(0.063,0.063,0.057)) \
 		}
 
-#dictionary mapping brick - types - to orientations
 brickOrientations = { \
 		'X1-Y2-Z1': (((1,1),(1,3)),-1.715224,0.031098), \
 		'X1-Y2-Z2-CHAMFER': (((1,1),(1,2),(0,2)),2.359515,0.015460), \
@@ -133,26 +135,22 @@ brickOrientations = { \
 		'X2-Y2-Z2-FILLET': (((1,1),(1,2),(0,2)),2.496793,0.018718) \
 		} #brickOrientations = (((side, roll), ...), rotX, height)
 
-#list of possible brick colours
-colorList = ['Gazebo/Indigo', 'Gazebo/Gray', 'Gazebo/Orange', \
+#color bricks
+colorList = ['Gazebo/Indigo', 'Gazebo/Orange', \
 		'Gazebo/Red', 'Gazebo/Purple', 'Gazebo/SkyBlue', \
-		'Gazebo/DarkYellow', 'Gazebo/White', 'Gazebo/Green']
+		'Gazebo/DarkYellow', 'Gazebo/Green']
 
-#list of brick types
 brickList = list(brickDict.keys())
-
-#list to keep track of brick counters
 counters = [0 for brick in brickList]
 
-#array to save lego bricks
 lego = [] 	#lego = [[name, type, pose, radius], ...]
 
-#function to get the model path
+#get model path
 def getModelPath(model):
-	pkgPath = rospkg.RosPack().get_path(packageName)
+	pkgPath = rospkg.RosPack().get_path(package_name)
 	return f'{pkgPath}/lego_models/{model}/model.sdf'
 
-#function to get a random position to set the brick
+#set position brick
 def randomPose(brickType, rotated):
 	_, dim, = brickDict[brickType]
 	spawnX = spawn_dim[0]
@@ -188,11 +186,10 @@ def randomPose(brickType, rotated):
 	point = Point(pointX, pointY, pointZ)
 	return Pose(point, rot), dim1, dim2
 
-#ecception class for pose errors
 class PoseError(Exception):
 	pass
 
-#function to get a valid pose for a brick
+#function to get a valid pose
 def getValidPose(brickType, rotated):
 	trys = 1000
 	valid = False
@@ -208,12 +205,13 @@ def getValidPose(brickType, rotated):
 				valid = False
 				trys -= 1
 				if trys == 0:
-					raise PoseError("No space found in the spawning area")
+					raise PoseError("Nessun spazio nell'area di spawn")
 				break
 	return pos, radius
 
-#functiont to spawn a model
-def spawnModel(model, pos, name=None, ref_frame='world', color=None):
+#functiont to spawn model
+''''
+def spawn_model(model, pos, name=None, ref_frame='world', color=None):
 	
 	if name is None:
 		name = model
@@ -222,20 +220,35 @@ def spawnModel(model, pos, name=None, ref_frame='world', color=None):
 	if color is not None:
 		model_xml = changeModelColor(model_xml, color)
 
-	spawnModelClient = rospy.ServiceProxy('/gazebo/spawn_sdf_model', SpawnModel)
-	return spawnModelClient(model_name=name, 
+	spawn_model_client = rospy.ServiceProxy('/gazebo/spawn_sdf_model', SpawnModel)
+	return spawn_model_client(model_name=name, 
 	    model_xml=model_xml,
 	    robot_namespace='/foo',
 	    initial_pose=pos,
-	    reference_frame=ref_frame)
+	    reference_frame=ref_frame)'''
 
-#support function to delete bricks from table
-def deleteModel(name):
-	deleteModelClient = rospy.ServiceProxy('/gazebo/deleteModel', DeleteModel)
-	return deleteModelClient(model_name=name)
+def spawn_model(model_name, pos, tf_broadcaster):
+    package = 'gazebo_ros'
+    executable = 'spawn_model'
+    name = 'spawn_brick'
+    namespace = '/'
+    param_name = model_name+'_description'
+    
+    args = '-urdf -param '+param_name+' -model '+model_name+' -x '+  str(pos.position.x)+ ' -y '+  str(posposition.y)+ ' -z '+  str(posposition.z)
+    node = roslaunch.core.Node(package, executable, name, namespace,args=args,output="screen")
+    launch = roslaunch.scriptapi.ROSLaunch()
+    launch.start()	
+    process = launch.launch(node)
+    
+    tf_broadcaster.sendTransform(pos.position, (0.0, 0.0, 0.0, 1.0), rospy.Time.now(),'/'+model_name, '/world')
 
-#support functon to spawn lego bricks
-def legoSpawn(brickType=None, rotated=False):
+#support function delete bricks on table
+def delete_model(name):
+	delete_model_client = rospy.ServiceProxy('/gazebo/delete_model', DeleteModel)
+	return delete_model_client(model_name=name)
+
+#support functon spawn bricks
+def spawnaLego(brickType=None, rotated=False, tf=None):
 	if brickType is None:
 		brickType = random.choice(brickList)
 	
@@ -244,7 +257,7 @@ def legoSpawn(brickType=None, rotated=False):
 	pos, radius = getValidPose(brickType, rotated)
 	color = random.choice(colorList)
 
-	spawnModel(brickType, pos, name, spawnName, color)
+	spawn_model(brickType, pos, tf)
 	lego.append((name, brickType, pos, radius))
 	counters[brickIndex] += 1
 
@@ -252,46 +265,64 @@ def legoSpawn(brickType=None, rotated=False):
 def setUpArea(livello=None, selectBrick=None): 	
 
 	#delete all bricks on the table
-	for brickType in brickList:
+	for brickType in brickList:	#ripulisce
 		count = 1
-		while deleteModel(f'{brickType}_{count}').success: count += 1
+		while delete_model(f'{brickType}_{count}').success: count += 1
 	
 	#screating spawn area
-	spawnModel(spawnName, Pose(Point(*spawn_pos),None) )
+	spawn_model(spawn_name, Pose(Point(*spawn_pos),None) )
+
 	
+	broadcaster2 = tf.TransformBroadcaster()
+	broadcaster3 = tf.TransformBroadcaster()
+	broadcaster4 = tf.TransformBroadcaster()
+
 	try:
 		if(livello == 1):
 			#spawn random brick
-			legoSpawn(selectBrick)
-			#legoSpawn('X2-Y2-Z2',rotated=True)
+			#spawnaLego(selectBrick)
+			broadcaster1 = tf.TransformBroadcaster()
+			spawnaLego(brickType=selectBrick, rotated=True, tf=broadcaster1)
+			#spawnaLego('X2-Y2-Z2',rotated=True)
 		elif(livello == 2):
 			#spawn all bricks
 			for brickType in brickList:
-				legoSpawn(brickType)
+				#spawnaLego(brickType)
+				spawnaLego(brickType=brickType, rotated=True, position=(11, 10, 10))
 		elif(livello == 3):
 			#spawn first 4 blocks	
 			for brickType in brickList[0:4]:
-				legoSpawn(brickType)
+				#spawnaLego(brickType)
+				spawnaLego(brickType=brickType, rotated=True, position=(12, 10, 10))
 			#spawn three blocks rotated
-			legoSpawn('X1-Y2-Z2',rotated=True)
-			legoSpawn('X1-Y2-Z2',rotated=True)
-			legoSpawn('X2-Y2-Z2',rotated=True)
+			#spawnaLego('X1-Y2-Z2',rotated=True)
+			spawnaLego(brickType='X1-Y2-Z2', rotated=True, position=(11, 10, 10))
+			#spawnaLego('X1-Y2-Z2',rotated=True)
+			spawnaLego(brickType='X1-Y2-Z2', rotated=True, position=(12, 10, 10))
+			#spawnaLego('X2-Y2-Z2',rotated=True)
+			spawnaLego(brickType='X2-Y2-Z2', rotated=True, position=(10, 10, 10))
 		elif(livello == 4):
 			if selectBrick is None:
 				#spawn blocks build
 				spawn_dim = (0.10, 0.10)    			#spawning area
-				legoSpawn('X1-Y2-Z2',rotated=True)
-				legoSpawn('X1-Y2-Z2',rotated=True)
-				legoSpawn('X1-Y3-Z2')	
-				legoSpawn('X1-Y3-Z2')
-				legoSpawn('X1-Y1-Z2')	
-				legoSpawn('X1-Y2-Z2-TWINFILLET')
+				#spawnaLego('X1-Y2-Z2',rotated=True)
+				spawnaLego(brickType='X1-Y2-Z2', rotated=False, position=(0.5, 0.9, 0.2))
+				#spawnaLego('X1-Y2-Z2',rotated=True)
+				spawnaLego(brickType='X1-Y2-Z2', rotated=False, position=(0.9, 0.7, 0.2))
+				#spawnaLego('X1-Y3-Z2')	
+				spawnaLego(brickType='X1-Y3-Z2', rotated=True, position=(0.7, 1.0, 0.1555))
+				#spawnaLego('X1-Y3-Z2')
+				spawnaLego(brickType='X1-Y3-Z2', rotated=True, position=(1.2, 1.2, 0.1555))
+				#spawnaLego('X1-Y1-Z2')	
+				spawnaLego(brickType='X1-Y1-Z2', rotated=True, position=(1.00, 0.8, 0.1555))
+				#spawnaLego('X1-Y2-Z2-TWINFILLET')
+				spawnaLego(brickType='X1-Y2-Z2-TWINFILLET', rotated=True, position=(8, 10, 10))
 			else:
-				models = getLegoForBuilding()
+				models = getLego4Costruzione()
 				r = 3
 				for brickType in models.name:
 					r -= 1
-					legoSpawn(brickType, rotated=r>0)
+					spawnaLego(brickType, rotated=r>0)
 		else:
 			print("[Error]: select level from 1 to 4")
 			return
@@ -323,9 +354,9 @@ if __name__ == '__main__':
 		print("No Gazebo services in execution")
 		pass
 	except rospkg.common.ResourceNotFound:
-		print(f"Package not found: '{packageName}'")
+		print(f"Package not found: '{package_name}'")
 		pass
 	except FileNotFoundError as err:
 		print(f"Model not found: \n{err}")
-		print(f"Check model in folder'{packageName}/lego_models'")
+		print(f"Check model in folder'{package_name}/lego_models'")
 		pass

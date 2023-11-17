@@ -62,6 +62,12 @@
         <pose>-0.44 -0.50 1.58 1.58 1.57079 0</pose>
       </include>
     </model>
+    
+    <include>
+      <name>X1-Y1-Z2 </name>
+      <uri>model://X1-Y1-Z2</uri>
+      <pose>0.6 0.25  1.0   0 0 0</pose>  <!-- 0.85 + 0.3/2= 1.0-->
+    </include>
 
   </world>
 </sdf>
