@@ -2,6 +2,8 @@
 #include <complex>
 #include "../include/inverseKinematics.h"
 
+#include <iostream>
+
 Eigen::Matrix<double,6,1> A = {0, -0.425, -0.3922, 0, 0, 0};
 Eigen::Matrix<double,6,1> D = {0.1625, 0, 0, 0.1333, 0.0997, 0.0996};
 
@@ -65,7 +67,7 @@ Eigen::Matrix4d T54f(double th){
     return T65;
 }               
 
-Eigen::Matrix<double, 6, 8> ur5inverseKinematics(Eigen::Vector3d p60, Eigen::Matrix3d R60){
+Eigen::Matrix<double, 8, 6> ur5inverseKinematics(Eigen::Vector3d p60, Eigen::Matrix3d R60){
 
     Eigen::Matrix4d T60 {
                         {R60(0,0),  R60(0,1),  R60(0,2), p60(0)}, 
@@ -88,7 +90,7 @@ Eigen::Matrix<double, 6, 8> ur5inverseKinematics(Eigen::Vector3d p60, Eigen::Mat
     double th5_3 = +std::real(acos(p60(0)*sin(th1_2)) - p60(1)*cos(th1_2)-D(3) / D(5));
     double th5_4 = -std::real(acos(p60(0)*sin(th1_2)) - p60(1)*cos(th1_2)-D(3) / D(5));
 
-    T60 = T60.inverse();
+    T60 = T60.inverse().eval();
 
     Eigen::Vector3d Xhat = T60.block<3,1>(0,0);
     Eigen::Vector3d Yhat = T60.block<3,1>(0,1);
@@ -99,19 +101,19 @@ Eigen::Matrix<double, 6, 8> ur5inverseKinematics(Eigen::Vector3d p60, Eigen::Mat
     double th6_4 = std::real(atan2(((-Xhat[1]*sin(th1_2)+Yhat[1]*cos(th1_2)))/sin(th5_4), ((Xhat[0]*sin(th1_2)-Yhat[0]*cos(th1_2)))/sin(th5_4)));
 
     //---- DA RIGA 66 ----    
-    Eigen::Matrix4d T41 = ((T10f(th1_1).inverse())*T60)*((T65f(th6_1).inverse())*(T54f(th5_1).inverse()));
+    Eigen::Matrix4d T41 = ((T10f(th1_1).inverse().eval())*T60)*((T65f(th6_1).inverse().eval())*(T54f(th5_1).inverse().eval()));
     Eigen::Vector3d p41_1 = T41.block<3,1>(0,3);
     double p41xz_1 = hypot(p41_1(0), p41_1(2));
 
-    T41 = ((T10f(th1_1).inverse())*T60)*((T65f(th6_2).inverse())*(T54f(th5_2).inverse()));
+    T41 = ((T10f(th1_1).inverse().eval())*T60)*((T65f(th6_2).inverse().eval())*(T54f(th5_2).inverse().eval()));
     Eigen::Vector3d p41_2 = T41.block<3,1>(0,3);
     double p41xz_2 = hypot(p41_2(0), p41_2(2));
 
-    T41 = ((T10f(th1_2).inverse())*T60)*((T65f(th6_3).inverse())*(T54f(th5_3).inverse()));
+    T41 = ((T10f(th1_2).inverse().eval())*T60)*((T65f(th6_3).inverse().eval())*(T54f(th5_3).inverse().eval()));
     Eigen::Vector3d p41_3 = T41.block<3,1>(0,3);
     double p41xz_3 = hypot(p41_3(0), p41_3(2));
 
-    T41 = ((T10f(th1_2).inverse())*T60)*((T65f(th6_4).inverse())*(T54f(th5_4).inverse()));
+    T41 = ((T10f(th1_2).inverse().eval())*T60)*((T65f(th6_4).inverse().eval())*(T54f(th5_4).inverse().eval()));
     Eigen::Vector3d p41_4 = T41.block<3,1>(0,3);
     double p41xz_4 = hypot(p41_4(0), p41_4(2));
 
@@ -135,39 +137,39 @@ Eigen::Matrix<double, 6, 8> ur5inverseKinematics(Eigen::Vector3d p60, Eigen::Mat
     double th2_7 = std::real(atan2(-p41_3[2], -p41_3[0])-asin((A[2]*sin(th3_3))/p41xz_3));
     double th2_8 = std::real(atan2(-p41_4[2], -p41_4[0])-asin((A[2]*sin(th3_4))/p41xz_4));
 
-    Eigen::Matrix4d T43 = ((((T32f(th3_1)).inverse()*(T21f(th2_1)).inverse())*((T10f(th1_1)).inverse()*T60))*((T65f(th6_1)).inverse()*(T54f(th5_1)).inverse()));
+    Eigen::Matrix4d T43 = ((((T32f(th3_1)).inverse().eval()*(T21f(th2_1)).inverse().eval())*((T10f(th1_1)).inverse().eval()*T60))*((T65f(th6_1)).inverse().eval()*(T54f(th5_1)).inverse().eval()));
     Eigen::Vector3d Xhat43 = T43.block<3,1>(0,3);
     double th4_1 = std::real(atan2(Xhat43(1),Xhat43(0)));
 
-    T43 = ((((T32f(th3_2)).inverse()*(T21f(th2_2)).inverse())*((T10f(th1_1)).inverse()*T60))*((T65f(th6_2)).inverse()*(T54f(th5_2)).inverse()));
+    T43 = ((((T32f(th3_2)).inverse().eval()*(T21f(th2_2)).inverse().eval())*((T10f(th1_1)).inverse().eval()*T60))*((T65f(th6_2)).inverse().eval()*(T54f(th5_2)).inverse().eval()));
     Xhat43 = T43.block<3,1>(0,3);
     double th4_2 = std::real(atan2(Xhat43(1),Xhat43(0)));
 
-    T43 = ((((T32f(th3_3)).inverse()*(T21f(th2_3)).inverse())*((T10f(th1_2)).inverse()*T60))*((T65f(th6_3)).inverse()*(T54f(th5_3)).inverse()));
+    T43 = ((((T32f(th3_3)).inverse().eval()*(T21f(th2_3)).inverse().eval())*((T10f(th1_2)).inverse().eval()*T60))*((T65f(th6_3)).inverse().eval()*(T54f(th5_3)).inverse().eval()));
     Xhat43 = T43.block<3,1>(0,3);
     double th4_3 = std::real(atan2(Xhat43(1),Xhat43(0)));
 
-    T43 = ((((T32f(th3_4)).inverse()*(T21f(th2_4)).inverse())*((T10f(th1_2)).inverse()*T60))*((T65f(th6_4)).inverse()*(T54f(th5_4)).inverse()));
+    T43 = ((((T32f(th3_4)).inverse().eval()*(T21f(th2_4)).inverse().eval())*((T10f(th1_2)).inverse().eval()*T60))*((T65f(th6_4)).inverse().eval()*(T54f(th5_4)).inverse().eval()));
     Xhat43 = T43.block<3,1>(0,3);
     double th4_4 = std::real(atan2(Xhat43(1),Xhat43(0)));
     
-    T43 = ((((T32f(th3_5)).inverse()*(T21f(th2_5)).inverse())*((T10f(th1_1)).inverse()*T60))*((T65f(th6_1)).inverse()*(T54f(th5_1)).inverse()));
+    T43 = ((((T32f(th3_5)).inverse().eval()*(T21f(th2_5)).inverse().eval())*((T10f(th1_1)).inverse().eval()*T60))*((T65f(th6_1)).inverse().eval()*(T54f(th5_1)).inverse().eval()));
     Xhat43 = T43.block<3,1>(0,3);
     double th4_5 = std::real(atan2(Xhat43(1),Xhat43(0)));
 
-    T43 = ((((T32f(th3_6)).inverse()*(T21f(th2_6)).inverse())*((T10f(th1_1)).inverse()*T60))*((T65f(th6_2)).inverse()*(T54f(th5_2)).inverse()));
+    T43 = ((((T32f(th3_6)).inverse().eval()*(T21f(th2_6)).inverse().eval())*((T10f(th1_1)).inverse().eval()*T60))*((T65f(th6_2)).inverse().eval()*(T54f(th5_2)).inverse().eval()));
     Xhat43 = T43.block<3,1>(0,3);
     double th4_6 = std::real(atan2(Xhat43(1),Xhat43(0)));
 
-    T43 = ((((T32f(th3_7)).inverse()*(T21f(th2_7)).inverse())*((T10f(th1_2)).inverse()*T60))*((T65f(th6_3)).inverse()*(T54f(th5_3)).inverse()));
+    T43 = ((((T32f(th3_7)).inverse().eval()*(T21f(th2_7)).inverse().eval())*((T10f(th1_2)).inverse().eval()*T60))*((T65f(th6_3)).inverse().eval()*(T54f(th5_3)).inverse().eval()));
     Xhat43 = T43.block<3,1>(0,3);
     double th4_7 = std::real(atan2(Xhat43(1),Xhat43(0)));
 
-    T43 = ((((T32f(th3_8)).inverse()*(T21f(th2_8)).inverse())*((T10f(th1_2)).inverse()*T60))*((T65f(th6_4)).inverse()*(T54f(th5_4)).inverse()));
+    T43 = ((((T32f(th3_8)).inverse().eval()*(T21f(th2_8)).inverse().eval())*((T10f(th1_2)).inverse().eval()*T60))*((T65f(th6_4)).inverse().eval()*(T54f(th5_4)).inverse().eval()));
     Xhat43 = T43.block<3,1>(0,3);
     double th4_8 = std::real(atan2(Xhat43(1),Xhat43(0)));
 
-    Eigen::Matrix<double, 6, 8> Th {
+    Eigen::Matrix<double, 8, 6> Th {
                                         {th1_1, th2_1, th3_1, th4_1, th5_1, th6_1},
                                         {th1_1, th2_2, th3_2, th4_2, th5_2, th6_2},
                                         {th1_2, th2_3, th3_3, th4_3, th5_3, th6_3},
@@ -177,6 +179,5 @@ Eigen::Matrix<double, 6, 8> ur5inverseKinematics(Eigen::Vector3d p60, Eigen::Mat
                                         {th1_2, th2_7, th3_7, th4_7, th5_3, th6_3},
                                         {th1_2, th2_8, th3_8, th4_8, th5_4, th6_4},
                                     };
-
     return Th;
 }
