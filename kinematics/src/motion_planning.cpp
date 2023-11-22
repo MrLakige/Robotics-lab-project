@@ -20,7 +20,7 @@
 #include "../include/inverseKinematics.h"
 #include "vision/Block.h"
 #include "ros_impedance_controller/generic_float.h"
-
+#include <std_msgs/Float64.h>
 
 using namespace std;
 
@@ -191,10 +191,12 @@ void moveTo(Eigen::Vector3d xef, Eigen::Vector3d phief, ros::Publisher pub, doub
     Eigen::Quaternion<double> q = rollAngle * yawAngle * pitchAngle;
 
     Eigen::Matrix3d rotationMatrix = q.matrix();
-
-    Eigen::Matrix<double, 6, 8> Th= ur5inverseKinematics(x, rotationMatrix);  
+    Eigen::Matrix<double, 8, 6> Th= ur5inverseKinematics(x, rotationMatrix);
+    cout<<"test"<<endl;  
     while (ros::ok()){
+        //cout<<"move"<<endl;
         // Check if the arm is in close range, threshold of wanted position
+        /*
         if ((TH0(0)>Th(6,0)-threshold and TH0(0)<Th(6,0)+threshold) and (TH0(1)>Th(6,1)-threshold and TH0(1)<Th(6,1)+threshold) and (TH0(2)>Th(6,2)-threshold and TH0(2) < Th(6,2)+threshold) and (TH0(3)>Th(6,3)-threshold and TH0(3) < Th(6,3)+threshold) and (TH0(4)>Th(6,4)-threshold and TH0(4) < Th(6,4)+threshold) and (TH0(5)>Th(6,5)-threshold and TH0(5) < Th(6,5)+threshold)){
             break;
         }
@@ -204,11 +206,21 @@ void moveTo(Eigen::Vector3d xef, Eigen::Vector3d phief, ros::Publisher pub, doub
 
         pts.positions = {Th(6,0), Th(6,1), Th(6,2), Th(6,3), Th(6,4), Th(6,5)};
         pts.time_from_start = ros::Duration(0.2);
+        //pts.accelerations={0.5, 0.5, 0.5, 0.5, 0.5, 0.5};
 
+        cout<<pts<<endl;
         // Set the points to the trajectory
         traj.points.push_back(pts);
         // Publish the message to the topic
         pub.publish(traj);
+        */
+
+        std_msgs::Float64MultiArray msg;
+        for(int i=0; i<6;i++){
+            msg.data.push_back((_Float64)Th(i, 2));
+        }
+        //msg.data = Th.col(2);
+        pub.publish(msg);
     }
 }
 
@@ -232,7 +244,9 @@ int main(int argc, char** argv){
     detachSrv.waitForExistence();
     */
     ros::ServiceClient gripperClient = nH.serviceClient<ros_impedance_controller::generic_float>("move_gripper");
-    ros::Publisher pub = nH.advertise<std_msgs::Float64MultiArray>("/trajectory_controller/command", 10);
+    //ros::Publisher pub = nH.advertise<std_msgs::Float64MultiArray>("/trajectory_controller/command", 10);
+    ros::Publisher pub = nH.advertise<std_msgs::Float64MultiArray>("/ur5/joint_group_pos_controller/command", 1);
+
     ros::Subscriber sub = nH.subscribe("/joint_states", 1000, jointState);    
 
     //std_msgs::String yolo = *(ros::topic::waitForMessage<std_msgs::String>("/mega_blocks_detections"));
@@ -263,7 +277,6 @@ int main(int argc, char** argv){
     double thresholdG = 0.1; //generic threshold
 
     for(int i=0; i<detectedObjs.size(); i++){
-        cout<<"please do not crash"<<endl;
         double x = detectedObjs[i].x;
         double y = detectedObjs[i].y;
         moveGripper(0.0, gripperClient);
@@ -271,7 +284,6 @@ int main(int argc, char** argv){
         Eigen::Vector3d xef = {x, y, 0.36};
         Eigen::Vector3d phief = {detectedObjs[i].gripperOp, M_PI, 0};
 
-        cout<<"move?"<<endl;
         moveTo(xef, phief, pub, thresholdG);
 
         xef = {x, y, 0.218};
