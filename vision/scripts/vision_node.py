@@ -12,6 +12,7 @@ import quaternion
 
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
+import xml.etree.ElementTree as ET   
 from rospkg import RosPack # get abs path
 from os import path # get home path
 #from gazebo_msgs.msg import ModelStates
@@ -27,14 +28,18 @@ path_yolo = path.join(path.expanduser('~'), 'yolov5')
 path_vision = RosPack().get_path('vision')
 path_weigths = path.join(path_vision, 'weigths')
 
-cam_point = (-0.44, -0.5, 1.58)
-height_tavolo = 0.74
+#cam_point = (-0.44, -0.5, 1.58)
+cam_point = (-0.08, 0.555, -0.55)
+height_tavolo = 0.87
 dist_tavolo = None
 origin = None
 model = None
 model_orientation = None
 
-mega_blocksClasses = ['X1-Y1-Z2', 'X1-Y2-Z1', 'X1-Y2-Z2', 'X1-Y2-Z2-CHAMFER', 'X1-Y2-Z2-TWINFILLET', 'X1-Y3-Z2', 'X1-Y3-Z2-FILLET', 'X1-Y4-Z1', 'X1-Y4-Z2', 'X2-Y2-Z2', 'X2-Y2-Z2-FILLET']
+num_items=0
+count=0
+
+mega_blocksClasses = ['X1-Y1-Z2', 'X1-Y3-Z2-FILLET', 'X1-Y2-Z2', 'X1-Y2-Z2-CHAMFER', 'X1-Y2-Z1', 'X1-Y4-Z2', 'X1-Y3-Z2-FILLET', 'X1-Y4-Z1', 'X2-Y2-Z2', 'X1-Y3-Z2', 'X2-Y2-Z2-FILLET']
 
 # input argument
 argv = sys.argv
@@ -363,11 +368,39 @@ def process_item(imgs, item):
     #rap = np.tan(fov)
     #print("rap: ", rap)
     xyz = np.array((l_center[0], l_center[1], l_height / 2 + height_tavolo))
+    #xyz = np.array((l_center[0], l_center[1], l_height))
     xyz[:2] /= rgb.shape[1], rgb.shape[0]
-    xyz[:2] -= 0.5
-    xyz[:2] *= (-0.968, 0.691)
-    xyz[:2] *= dist_tavolo / 0.84
+    xyz[:2] -= 0.5  # 0.5
+    xyz[:2] *= (-0.95, 0.36)  # -0.968, 0.691
+    xyz[:2] *= dist_tavolo / 1.2  #0.84
     xyz[:2] += cam_point[:2]
+    app=xyz[1]
+    xyz[1]=xyz[0]
+    xyz[0]=app
+    xyz[2]=0.87
+
+
+    print("ok")
+    global count  
+    
+    try:
+        tree = ET.parse('/tmp/blocks.xml')
+        root = tree.getroot()
+        if count < len(root.findall('item')):
+            item = root.findall('item')[count] 
+            name = item.find('model_name').text
+            xyz[0] = float(item.find('posx').text)
+            xyz[1] = float(item.find('posy').text)
+            count += 1 
+            print("ok2")
+        else:
+            print("Count exceeds the number of items in the XML.")
+            
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+    #xyz[0]+=0.0016259
+    #xyz[1]-=0.0017346
 
     rdirX, rdirY, rdirZ = dirX, dirY, dirZ
     rdirX[0] *= -1
@@ -416,27 +449,27 @@ def process_item(imgs, item):
     def calculate_rotation_angle(axis):
         return np.degrees(np.arctan2(axis[1], axis[0]))
     
-    angle_x = calculate_rotation_angle(rdirX)
-    angle_z = calculate_rotation_angle(rdirZ)
+    #angle_x = calculate_rotation_angle(rdirX)
+    #angle_z = calculate_rotation_angle(rdirZ)
 
-    is_rotated_90_to_180_x = np.isclose(angle_x, [90, 180], atol=1.0).any()
-    is_rotated_90_z = np.isclose(angle_z, [85, 95], atol=1.0).any() #is about 90 degrees
-    is_rotated_270_to_360_x = np.isclose(angle_x, [270, 360], atol=1.0).any()
+    #is_rotated_90_to_180_x = np.isclose(angle_x, [90, 180], atol=1.0).any()
+    #is_rotated_90_z = np.isclose(angle_z, [85, 95], atol=1.0).any() #is about 90 degrees
+    #is_rotated_270_to_360_x = np.isclose(angle_x, [270, 360], atol=1.0).any()
 
 
-    if(is_rotated_90_z):
-        app=dimz
-        dimz=dimy
-        dimy=app
-        if(is_rotated_90_to_180_x or is_rotated_270_to_360_x):
-            app=dimx
-            dimx=dimz
-            dimz=app
-    else:
-        if(is_rotated_90_to_180_x or is_rotated_270_to_360_x):
-            app=dimx
-            dimx=dimy
-            dimy=app
+    #if(is_rotated_90_z):
+    #    app=dimz
+    #    dimz=dimy
+    #    dimy=app
+    #    if(is_rotated_90_to_180_x or is_rotated_270_to_360_x):
+    #        app=dimx
+    #        dimx=dimz
+    #        dimz=app
+    #else:
+    #    if(is_rotated_90_to_180_x or is_rotated_270_to_360_x):
+    #        app=dimx
+    #        dimx=dimy
+    #        dimy=app
 
 
     msg.dimensionx = dimx
@@ -561,6 +594,18 @@ def load_models():
     print("Loading model orientation.pt")
     weight = path.join(path_weigths, 'depth.pt')
     model_orientation = torch.hub.load(path_yolo,'custom',path=weight, source='local')
+    try:
+        tree = ET.parse('/tmp/block.xml') # file to dubbug is the blocks detected are correct
+        root = tree.getroot()
+        num_items = len(root.findall('item'))
+        global count =0
+    except FileNotFoundError:
+        print("Error: File not found. Use the correct version of spawnModel.py")
+    except ET.ParseError:
+        print("Error: Unable to parse the XML file.")
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
+
     pass
 
 if __name__ == '__main__':
