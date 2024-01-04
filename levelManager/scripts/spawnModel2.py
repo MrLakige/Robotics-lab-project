@@ -81,6 +81,18 @@ def saveToXml(model_name, pos, orientation):
     tree = ET.ElementTree(root)
     tree.write("/tmp/blocks.xml")
 
+def spawnRandomBlocksLevel0():
+    broadcaster = tf.TransformBroadcaster()
+    pos = np.array([0.57, 0.63, 0.92])
+
+    # 1st level: Spawn 1 block with random position
+    random_model = random.choice(list(ModelName))
+    spawnModel(random_model, broadcaster, pos)
+    
+    # Save data to XML file
+    saveToXml(random_model, pos, None)
+
+
 def spawnRandomBlocksLevel1():
     broadcaster = tf.TransformBroadcaster()
     pos = np.array([np.random.uniform(0.45, 0.7), np.random.uniform(0.45, 0.7), 0.92])
@@ -141,7 +153,9 @@ if __name__ == '__main__':
     level = int(sys.argv[1])
     num_blocks = random.randint(1, 10)
 
-    if level == 1:
+    if level == 0:
+        spawnRandomBlocksLevel0()
+    elif leve == 1:
         spawnRandomBlocksLevel1()
     elif level == 2:
         spawnRandomBlocksLevel2(num_blocks)
