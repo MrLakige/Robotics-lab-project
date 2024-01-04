@@ -1,9 +1,34 @@
-#include "../include/directKinematics.h"
+#include "directKinematics.h"
 
+Eigen::Matrix4d generalTransformationMatrix(Vector6d th,int i){
+    return Eigen::Matrix4d{
+    {cos(th(i)), -sin(th(i))*cos(Alpha(i)), sin(th(i))*sin(Alpha(i)), A(i)*cos(th(i))},
+    {sin(th(i)), cos(th(i))*cos(Alpha(i)), -cos(th(i))*sin(Alpha(i)), A(i)*sin(th(i))},
+    {0, sin(Alpha(i)), cos(Alpha(i)), D(i)},
+    {0, 0, 0, 1}
+    };
+}
 
-directK ur5DirectKinematics(Eigen::Matrix<double,6,1> Th){
-    Eigen::Matrix<double,6,1> A = {0, -0.425, -0.3922, 0, 0, 0};
-    Eigen::Matrix<double,6,1> D = {0.1625, 0, 0, 0.1333, 0.0997, 0.0996};
+directK ur5DirectKinematics(Vector6d Th){
+    directK direct;
+    
+    Eigen::Matrix4d T10 = generalTransformationMatrix(Th, 0);
+    Eigen::Matrix4d T21 = generalTransformationMatrix(Th, 1);
+    Eigen::Matrix4d T32 = generalTransformationMatrix(Th, 2);
+    Eigen::Matrix4d T43 = generalTransformationMatrix(Th, 3);
+    Eigen::Matrix4d T54 = generalTransformationMatrix(Th, 4);
+    Eigen::Matrix4d T65 = generalTransformationMatrix(Th, 5);
+
+    Eigen::Matrix4d T06 = (T10*T21*T32*T43*T54*T65);
+
+    direct.pe = T06.block<3,1>(0,3);
+    direct.Re = T06.block<3,3>(0,0);
+
+    return direct;
+}
+
+/* directK ur5DirectKinematics(Vector6d Th){
+    directK direct;
     
     Eigen::Matrix4d T10{
                         {cos(Th(0)),  -sin(Th(0)),  0, 0}, 
@@ -48,12 +73,10 @@ directK ur5DirectKinematics(Eigen::Matrix<double,6,1> Th){
                         {0, 0, 0, 1}
                         };
 
-    Eigen::Matrix4d T06 = ((T10*T21)*(T32*T43))*(T54*T65);
-
-    directK direct;
+    Eigen::Matrix4d T06 = (T10*T21*T32*T43*T54*T65);
 
     direct.pe = T06.block<3,1>(0,3);
     direct.Re = T06.block<3,3>(0,0);
 
     return direct;
-}
+} */

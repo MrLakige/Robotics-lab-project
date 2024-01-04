@@ -1,9 +1,8 @@
 #ifndef INVERSEKINEMATICS_H
 #define INVERSEKINEMATICS_H
 
-#include <Eigen/Core>
-#include <Eigen/Geometry>
+#include "typedefs.h"
 
-Eigen::Matrix<double, 8, 6> ur5inverseKinematics(Eigen::Vector3d p60, Eigen::Matrix3d R60);
+Matrix68d ur5inverseKinematics(Eigen::Vector3d p60, Eigen::Matrix3d R60);
 
 #endif

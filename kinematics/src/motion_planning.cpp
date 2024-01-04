@@ -217,7 +217,7 @@ void moveTo(Eigen::Vector3d xef, Eigen::Vector3d phief, ros::Publisher pub, doub
 
         std_msgs::Float64MultiArray msg;
         for(int i=0; i<6;i++){
-            msg.data.push_back((_Float64)Th(i, 2));
+            msg.data.push_back((_Float64)Th(6, i));
         }
         //msg.data = Th.col(2);
         pub.publish(msg);
