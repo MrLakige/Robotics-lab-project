@@ -81,7 +81,6 @@ def saveToXml(model_name, pos, orientation):
     tree = ET.ElementTree(root)
     tree.write("/tmp/blocks.xml")
 
-
 def spawnRandomBlocksLevel1():
     broadcaster = tf.TransformBroadcaster()
     pos = np.array([np.random.uniform(0.45, 0.7), np.random.uniform(0.45, 0.7), 0.92])
