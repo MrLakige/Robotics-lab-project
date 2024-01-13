@@ -35,4 +35,8 @@ Eigen::Vector3d desPos(Eigen::Vector3d xe, Eigen::Vector3d xf);
 
 Vector6d dotQControlCompleteAangleAxis(Vector6d q, Eigen::Vector3d xe, Eigen::Vector3d xd, Eigen::Vector3d vd, Eigen::Matrix3d Re, Eigen::Vector3d phid, Eigen::Vector3d phidDot);
 
+Eigen::Vector3d rotMatToEuler(Eigen::Matrix3d rotMatrix);
+
+void straightenBlockUp(Eigen::Vector3d pos, Eigen::Vector3d rot, std::string blockName);
+
 #endif

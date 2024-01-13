@@ -1,3 +1,4 @@
+#include <unistd.h> 
 #include "kinematics.h"
 #include <math.h>
 #include <cmath>
@@ -7,7 +8,11 @@
 #include "inverseKinematics.h"
 #include "directKinematics.h"
 #include "functions.h"
-#include "typedefs.h"
+#include <ros/ros.h>
+#include "gazebo_ros_link_attacher/Attach.h"
+#include <Eigen/Dense>
+#include <sensor_msgs/JointState.h>
+#include <std_msgs/Float64MultiArray.h>
 
 void sendDesJstate(const Vector6d & joint_pos, const Eigen::Vector3d & gripper_pos){    
     /* GRIPPER MANAGEMENT */
@@ -58,26 +63,6 @@ double mapToGripperJoints(double diameter){
     }
 }
 
-void setNewGripperPosition(double diameter){
-
-    double q = mapToGripperJoints(diameter);
-
-    Eigen::Vector3d v;
-    v << q, q, q;
-
-    setGripper(v);
-    //this->gripper_diameter = diameter;
-}
-
-void move_gripper(double diameter){ //???
-    if(real_robot){
-        moveGripper(diameter);
-    }else{
-        setNewGripperPosition(diameter);
-        sendDesJstate(jointsAndGripper.joints, jointsAndGripper.gripper);
-    }
-}
-
 void setJoints(Vector6d q){
     jointsAndGripper.joints = q;
 }
@@ -91,102 +76,52 @@ void setJointsAndGripper(Vector6d q, Eigen::Vector3d gripper){
     jointsAndGripper.gripper = gripper;
 }
 
-Eigen::VectorXd nearest_config(Eigen::VectorXd qk, Eigen::MatrixXd val){
-    Eigen::VectorXd min_config = val.block<1,6>(0,0);
-    Eigen::VectorXd diff_min = qk - min_config;
-    Eigen::VectorXd diff;
-    Eigen::VectorXd candidate;
 
-    for(int i=1; i < val.rows(); i++){
-        candidate = val.block<1,6>(i,0);
-        diff = qk -candidate;
-        diff << diff(0)*2, diff(1)*2, diff(2)*2, diff(3), diff(4), diff(5); // more weight on the first joints -> reduce shoulder movements
-        if(diff.norm() < diff_min.norm()){    // looking for the nearest configuration
-            min_config = candidate;
-            diff_min = diff;
-        }
-    }
+void setNewGripperPosition(double diameter){
+    double q = mapToGripperJoints(diameter);
 
-    return min_config;
+    Eigen::Vector3d v;
+    v << q, q, q;
+
+    setGripper(v);
 }
 
-Eigen::MatrixXd jointSpace_kinematics(Eigen::VectorXd qk, Eigen::Vector3d endPos, Eigen::Vector3d endOrient ){
-    Eigen::MatrixXd val = ur5inverseKinematics(endPos, eulerToRotationMatrix(endOrient));
-    Eigen::VectorXd endConfig = nearest_config(qk, val);
-    /*to be added to gripper getter*/
-   /*  for (int j = 0; j < qk.size(); j++) {
-            qk(j) = atan2(std::imag(exp(1i * qk(j))), std::real(exp(1i * qk(j))));
-    } */
-    Eigen::VectorXd qNext = qk;
-    Eigen::VectorXd error = endConfig - qNext;
-    Eigen::MatrixXd joints_config = qk.transpose();
-
-
-    // check if orientations are correct
-    Eigen::Matrix3d rot;
-    Eigen::Vector3d pos;
-    directK tmp = ur5DirectKinematics(endConfig);
-    rot = tmp.Re;
-    pos = tmp.pe;
-
-    /* fill the matrix with the middle configurations */
-    int iter = 0;
-    while (error.norm() > 0.005)
-    {
-        qNext = qNext + 5*deltaT* error/error.norm();
-        joints_config.conservativeResize(joints_config.rows() + 1, joints_config.cols());
-        joints_config.block<1,6>(joints_config.rows()-1, 0) = qNext.transpose();
-        error = endConfig - qNext;
-        iter++;
-    }
-
-    return joints_config;
-}
-
-void move(Eigen::Vector3d poseF, Eigen::Vector3d orientF){
-    ros::Rate loop_rate(250.);
-    readJoints();
-    Eigen::MatrixXd traj = inverseDiffKinematicsControlComplete(jointsAndGripper.joints, poseF, orientF);
-    //Eigen::MatrixXd traj = jointSpace_kinematics(jointsAndGripper.joints, poseF, orientF);
+void attachBlock(const char* model1, const char* link1, const char* model2, const char* link2){
+    gazebo_ros_link_attacher::Attach::Request req;
+    gazebo_ros_link_attacher::Attach::Response res;
     
-    int i;
-    for(i=0; i<traj.cols(); i++){
-        sendDesJstate(traj.block<6,1>(0,i), jointsAndGripper.gripper);
-        ros::spinOnce();
-        loop_time++;
-        loop_rate.sleep();
-    }
-    setJoints(traj.block<6,1>(0,i-1));
-} 
-
-void move2(Eigen::Vector3d poseF, Eigen::Vector3d orientF){
-    ros::Rate loop_rate(250.);
-    readJoints();
-    Eigen::MatrixXd traj = inverseDiffKinematicsControlCompleteAnglesAxis(jointsAndGripper.joints, poseF, orientF);
-    //Eigen::MatrixXd traj = jointSpace_kinematics(jointsAndGripper.joints, poseF, orientF);
+    req.model_name_1 = model1;
+    req.link_name_1 = link1;
+    req.model_name_2 = model2;
+    req.link_name_2 = link2;
     
-    int i;
-    for(i=0; i<traj.cols(); i++){
-        sendDesJstate(traj.block<6,1>(0,i), jointsAndGripper.gripper);
-        ros::spinOnce();
-        loop_time++;
-        loop_rate.sleep();
+    if (!attach_client.call(req, res)){
+        ROS_INFO_STREAM("Attach failed");
     }
-    setJoints(traj.block<6,1>(0,i-1));
-} 
-
-/* void initFilter(const Vector6d & joint_pos){
-        filter_1 = joint_pos;
-        filter_2 = joint_pos;
 }
 
-Vector6d secondOrderFilter(const Vector6d & input, const double rate, const double settling_time){
-        double dt = 1 / rate;
-        double gain =  dt / (0.1*settling_time + dt);
-        filter_1 = (1 - gain) * filter_1 + gain * input;
-        filter_2 = (1 - gain) * filter_2 + gain *filter_1;
-        return filter_2;
-} */
+void detachBlock(const char* model1, const char* link1, const char* model2, const char* link2){
+    gazebo_ros_link_attacher::Attach::Request req;
+    gazebo_ros_link_attacher::Attach::Response res;
+    
+    req.model_name_1 = model1;
+    req.link_name_1 = link1;
+    req.model_name_2 = model2;
+    req.link_name_2 = link2;
+    
+    if (!detach_client.call(req, res)){
+        ROS_INFO_STREAM("Detach failed");
+    }
+}
+
+void move_gripper(double diameter){ 
+    if(real_robot){
+        moveGripper(diameter);
+    }else{
+        setNewGripperPosition(diameter);
+        sendDesJstate(jointsAndGripper.joints, jointsAndGripper.gripper);
+    }
+}
 
 void readJoints(){
     sensor_msgs::JointState::ConstPtr msg = ros::topic::waitForMessage<sensor_msgs::JointState>("/ur5/joint_states");
@@ -201,10 +136,53 @@ void readJoints(){
 
     jointsAndGripper.gripper = joints.block<3,1>(6,0);
     jointsAndGripper.joints = joints.block<6,1>(0,0); 
-    //return joints;
 }
 
-Eigen::Vector3d worldToRobot(Eigen::Vector3d p){
+void move(Eigen::Vector3d poseF, Eigen::Vector3d orientF){
+    ros::Rate loop_rate(250.);
+    readJoints();
+    Eigen::MatrixXd traj = inverseDiffKinematics(jointsAndGripper.joints, poseF, orientF);
+    
+    int i;
+    for(i=0; i<traj.cols(); i++){
+        sendDesJstate(traj.block<6,1>(0,i), jointsAndGripper.gripper);
+        ros::spinOnce();
+        loop_rate.sleep();
+    }
+    setJoints(traj.block<6,1>(0,i-1));
+} 
+
+/* void move2(Eigen::Vector3d poseF, Eigen::Vector3d orientF){
+    ros::Rate loop_rate(250.);
+    readJoints();
+    Eigen::MatrixXd traj = inverseDiffKinematicsControlCompleteAnglesAxis(jointsAndGripper.joints, poseF, orientF);
+    
+    int i;
+    for(i=0; i<traj.cols(); i++){
+        sendDesJstate(traj.block<6,1>(0,i), jointsAndGripper.gripper);
+        ros::spinOnce();
+        loop_time++;
+        loop_rate.sleep();
+    }
+    setJoints(traj.block<6,1>(0,i-1));
+} 
+
+
+void move3(Eigen::Vector3d poseF, Eigen::Vector3d orientF){
+    ros::Rate loop_rate(250.);
+    readJoints();
+    Eigen::MatrixXd traj = inverseDiffKinematicsControlComplete(jointsAndGripper.joints, poseF, orientF);
+    
+    int i;
+    for(i=0; i<traj.cols(); i++){
+        sendDesJstate(traj.block<6,1>(0,i), jointsAndGripper.gripper);
+        ros::spinOnce();
+        loop_rate.sleep();
+    }
+    setJoints(traj.block<6,1>(0,i-1));
+} */
+
+Eigen::Vector3d transformWrldToRbt(Eigen::Vector3d p){
     Eigen::Vector4d pe;
     pe << p(0), p(1), p(2), 1;
 
@@ -217,7 +195,7 @@ Eigen::Vector3d worldToRobot(Eigen::Vector3d p){
     return (t0b*pe).block<3,1>(0,0);
 } 
 
-Eigen::Vector3d robotToWorld(Eigen::Vector3d p){
+Eigen::Vector3d transformRbtToWrld(Eigen::Vector3d p){
     Eigen::Vector4d pe;
     pe << p(0), p(1), p(2), 1;
 
@@ -230,6 +208,22 @@ Eigen::Vector3d robotToWorld(Eigen::Vector3d p){
     return (t0b*pe).block<3,1>(0,0);
 } 
 
+void moveStrightObjFromTo(Eigen::Vector3d posI, Eigen::Vector3d posF, const char* blockName){
+    move(transformWrldToRbt({posI(0), posI(1), workingH}), {0.,0.,0.});
+    move_gripper(60); 
+    move(transformWrldToRbt({posI(0), posI(1), releasingH}), {0.,0.,0.});
+    attachBlock("ur5", "wrist_3_link", blockName, "link");
+    move_gripper(27);
+    move(transformWrldToRbt({posI(0), posI(1), workingH}), {0.,0.,0.});
+    move(transformWrldToRbt({posF(0), posF(1), workingH}), {0.,0.,0.});
+    move(transformWrldToRbt({posF(0), posF(1), releasingH}), {0.,0.,0.});
+    move_gripper(60);
+    detachBlock("ur5", "wrist_3_link", blockName, "link");
+    attachBlock("tavolo", "link", blockName, "link");
+    move(transformWrldToRbt({posF(0), posF(1), workingH}), {0.,0.,0.});
+    move(transformWrldToRbt(dflHndlPos), {0.,0.,0.});
+}
+
 int main(int argc, char **argv)
 {
     ros::init(argc, argv, "kinematics");
@@ -240,39 +234,19 @@ int main(int argc, char **argv)
     nH.getParam("/gripper_sim", gripper_sim);
 
     pub = nH.advertise<std_msgs::Float64MultiArray>("/ur5/joint_group_pos_controller/command", 10);
+    attach_client = nH.serviceClient<gazebo_ros_link_attacher::Attach>("link_attacher_node/attach");
+    attach_client.waitForExistence();
+    detach_client = nH.serviceClient<gazebo_ros_link_attacher::Attach>("link_attacher_node/detach");
+    detach_client.waitForExistence();
 
     ros::Rate loop_rate(loop_frequency);
     
     Vector6d q_des0 {-0.32, -0.78, -2.1, -1.63, -1.57,  3.49};
-    ;
+    
     readJoints();
 
-    /* std::cout << "joints values" << jointsAndGripper.joints<< std::endl;
-    std::cout << "gripper values" << jointsAndGripper.gripper<< std::endl;
-    std::cout << "joint values should be " << q_des0<< std::endl; 
-    FUNZIONA CON UN ERRORE NEL TERZO GIUNTO(PARI A QUELLO STAMPATO DA FOCCHI)
-    
+    move(transformWrldToRbt({0.573892, 0.636202, 1.02}), {0.,0.,0.});
+    move(transformWrldToRbt({0.573892, 0.636202, 1.27}), {0.,0.,0.});
 
-    std::cout << "Posizione del gripper a: " << ur5DirectKinematics(jointsAndGripper.joints).pe << std::endl;
-    std::cout << "Posizione del gripper con base il mondo: " << robotToWorld(ur5DirectKinematics(jointsAndGripper.joints).pe) << std::endl;
-    std::cout << "Rotazione del gripper a: " << ur5DirectKinematics(jointsAndGripper.joints).Re << std::endl;
-    SEMBRA FUNZIONARE ANCHE TRASFORMANDO I VALORI RISPETTO AL MONDO
-    */
-    
-    /* std::cout << "joints values" << jointsAndGripper.joints<< std::endl;
-    directK dir = ur5DirectKinematics(jointsAndGripper.joints);
-    std::cout << "Posizione del gripper a: " << dir.pe << std::endl;
-    std::cout << "Rotazione del gripper a: " << dir.Re << std::endl;
-
-    Matrix68d inv =  ur5inverseKinematics(dir.pe, dir.Re);
-    std::cout << "Soluiozni  " << std::endl << inv << std::endl;
-    
-    Matrix66d J = jacobian(jointsAndGripper.joints); 
-    SEMBRANO FUNZIONARE ANCHE QUESTE FUNZIONI
-    */
-   
-   //move(worldToRobot({0.573892, 0.636202, 0.87}), {0.,0.,0.});
-   move2(worldToRobot({0.573892, 0.636202, 0.87}), {0.,0.,0.});
-  
   return 0;
 }

@@ -1,7 +1,9 @@
 #include "functions.h"
+#include "kinematics.h"
 #include "directKinematics.h"
 #include <cmath>
 #include <iostream>
+#include <string>
 
 /* Matrix66d jacobian(Vector6d th){
     Matrix66d J;
@@ -215,11 +217,11 @@ Vector6d dotQControlComplete(Vector6d q, Eigen::Vector3d xe, Eigen::Vector3d xd,
     Matrix66d Jac;
     Eigen::Vector3d phie;
     
-    Eigen::Matrix3d Kp = 10*Eigen::MatrixXd::Identity(3,3);
-    Eigen::Matrix3d Kphi = 10*Eigen::MatrixXd::Identity(3,3);
+    Eigen::Matrix3d Kp = 27*Eigen::MatrixXd::Identity(3,3);
+    Eigen::Matrix3d Kphi = 27*Eigen::MatrixXd::Identity(3,3);
     
     directK dk = ur5DirectKinematics(q);
-    phie = rotmToAngleAxis(dk.Re); //phie = dk.Re.eulerAngles(2,1,0);
+    phie = rotMatToEuler(dk.Re); // phie = dk.Re.eulerAngles(2,1,0);
     Jac = jacobian(q);
     double gamma = phie(0);
     double beta = phie(1);
@@ -257,8 +259,8 @@ Vector6d dotQControlCompleteAangleAxis(Vector6d q, Eigen::Vector3d xe, Eigen::Ve
     Matrix66d Jac;
     Eigen::Vector3d phie;
     
-    Eigen::Matrix3d Kp = 5*Eigen::MatrixXd::Identity(3,3);
-    Eigen::Matrix3d Kphi = 0.1*Eigen::MatrixXd::Identity(3,3);
+    Eigen::Matrix3d Kp = 0.8*Eigen::MatrixXd::Identity(3,3);
+    Eigen::Matrix3d Kphi = 6*Eigen::MatrixXd::Identity(3,3);
     Eigen::Matrix3d Red = eulerToRotationMatrix(phid);
     Eigen::Vector3d oError = computeOrientationErrorW(Re, Red);
 
@@ -282,7 +284,7 @@ Vector6d dotQControlCompleteAangleAxis(Vector6d q, Eigen::Vector3d xe, Eigen::Ve
     V.block<3,1>(0,0) = vd+Kp*(xd-xe);
     V.block<3,1>(3,0) = omedaDot+Kphi*oError;
     
-    dotQ = (Jac+Eigen::MatrixXd::Identity(6,6)*1e-06).inverse()*V;
+    dotQ = (Jac+Eigen::MatrixXd::Identity(6,6)*(0.001)).inverse()*V;
     return dotQ;
 }
 
@@ -344,6 +346,25 @@ Eigen::Matrix3d eulerToRotationMatrix(Eigen::Vector3d euler){
 
 }
 
+Eigen::Vector3d rotMatToEuler(Eigen::Matrix3d rotMatrix){
+    double sy = sqrt(pow(rotMatrix(0,0),2) + pow(rotMatrix(1,0),2));
+
+    bool singular = sy < 1e-6;
+    double x, y, z;
+
+    if(!singular){
+        x = atan2(rotMatrix(2,1), rotMatrix(2,2));
+        y = atan2(-rotMatrix(2,0), sy);
+        z = atan2(rotMatrix(1,0), rotMatrix(0,0));
+    }else{
+        x = atan2(-rotMatrix(1,2), rotMatrix(1,1));
+        y = atan2(-rotMatrix(2,0), sy);
+        z = 0;
+    }
+
+    return Eigen::Vector3d(x,y,z);
+}
+
 Matrix66d pseudoInverse(Matrix66d J){
     Matrix66d pseudoInverse;
 
@@ -351,3 +372,134 @@ Matrix66d pseudoInverse(Matrix66d J){
 
     return pseudoInverse;
 }
+
+/* void turnRight(Eigen::Vector3d pos, Eigen::Vector3d rot, string blockName){
+
+}
+
+void turnLeft(Eigen::Vector3d pos, Eigen::Vector3d rot, string blockName){
+
+}
+
+void turnUp(Eigen::Vector3d pos, Eigen::Vector3d rot, string blockName){
+
+}
+
+void straightenBlockUp(Eigen::Vector3d pos, Eigen::Vector3d rot, std::string blockName){
+    double roll = rot(2);
+    double pitch = rot(1);
+    double yaw = rot(0);
+    double workingH = 1.1;
+    double graspingH = 0.89;
+    double releasingH = 0.92;
+
+    bool reversed = false;
+    
+    if( (abs(roll) < 0.5 && abs(pitch) < 0.5) || ((0.9 < (abs(pitch)/M_PI) && (abs(pitch)/M_PI) < 1.1) && (0.9 < (abs(roll)/M_PI) && (abs(roll)/M_PI) < 1.1)) ){
+        std::cout << "Block already up right! " << std::endl;
+    }else{
+
+        // upside down 
+        if( ((0.9 < (abs(roll)/M_PI) && (abs(roll)/M_PI) < 1.1)  ||  (0.9 < (abs(pitch)/M_PI) && (abs(pitch)/M_PI) < 1.1) ) && !(0.9 < (abs(pitch)/M_PI_2) && (abs(pitch)/M_PI_2) < 1.1) ){
+            
+            move({pos(0), pos(1), workingH}, {0, 0, -yaw});
+
+            move_gripper(50);
+
+            move({pos(0), pos(1), graspingH}, {0, 0, -yaw});
+
+            attach("ur5", "hand_1_link", blockName, "link");
+
+            move({pos(0), pos(1), workingH}, {0, 0, 0}); 
+            rotate({pos(0), pos(1), workingH}, {M_PI_2, M_PI, 0});
+            move({pos(0), pos(1), releasingH}, {M_PI_2, M_PI, 0}); 
+
+            detach("ur5", "hand_1_link", blockName, "link");
+            move({pos(0), pos(1), workingH}, {M_PI_2, M_PI, 0});
+            rotate({pos(0), pos(1), workingH}, {0,0,0});
+            
+            reversed = true;
+        }else if( (0.9 < (abs(pitch)/M_PI_2) && (abs(pitch)/M_PI_2) < 1.1) ){ // lying on the side 
+            move_gripper(75);
+
+           if( pitch > 0 ){
+                if( (roll<0 && yaw<0) || (roll>0 && yaw>0) ){
+                    move({pos(0), pos(1), workingH}, {0, 0, -(roll-yaw)});
+                    
+
+                    if( roll-yaw < 1.57 && roll-yaw > -1.57 ) {
+
+                        move({pos(0), pos(1), graspingH}, {0, 0, -(roll-yaw)});
+                    }else{
+
+                        move({pos(0), pos(1), graspingH}, {0, 0, -(roll-yaw)});
+                        reversed = true;
+                    }
+
+                }else{
+                    move({pos(0), pos(1), workingH}, {0, 0, -(roll+yaw)});
+
+                    if( (roll+yaw < 1.57 && roll+yaw > -1.57) || abs(roll+yaw)>4.71 ){
+
+                        move({pos(0), pos(1), graspingH}, {0, 0, -(roll+yaw)});
+                    }else{
+
+                        move({pos(0), pos(1), graspingH}, {0, 0, -(roll+yaw)});
+                        reversed = true;
+                    }
+
+                }
+
+           }else{
+                move({pos(0), pos(1), workingH}, {0, 0, -(roll+yaw)});
+
+                if( (roll+yaw < 1.57 && roll+yaw > -1.57) ){
+                    move({pos(0), pos(1), graspingH}, {0, 0, -(roll+yaw)});
+                    reversed = true;
+                }else{
+                    move({pos(0), pos(1), graspingH}, {0, 0, -(roll+yaw)});
+                }
+
+           }
+
+            attach("ur5", "hand_1_link", blockName, "link");
+            move({pos(0), pos(1), workingH}, {0, 0, 0});
+            rotate({pos(0), pos(1), workingH}, {-M_PI_2, 0, M_PI_2});
+            move({pos(0), pos(1), releasingH}, {-M_PI_2, 0, M_PI_2});  
+
+        
+            detach("ur5", "hand_1_link", handled_model.c_str(), "link");
+            move({pos(0), pos(1), workingH}, {-M_PI_2, 0, M_PI_2});
+            rotate({pos(0), pos(1), workingH}, {0,0,0});
+
+        }else{
+            cout << "Block Position & Orientation NOT Handle, Aborting..." << endl;
+            return;
+        }
+
+
+        if(reversed == true){
+                move({pos(0), pos(1), releasingH}, {0,0,0});
+                attach("ur5", "hand_1_link", blockName, "link");
+
+                move({pos(0), pos(1), workingH}, {0,0,0});
+                rotate({pos(0), pos(1), workingH}, {0,0,M_PI});
+                move({pos(0), pos(1), releasingH}, {0,0,M_PI});
+                detach("ur5", "hand_1_link", blockName, "link");
+
+                move({pos(0), pos(1), workingH}, {0,0,M_PI});
+            }
+
+        rotate({pos(0), pos(1), workingH}, {M_PI_2,M_PI,0});
+        move({pos(0), pos(1), releasingH}, {M_PI_2,M_PI,0});
+
+        attach("ur5", "hand_1_link", blockName, "link");
+        move({pos(0), pos(1), workingH}, {M_PI_2,M_PI,0});
+        rotate({pos(0), pos(1), workingH}, {0,0,0});
+        move({pos(0), pos(1), releasingH}, {0,0,0});
+        
+        detach("ur5", "hand_1_link", blockName, "link");
+        move({pos(0), pos(1), workingH}, {0,0,0});
+    }
+}
+ */
