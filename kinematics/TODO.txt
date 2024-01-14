@@ -1,0 +1,3 @@
+cerare funzione che restituisce altezza del grasping in base al tipo di cubo (se Z1 o Z2)
+creare funzione che restituisce apertura gripper in base al tipo di cubo
+creare lista con posizioni finali in base al cubo

@@ -206,7 +206,68 @@ Eigen::Vector3d transformRbtToWrld(Eigen::Vector3d p){
         {0, 0, 0, 1}};
 
     return (t0b*pe).block<3,1>(0,0);
-} 
+}
+
+blockPose getBlockPose(std::string blockName){
+    blockPose pos;
+
+    if(strcmp(blockName.c_str(),"X1-Y1-Z2")==0){
+        pos.x = 1.059747;
+        pos.y = 0.266603;
+        pos.z = 0.863913;
+    }
+    if(strcmp(blockName.c_str(),"X1-Y2-Z1")==0){
+        pos.x = 0.903177;
+        pos.y = 0.281704;
+        pos.z = 0.863913;
+    }
+    if(strcmp(blockName.c_str(),"X1-Y2-Z2")==0){
+        pos.x = 0.977510;
+        pos.y = 0.582337;
+        pos.z = 0.863913;
+    }     
+    if(strcmp(blockName.c_str(),"X1-Y2-Z2-CHAMFER")==0){
+        pos.x = 0.896607;
+        pos.y = 0.592261;
+        pos.z = 0.863913;
+    }       
+    if(strcmp(blockName.c_str(),"X1-Y2-Z2-TWINFILLET")==0){
+        pos.x = 0.983954;
+        pos.y = 0.280836;
+        pos.z = 0.863913;
+    }       
+    if(strcmp(blockName.c_str(),"X1-Y3-Z2")==0){
+        pos.x = 0.899273;
+        pos.y = 0.418322;
+        pos.z = 0.863913;
+    }
+    if(strcmp(blockName.c_str(),"X1-Y3-Z2-FILLET")==0){
+        pos.x = 1.059748;
+        pos.y = 0.592607;
+        pos.z = 0.863913;
+    }
+    if(strcmp(blockName.c_str(),"X1-Y4-Z1")==0){
+        pos.x = 1.055354;
+        pos.y = 0.419024;
+        pos.z = 0.863913;
+    }
+    if(strcmp(blockName.c_str(),"X1-Y4-Z2")==0){
+        pos.x = 0.980792;
+        pos.y = 0.411519;
+        pos.z = 0.863913;
+    }
+    if(strcmp(blockName.c_str(),"X2-Y2-Z2")==0){
+        pos.x = 0.916188;
+        pos.y = 0.717653;
+        pos.z = 0.863913;
+    }
+    if(strcmp(blockName.c_str(),"X2-Y2-Z2-FILLET")==0){
+        pos.x = 1.022507;
+        pos.y = 0.714191;
+        pos.z = 0.863913;
+    }
+    return pos;
+}
 
 void moveStrightObjFromTo(Eigen::Vector3d posI, Eigen::Vector3d posF, const char* blockName){
     move(transformWrldToRbt({posI(0), posI(1), workingH}), {0.,0.,0.});
@@ -228,6 +289,12 @@ int main(int argc, char **argv)
 {
     ros::init(argc, argv, "kinematics");
     ros::NodeHandle nH;
+    if(argc !=2){
+        std::cout << "Please relaunch and insert the task number when running the node" << std::endl;
+        return 1;
+    }
+
+    int task = atoi(argv[1]);
 
     nH.getParam("/real_robot", real_robot);
     nH.getParam("/soft_gripper", soft_gripper);
@@ -238,15 +305,27 @@ int main(int argc, char **argv)
     attach_client.waitForExistence();
     detach_client = nH.serviceClient<gazebo_ros_link_attacher::Attach>("link_attacher_node/detach");
     detach_client.waitForExistence();
-
+    
     ros::Rate loop_rate(loop_frequency);
     
     Vector6d q_des0 {-0.32, -0.78, -2.1, -1.63, -1.57,  3.49};
     
-    readJoints();
+    vision::Block::ConstPtr visionNode = ros::topic::waitForMessage<vision::finBlockals>("/messmega_blocks_detectionsaggi");
 
-    move(transformWrldToRbt({0.573892, 0.636202, 1.02}), {0.,0.,0.});
-    move(transformWrldToRbt({0.573892, 0.636202, 1.27}), {0.,0.,0.});
+    if(task == 1 || task == 2){
+        for (int i=0; i< visionNode.size(); i++){ 
+            blockPose releaseBlock = getBlockPose(visionNode.class_id);
+            moveStrightObjFromTo({visionNode.position.x, visionNode.position.y, positionNode.position.z}, {releaseBlock.x, releaseBlock.y, releaseBlock.z}, visionNode.class_id);
+            move(transformWrldToRbt(dflHndlPos), {0., 0., 0.});
+        }
+    }
+    if(task == 3 || task == 4){
+        
+    }
 
   return 0;
 }
+
+/*
+altezza blocchi = 0.863913;
+*/

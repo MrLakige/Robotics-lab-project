@@ -23,6 +23,12 @@ typedef struct directK{
     Eigen::Matrix3d Re;
 }directK;
 
+typedef struct blockPose{
+    double x;
+    double y;
+    double z;
+}blockPose;
+
 static struct jointsAndGripper{
     Vector6d joints;
     Eigen::Vector3d gripper;
