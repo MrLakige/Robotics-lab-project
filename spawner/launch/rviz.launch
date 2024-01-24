@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<launch>
+
+	<arg name="rviz_conf" default="$(find levelManager)/rviz/conf.rviz"/>
+
+	
+	<!-- send hyq urdf to param server and spawn it -->
+	<include file="$(find levelManager)/launch/upload.launch"/>	
+
+	<node pkg="tf" type="static_transform_publisher" name="brick1_tf_broadcaster" args="0.0 0 0 0 0 0   /X1-Y1-Z2 /world  200"/>
+	<node pkg="tf" type="static_transform_publisher" name="brick2_tf_broadcaster" args="0.0 0 0 0 0 0   /X1-Y2-Z1 /world  200"/>
+	<node pkg="tf" type="static_transform_publisher" name="brick2_tf_broadcaster" args="0.0 0 0 0 0 0   /X1-Y2-Z2 /world  200"/>
+	<node pkg="tf" type="static_transform_publisher" name="brick2_tf_broadcaster" args="0.0 0 0 0 0 0   /X1-Y2-Z2-CHAMFER /world  200"/>
+	<node pkg="tf" type="static_transform_publisher" name="brick2_tf_broadcaster" args="0.0 0 0 0 0 0   /X1-Y2-Z2-TWINFILLET /world  200"/>
+	<node pkg="tf" type="static_transform_publisher" name="brick2_tf_broadcaster" args="0.0 0 0 0 0 0   /X1-Y3-Z2 /world  200"/>
+	<node pkg="tf" type="static_transform_publisher" name="brick2_tf_broadcaster" args="0.0 0 0 0 0 0   /X1-Y3-Z2-FILLET /world  200"/>
+	<node pkg="tf" type="static_transform_publisher" name="brick2_tf_broadcaster" args="0.0 0 0 0 0 0   /X1-Y4-Z1 /world  200"/>
+	<node pkg="tf" type="static_transform_publisher" name="brick2_tf_broadcaster" args="0.0 0 0 0 0 0   /X1-Y4-Z2 /world  200"/>
+	<node pkg="tf" type="static_transform_publisher" name="brick2_tf_broadcaster" args="0.0 0 0 0 0 0   /X2-Y2-Z2 /world  200"/>
+	<node pkg="tf" type="static_transform_publisher" name="brick2_tf_broadcaster" args="0.0 0 0 0 0 0   /X2-Y2-Z2-FILLET /world  200"/>
+
+
+	<!-- run rviz -->
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rviz_conf) -f world"/>
+
+</launch>
+
