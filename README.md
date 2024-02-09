@@ -14,10 +14,19 @@ ___
 ### Installation and Requirements <br>
 First of all, download and install ros: <br>
 Following this tutorial [link](https://github.com/mfocchi/locosim) <br>
+##### Kinematics part
 Install eigen library
 ```bash
-    sudo apt install libeigen3-dev
+sudo apt install libeigen3-dev
 ```
+##### Vision part
+- Install cuda [guide here](https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html)
+- Install yolov5
+```bash
+pip install yolov5
+``` 
+<br>
+<br>
 then clone this repository:
 ```bash
 git clone https://github.com/MrLakige/robot_project
