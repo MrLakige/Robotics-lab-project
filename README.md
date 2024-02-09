@@ -15,13 +15,13 @@ ___
 First of all, download and install ROS: <br>
 Following this tutorial [link](https://github.com/mfocchi/locosim) <br>
 #### Kinematics part
-Install "eigen" library
+Install `eigen` library
 ```bash
 sudo apt install libeigen3-dev
 ```
 #### Vision part
-- Install "cuda" [(guide here)](https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html)
-- Install "yolov5"
+- Install `cuda` [(guide here)](https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html)
+- Install `yolov5`
 ```bash
 pip install yolov5
 ```
