@@ -12,8 +12,7 @@ ___
 [![Watch the video](https://i3.ytimg.com/vi/kgfko_N8W6o/maxresdefault.jpg)](https://youtu.be/kgfko_N8W6o)
 ___
 ## Installation and Requirements <br>
-First of all, download and install ROS: <br>
-Following this tutorial [link](https://github.com/mfocchi/locosim) <br>
+download and install ROS [(guide here)](https://github.com/mfocchi/locosim) <br>
 #### Kinematics part
 Install `eigen` library
 ```bash
