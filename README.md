@@ -24,9 +24,8 @@ sudo apt install libeigen3-dev
 - Install yolov5
 ```bash
 pip install yolov5
-``` 
-<br>
-<br>
+```
+
 then clone this repository:
 ```bash
 git clone https://github.com/MrLakige/robot_project
