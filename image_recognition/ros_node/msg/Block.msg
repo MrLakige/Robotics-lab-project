@@ -1,9 +1,0 @@
-geometry_msgs/Pose pose
-float64 quatx
-float64 quaty
-float64 quatz
-float64 quatw
-string class_id
-float64 dimensionx
-float64 dimensiony
-float64 dimensionz

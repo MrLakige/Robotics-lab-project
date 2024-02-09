@@ -4,6 +4,8 @@ from geometry_msgs.msg import *
 import rospy
 import random
 import numpy as np
+from save import *
+
 
 #delete a block by its name
 def delete_model(name):
@@ -22,7 +24,9 @@ initialBlockPositions = [
 
 #cleans the table in case there are blocks on it
 for block in blocks:	
-		delete_model(f'{block}')
+	delete_model(f'{block}')
+    
+clean()
                 
 for i in range(4):
     #Get a random lego block from all legos
@@ -31,7 +35,9 @@ for i in range(4):
     #Call rospy spawn function to spawn objects in gazebo
     spawn_model_client = rospy.ServiceProxy('/gazebo/spawn_sdf_model', SpawnModel)
     spawn_model_client(model_name=''+str(brick), 
-        model_xml=open('src/spawner/34lego_models/'+brick+'/model.sdf', 'r').read(),
+        model_xml=open('../lego_models/'+brick+'/model.sdf', 'r').read(),
         robot_namespace='/foo',
         initial_pose=pos,
         reference_frame='world')
+
+    saveToXml(str(brick), pos, None)

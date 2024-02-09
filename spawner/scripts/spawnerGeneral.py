@@ -4,6 +4,8 @@ from geometry_msgs.msg import *
 import rospy
 import random
 import numpy as np
+from save import *
+
 
 blocks = { \
 		'X1-Y1-Z2': (0,(0.031,0.031,0.057)), \
@@ -44,10 +46,11 @@ def getLevel():
 
 def spawnBlock(brick, pos):
     spawn_model_client(model_name=''+str(brick), 
-    model_xml=open('src/levelManager/lego_models/'+brick+'/model.sdf', 'r').read(),
+    spawn_model_client = rospy.ServiceProxy('/gazebo/spawn_sdf_model', SpawnModel)
     robot_namespace='/foo',
     initial_pose=pos,
     reference_frame='world')
+    saveToXml(str(brick), pos, None)
         
          
 def getPose(rotated=False):
