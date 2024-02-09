@@ -2,26 +2,26 @@
 
 Repository of robotics laboratory project 
 
-### Description
+## Description
 Project based on ROS, <br>
 The goal of this project is recognize certain Mega Bloks bricks using zed2 stereo camera, and then move the robotic arm to take the bricks and move to another position<br>
 framework used: [ROS-noetic](https://wiki.ros.org/noetic)
 ___
-### Video
+## Video
 
 [![Watch the video](https://i3.ytimg.com/vi/kgfko_N8W6o/maxresdefault.jpg)](https://youtu.be/kgfko_N8W6o)
 ___
-### Installation and Requirements <br>
+## Installation and Requirements <br>
 First of all, download and install ROS: <br>
 Following this tutorial [link](https://github.com/mfocchi/locosim) <br>
-##### Kinematics part
-Install eigen library
+#### Kinematics part
+Install "eigen" library
 ```bash
 sudo apt install libeigen3-dev
 ```
-##### Vision part
-- Install cuda [guide here](https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html)
-- Install yolov5
+#### Vision part
+- Install "cuda" [(guide here)](https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html)
+- Install "yolov5"
 ```bash
 pip install yolov5
 ```
@@ -32,7 +32,7 @@ git clone https://github.com/MrLakige/robot_project
 cd robot_project
 ```
 ___
-### Usage
+## Usage
 #### Set up local enviroment
 Create a catkin workspace 
 ```bash
@@ -46,7 +46,7 @@ Add source
 ```bash
 source devel/setup.bash
 ```
-#### Run the project
+### Run the project
 1. Launch simulation enviroment
     ```bash
     cd src/locosim/robot_control/lab_exercises/lab_palopoli
