@@ -3,14 +3,15 @@
 Repository of robotics laboratory project 
 
 ### Description
-project based on ROS, <br>
-the goal of this project is recognize some mega blocks bricks using zed2 sterocam, and then move the arm robot to take the bricks and move to another position<br>
+Project based on ROS, <br>
+The goal of this project is recognize some mega blocks bricks using zed2 sterocam, and then move the arm robot to take the bricks and move to another position<br>
 framework used: ROS-noetic (https://wiki.ros.org/noetic)
 
+___
 ### Installation and Requirements <br>
-first of all, download and install ros: <br>
-following this tutorial [link](https://github.com/mfocchi/locosim) <br>
-install eigen library
+First of all, download and install ros: <br>
+Following this tutorial [link](https://github.com/mfocchi/locosim) <br>
+Install eigen library
 ```bash
     sudo apt install libeigen3-dev
 ```
@@ -19,24 +20,47 @@ then clone this repository:
 git clone https://github.com/MrLakige/robot_project
 cd robot_project
 ```
-
+___
 ### Usage
-create a catkin workspace 
+#### Set up local enviroment
+Create a catkin workspace 
 ```bash
 catkin init
 ```
-clone the repository and compile
+Clone the repository and compile
 ```bash
 catkin_make install
 ```
-add source 
+Add source 
 ```bash
 source devel/setup.bash
 ```
-
-
-## Authors and acknowledgment
-MrLakige HappaBaboo Indra999
-
-## Project status
-work in progress
+#### Run the project
+1. Launch simulation enviroment
+    ```bash
+    cd src/locosim/robot_control/lab_exercises/lab_palopoli
+    python3 ur5_generic.py
+    ```
+2. Bricks spawn, you can choose the difficult type level<br>
+        Levels: spawner1Default.py, spawner2Default.py, spawner1.py, spawner2.py 
+    ```bash
+    rosrun spawner spawner_level
+    ```
+3. Run kinematics, 2 levels are avaible<br>
+    level 1
+    ```bash
+    rosrun kinematics kinematics 1
+    ```
+    level 2
+    ```bash
+    rosrun kinematics kinematics 2
+    ```
+4. Run bricks vision recognition<br>
+    without graphical output
+    ```bash
+    rosrun vision vision_node.py
+    ```
+    with graphical output
+    ```bash
+    rosrun vision vision_node.py -show
+    ```
