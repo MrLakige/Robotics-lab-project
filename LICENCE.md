@@ -1,4 +1,4 @@
-Copyright 2024 [**Sara Ferrari** (Sara Ferrari)](https://github.com/SaraFerrari99), [**Hafsa Hamzaoui** (Hafsa Hamzaoui)](https://github.com/HafsaBaboo), [**MrLakige** (Callegari Michele)](https://github.com/MrLakige)
+Copyright 2024 [**SaraFerrari99** (Sara Ferrari)](https://github.com/SaraFerrari99), [**HafsaBaboo** (Hafsa Hamzaoui)](https://github.com/HafsaBaboo), [**MrLakige** (Callegari Michele)](https://github.com/MrLakige)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
