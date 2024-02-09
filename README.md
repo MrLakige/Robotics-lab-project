@@ -4,7 +4,7 @@ Repository of robotics laboratory project
 
 ### Description
 Project based on ROS, <br>
-The goal of this project is recognize some mega blocks bricks using zed2 sterocam, and then move the arm robot to take the bricks and move to another position<br>
+The goal of this project is recognize certain Mega Bloks bricks using zed2 stereo camera, and then move the robotic arm to take the bricks and move to another position<br>
 framework used: ROS-noetic (https://wiki.ros.org/noetic)
 ___
 ### Video
@@ -12,7 +12,7 @@ ___
 [![Watch the video](https://i3.ytimg.com/vi/kgfko_N8W6o/maxresdefault.jpg)](https://youtu.be/kgfko_N8W6o)
 ___
 ### Installation and Requirements <br>
-First of all, download and install ros: <br>
+First of all, download and install ROS: <br>
 Following this tutorial [link](https://github.com/mfocchi/locosim) <br>
 ##### Kinematics part
 Install eigen library
@@ -57,7 +57,7 @@ source devel/setup.bash
     ```bash
     rosrun spawner spawner_level
     ```
-3. Run kinematics, 2 levels are avaible<br>
+3. Run kinematics, 2 levels are available<br>
     level 1
     ```bash
     rosrun kinematics kinematics 1
