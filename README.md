@@ -6,7 +6,10 @@ Repository of robotics laboratory project
 Project based on ROS, <br>
 The goal of this project is recognize some mega blocks bricks using zed2 sterocam, and then move the arm robot to take the bricks and move to another position<br>
 framework used: ROS-noetic (https://wiki.ros.org/noetic)
+___
+### Video
 
+[![Watch the video](https://i3.ytimg.com/vi/kgfko_N8W6o/maxresdefault.jpg)](https://youtu.be/kgfko_N8W6o)
 ___
 ### Installation and Requirements <br>
 First of all, download and install ros: <br>
