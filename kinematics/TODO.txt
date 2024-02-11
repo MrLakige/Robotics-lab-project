@@ -1,3 +1,11 @@
-cerare funzione che restituisce altezza del grasping in base al tipo di cubo (se Z1 o Z2)
-creare funzione che restituisce apertura gripper in base al tipo di cubo
-creare lista con posizioni finali in base al cubo
+calcolare altezza del blocco e tenere conto dell'altezza,, in modo da mettere il prossimo blocco sopra 
+sistemare algoritmo rotazione su un lato (tenere traccia anche del blocco sdraiato e guarda destra o sinistra)
+aggiungere trotazioni possibili negli if 
+sistemare main definitivamente e testare
+
+domani mattina
+sistemare main principale
+sistemare relazione
+sistemare ppt
+girare video schermo
+push del codice 

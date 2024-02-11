@@ -288,15 +288,6 @@ Vector6d dotQControlCompleteAangleAxis(Vector6d q, Eigen::Vector3d xe, Eigen::Ve
     return dotQ;
 }
 
-Vector6d qDott0(Vector6d q){
-    Eigen::VectorXd q_dott0(6);
-    int k0 = 20;
-
-    q_dott0 = -k0/6*(q/(2*M_PI));
-
-    return q_dott0;
-}
-
 Eigen::Vector3d computeOrientationErrorW(Eigen::Matrix3d w_R_e, Eigen::Matrix3d w_R_d){
         Eigen::Vector3d error; 
         //computaion of the relative orientation 
@@ -373,18 +364,7 @@ Matrix66d pseudoInverse(Matrix66d J){
     return pseudoInverse;
 }
 
-/* void turnRight(Eigen::Vector3d pos, Eigen::Vector3d rot, string blockName){
-
-}
-
-void turnLeft(Eigen::Vector3d pos, Eigen::Vector3d rot, string blockName){
-
-}
-
-void turnUp(Eigen::Vector3d pos, Eigen::Vector3d rot, string blockName){
-
-}
-
+/*
 void straightenBlockUp(Eigen::Vector3d pos, Eigen::Vector3d rot, std::string blockName){
     double roll = rot(2);
     double pitch = rot(1);

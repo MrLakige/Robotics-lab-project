@@ -522,41 +522,41 @@ int main(int argc, char **argv){
     
     Vector6d q_des0 {-0.32, -0.78, -2.1, -1.63, -1.57,  3.49};
     
-    vision::Block::ConstPtr visionNode = ros::topic::waitForMessage<vision::Block>("/mega_blocks_detections");
+    //vision::Block::ConstPtr visionNode = ros::topic::waitForMessage<vision::Block>("/mega_blocks_detection");
 
     if(task == 1){
-        for (int i=0; i< visionNode->size; i++){ 
-            blockInfo releaseBlock = getBlockPose(visionNode->class_id[i].c_str());
-            moveStraightObjToTargetPos({visionNode->pose[i].position.x, visionNode->pose[i].position.y, visionNode->pose[i].position.z}, releaseBlock, {releaseBlock.x, releaseBlock.y, releaseBlock.graspingH});
-            move(transformWrldToRbt(dflHndlPos), {0., 0., 0.});
-        }    
+        visionSim visionNode = initialBlockInfo;
+        blockInfo releaseBlock = getBlockPose(visionNode.class_id.c_str());
+        moveStraightObjToTargetPos({visionNode.pose.position.x, visionNode.pose.position.y, visionNode.pose.position.z}, releaseBlock, {releaseBlock.x, releaseBlock.y, releaseBlock.graspingH});
     }
 
     if(task == 2){
+        visionSim* visionNode = initialBlockInfo2;
         Eigen::Vector3d tmp = {0.914134, 0.318471, 1.02};
-        for (int i=0; i< visionNode->size; i++){ 
-            blockInfo releaseBlock = getBlockPose(visionNode->class_id[i].c_str());
-            moveStraightObjToTargetPos({visionNode->pose[i].position.x, visionNode->pose[i].position.y, visionNode->pose[i].position.z}, releaseBlock, {tmp(0), tmp(1), releaseBlock.graspingH});
-            tmp = {visionNode->pose[i].position.x, visionNode->pose[i].position.y, releaseBlock.graspingH};
-        }    
+        for (int i=0; i<10; i++){           
+            blockInfo releaseBlock = getBlockPose(visionNode[i].class_id.c_str());
+            moveStraightObjToTargetPos({visionNode[i].pose.position.x, visionNode[i].pose.position.y, visionNode[i].pose.position.z}, releaseBlock, {tmp(0), tmp(1), releaseBlock.graspingH});
+            tmp = {visionNode[i].pose.position.x, visionNode[i].pose.position.y, releaseBlock.graspingH};
+        }        
     }
 
     if(task == 3){
-        for (int i=0; i< visionNode->size; i++){ 
-            blockInfo releaseBlock = getBlockPose(visionNode->class_id[i].c_str());
-            setBlockUp({visionNode->pose[i].position.x, visionNode->pose[i].position.y, releaseBlock.graspingH},{visionNode->rotx[i], visionNode->roty[i], visionNode->rotz[i]}, releaseBlock);
+        visionSim* visionNode = initialBlockInfo3;
+        for(int i=0; i<4; i++){
+            blockInfo releaseBlock = getBlockPose(visionNode[i].class_id.c_str());
+            setBlockUp({visionNode[i].pose.position.x, visionNode[i].pose.position.y, releaseBlock.graspingH},{visionNode[i].rotx, visionNode[i].roty, visionNode[i].rotz}, releaseBlock);
             moveStraightObjToTargetPos({dflHndlPos(0), dflHndlPos(1)-.017, dflHndlPos(2)}, releaseBlock, {releaseBlock.x+.06, releaseBlock.y, releaseBlock.graspingH});
         }
-        move(transformWrldToRbt(dflHndlPos), {0.,0.,0.});
     }
 
     if(task == 4){
-        for (int k=0; k< visionNode->size; k++){
-            int i = getBlockIndexFromArray(visionNode, k);
+        visionSim* visionNode = initialBlockInfo4;
+        for(int k=0; k<3; k++){
+            int i = getBlockIndexFromArrayDefault(visionNode, k);
             double z = 1.02+(k*0.039);
-            blockInfo releaseBlock = getBlockPose(visionNode->class_id[i].c_str());
-            setBlockUp({visionNode->pose[i].position.x, visionNode->pose[i].position.y, releaseBlock.graspingH},{visionNode->rotx[i], visionNode->roty[i], visionNode->rotz[i]}, releaseBlock);
-            moveForCastleConstruction({dflHndlPos(0), dflHndlPos(1)-.017, releaseBlock.graspingH}, {castleBuildingPoint(0), castleBuildingPoint(1)-(k*0.013), z}, visionNode->class_id[i].c_str(), releaseBlock.gripperClosure);
+            blockInfo releaseBlock = getBlockPose(visionNode[i].class_id.c_str());
+            setBlockUp({visionNode[i].pose.position.x, visionNode[i].pose.position.y, releaseBlock.graspingH},{visionNode[i].rotx, visionNode[i].roty, visionNode[i].rotz}, releaseBlock);
+            moveForCastleConstruction({dflHndlPos(0), dflHndlPos(1)-.017, releaseBlock.graspingH}, {castleBuildingPoint(0), castleBuildingPoint(1)-(k*0.013), z}, visionNode[i].class_id.c_str(), releaseBlock.gripperClosure);
         }
         move(transformWrldToRbt(dflHndlPos), {0.,0.,0.});
     }
