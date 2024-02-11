@@ -1,3 +1,12 @@
+"""
+@package spawn
+@brief spawn block in gazebo
+
+@version 1.0
+@author Hafsa, Michele, Sara
+"""
+
+
 #!/usr/bin/python3
 from gazebo_msgs.srv import SpawnModel
 from geometry_msgs.msg import *
@@ -31,6 +40,9 @@ level = None
 spawn_model_client = rospy.ServiceProxy('/gazebo/spawn_sdf_model', SpawnModel)
 
 def getLevel():
+    """
+    Get the level of the task from the command line argument.
+    """
     global level
 
     if len(sys.argv) != 2:
@@ -41,26 +53,50 @@ def getLevel():
         if(level > 0 and level <=4):
             print(level)
         else:
-            print("The task number is incorrect please insert a level betwween 1-4" )
+            print("The task number is incorrect please insert a level between 1-4" )
         exit(2) 
 
 def spawnBlock(brick, pos):
-    spawn_model_client(model_name=''+str(brick), 
-    spawn_model_client = rospy.ServiceProxy('/gazebo/spawn_sdf_model', SpawnModel)
-    robot_namespace='/foo',
-    initial_pose=pos,
-    reference_frame='world')
-    saveToXml(str(brick), pos, None)
+    """
+    Spawn a Lego block in Gazebo.
+
+    Args:
+        brick (str): The Lego block name.
+        pos (Pose): The position and orientation of the Lego block.
+
+    Returns:
+        None
+    """
         
-         
+    spawn_model_client = rospy.ServiceProxy('/gazebo/spawn_sdf_model', SpawnModel)
+    spawn_model_client(model_name=''+str(brick), 
+        robot_namespace='/foo',
+        initial_pose=pos,
+        reference_frame='world' )
+    
+    saveToXml(str(brick), pos, None)
+
 def getPose(rotated=False):
+    """
+    Generate a random Pose for the Lego block.
+
+    Args:
+        rotated (bool): If True, generate a rotated Pose.
+
+    Returns:
+        Pose: The generated Pose.
+    """
     if (rotated==False):
         pose = Pose(Point(random.uniform(0.060266, 0.432769), random.uniform(0.565019, 0.730745), 0.863913), Quaternion(0, 0, 0, 0))
         return pose
     else:
         pose = Pose(Point(random.uniform(0.060266, 0.432769), random.uniform(0.565019, 0.730745), 0.863913), Quaternion(0,0,random.uniform(-3.14, 3.14), random.uniform(-1.57, 1.57)))
+        return pose
 
 def spawnLegoPerLevel():
+    """
+    Spawn Lego blocks based on the specified level.
+    """
     global level
     print(level)
     if(level == 1):
@@ -82,7 +118,7 @@ def spawnLegoPerLevel():
                         if k == i-1:
                             positionsUsed.append(pose)
                             notAvailable = False
-            spawnBlock(blockList[i], pose)
+                spawnBlock(blockList[i], pose)
     elif(level == 3):
         random.shuffle(shufflableBlockArray)
         for i in range(4):
@@ -100,13 +136,11 @@ def spawnLegoPerLevel():
                         if k == i-1:
                             positionsUsed.append(pose)
                             notAvailable = False
-            spawnBlock(shufflableBlockArray[i], pose) 
+                spawnBlock(shufflableBlockArray[i], pose) 
     else:
         print(level)
 
-
 if __name__ == '__main__':
-
     getLevel()
     spawnLegoPerLevel()
     rospy.init_node("levelManager")

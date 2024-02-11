@@ -1,3 +1,12 @@
+"""
+@package spawn
+@brief spawn block in gazebo, level 4
+
+@version 1.0
+@author Hafsa, Michele, Sara
+"""
+
+
 #!/usr/bin/python3
 from gazebo_msgs.srv import SpawnModel, DeleteModel
 from geometry_msgs.msg import *
@@ -6,17 +15,26 @@ import random
 import numpy as np
 from save import *
 
-
-#delete a block by its name
+# Delete a Gazebo model by its name
 def delete_model(name):
-	delete_model_client = rospy.ServiceProxy('/gazebo/delete_model', DeleteModel)
-	return delete_model_client(model_name=name)
+    """
+    Delete a Gazebo model by its name.
 
-#Array containing all lego blocks names
+    Args:
+        name (str): The name of the model to be deleted.
+
+    Returns:
+        bool: True if the model deletion was successful, False otherwise.
+    """
+    delete_model_client = rospy.ServiceProxy('/gazebo/delete_model', DeleteModel)
+    return delete_model_client(model_name=name)
+
+# Array containing all Lego blocks names
 blocks = ['X1-Y4-Z1', 'X1-Y4-Z2', 'X1-Y3-Z2', 'X1-Y3-Z2-FILLET', 'X1-Y1-Z2', 'X1-Y2-Z1', 'X1-Y2-Z2', 'X1-Y2-Z2-CHAMFER', 'X1-Y2-Z2-TWINFILLET', 'X2-Y2-Z2', 'X2-Y2-Z2-FILLET']
 castleBlocks = ['X1-Y4-Z2', 'X1-Y3-Z2', 'X1-Y1-Z2', 'X1-Y2-Z2']
 positions = []
 
+# Possible rotations in quaternion format
 possibleRotations = [[0., 0., 0., 1], [0., 0.7071, 0., 0.7071], [0., 1., 0., 0.], [0., -0.7071, 0., 0.7071], #rotation around y axis
                      [0., 0., 0.7071, 0.7071], [0.5, 0.5, 0.5, 0.5], [0.7071, 0.7071, 0., 0.], [-0.5, -0.5, 0.5, 0.5],
                      [0., 0., 0.7071, -0.7071], [-0.5, 0.5, -0.5, 0.5], [-0.7071, 0.7071, 0., 0.], [0.5, -0.5, -0.5, 0.5],
@@ -24,17 +42,18 @@ possibleRotations = [[0., 0., 0., 1], [0., 0.7071, 0., 0.7071], [0., 1., 0., 0.]
                      [1., 0., 0., 0.], [0.7071, 0., -0.7071, 0.], [0., 0., 1., 0.], [0.7071, 0., 0.7071, 0.],
                      [-0.7071, 0., 0., 0.7071], [-0.5, 0.5, 0.5, 0.5], [0., 0.7071, 0.7071, 0.], [-0.5, -0.5, -0.5, 0.5]]
 
-#cleans the table in case there are blocks on it
+# Clean the table in case there are blocks on it
 for block in blocks:	
-		delete_model(f'{block}')
-    
-clean
-                
+    delete_model(f'{block}')
+
+clean()
+
 random.shuffle(castleBlocks)
 
+# Spawn castle Lego blocks at predefined positions and orientations
 for i in range(4):
     f=True
-    #Generate random position
+    # Generate random position
     if i==0:
         rotIndex = random.randint(0,23)
         rot = possibleRotations[rotIndex]  
@@ -56,11 +75,11 @@ for i in range(4):
                     f = False
 
     
-    #Get a random lego block from all legos
-    brick=castleBlocks[i]
+    # Get a random Lego block from castle Lego blocks
+    brick = castleBlocks[i]
     print(pos)
     print(brick)
-    #Call rospy spawn function to spawn objects in gazebo
+    # Call rospy spawn function to spawn objects in gazebo
     spawn_model_client = rospy.ServiceProxy('/gazebo/spawn_sdf_model', SpawnModel)
     spawn_model_client(model_name=''+str(brick), 
         model_xml=open('../lego_models/'+brick+'/model.sdf', 'r').read(),
@@ -68,4 +87,5 @@ for i in range(4):
         initial_pose=pos,
         reference_frame='world')
     
+    # Save information about the spawned Lego block to an XML file
     saveToXml(str(brick), pos, None)

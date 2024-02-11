@@ -1,3 +1,11 @@
+"""
+@package spawn
+@brief library to save blocks in xml file
+
+@version 1.0
+@author Hafsa, Michele, Sara
+"""
+
 import tf
 import xml.etree.ElementTree as ET
 from xml.dom import minidom
@@ -7,16 +15,36 @@ import os
 import math
 
 def quaternionToEulerAngles(quaternion):
+    """
+    Convert a quaternion to Euler angles (XYZ order).
+
+    Args:
+        quaternion (list or tuple): The input quaternion [x, y, z, w].
+
+    Returns:
+        list: Euler angles in degrees [roll, pitch, yaw].
+    """
     r = Rotation.from_quat(quaternion)
     euler_angles = r.as_euler('xyz', degrees=True)
     return euler_angles
 
 def clean():
+    """
+    Remove the existing XML file if it exists.
+    """
     existing_file_path = "/tmp/blocks.xml"
     if os.path.exists(existing_file_path):
         os.remove(existing_file_path)
 
 def saveToXml(model_name, pos, orientation):
+    """
+    Save model information to an XML file.
+
+    Args:
+        model_name (str): The name of the model.
+        pos (tf.Transform): The position of the model.
+        orientation (list or tuple or None): The orientation of the model as a quaternion [x, y, z, w]. None if not provided.
+    """
     try:
         tree = ET.parse("/tmp/blocks.xml")
         root = tree.getroot()
