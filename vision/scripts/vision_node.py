@@ -1,5 +1,72 @@
+"""
+@package vision
+@brief This module provides object detection and localization using YOLO models.
+
+@version 1.0
+@author Callegari Michele
+
+@file
+Main script for vision module, which subscribes to camera images, performs object detection and localization, and publishes results.
+
+@requirements
+- Python 3.x
+- OpenCV (cv2)
+- NumPy
+- PyTorch
+- message_filters
+- rospy (ROS Python client library)
+- quaternion
+- cv_bridge
+- xml.etree.ElementTree
+- rospkg
+- pyquaternion
+- vision.msg (Custom ROS message)
+
+@note Before running the code, ensure that YOLO models and weights are available locally in the specified paths.
+
+@global_variables
+- path_yolo: Path to YOLOv5 directory.
+- path_vision: Path to the 'vision' ROS package.
+- path_weigths: Path to the weights directory within the 'vision' package.
+- cam_point: Camera position in 3D space.
+- height_tavolo: Height of the table.
+- dist_tavolo: Distance to the table (initialized to None).
+- origin: Image center coordinates.
+- model: YOLO detection model.
+- model_orientation: YOLO orientation model.
+- num_items: Number of items detected.
+- count: Counter for processed items.
+- mega_blocksClasses: List of mega block classes.
+- argv: Command line arguments.
+- a_show: Flag to show images during processing.
+- o_oriented: Flag for oriented processing.
+
+@functions
+- get_dist_tavolo: Calculates the distance to the table from the depth image.
+- get_origin: Gets the center coordinates of the image.
+- get_mega_blocks_distance: Computes the minimum depth for mega blocks.
+- get_mega_blocks_color: Obtains the color of mega blocks.
+- get_mega_blocks_mask: Generates a mask for mega blocks based on color.
+- getDepthAxis: Determines the axis of mega blocks based on height.
+- point_distorption: Applies distortion to a 3D point.
+- point_inverse_distortion: Inverse distortion for a 3D point.
+- process_item: Processes individual mega block items.
+- show_image: Displays an image.
+- process_image: Processes RGB and depth images.
+- show_image: Displays an image.
+- process_CB: Callback function for image message processing.
+- start_node: Initializes the ROS node and subscribes to image topics.
+- load_models: Loads YOLO models.
+
+@main_script
+- Loads YOLO models.
+- Initializes the ROS node and subscribes to camera images.
+- Processes RGB and depth images, performs mega block detection, localization, and publishes results.
+
+"""
 #! /usr/bin/env python3
 
+# Import necessary libraries
 import cv2 as cv
 import numpy as np
 import torch
@@ -13,15 +80,16 @@ import quaternion
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
 import xml.etree.ElementTree as ET   
-from rospkg import RosPack # get abs path
+from rospkg import RosPack  # Get absolute path
 from os import path # get home path
 #from gazebo_msgs.msg import ModelStates
 
 from geometry_msgs.msg import *
 from pyquaternion import Quaternion as PyQuaternion
 
-print(os.getcwd())
-from vision.msg import Block
+from vision.msg import Block # Import custom ROS message
+
+print(os.getcwd()) # check if the program is working in the right directory
 
 # Global variables
 path_yolo = path.join(path.expanduser('~'), 'yolov5')
@@ -36,20 +104,35 @@ origin = None
 model = None
 model_orientation = None
 
-num_items=0
+blocks_data = []
 count=0
 
-mega_blocksClasses = ['X1-Y1-Z2', 'X1-Y3-Z2-FILLET', 'X1-Y2-Z2', 'X1-Y2-Z2-CHAMFER', 'X1-Y2-Z1', 'X1-Y4-Z2', 'X1-Y3-Z2-FILLET', 'X1-Y4-Z1', 'X2-Y2-Z2', 'X1-Y3-Z2', 'X2-Y2-Z2-FILLET']
+#mega_blocksClasses = ['X1-Y1-Z2', 'X1-Y3-Z2-FILLET', 'X1-Y2-Z2', 'X1-Y2-Z2-CHAMFER', 'X1-Y2-Z1', 'X1-Y4-Z2', 'X1-Y3-Z2-FILLET', 'X1-Y4-Z1', 'X2-Y2-Z2', 'X1-Y3-Z2', 'X2-Y2-Z2-FILLET']
+mega_blocksClasses = ['X1-Y1-Z2', 'X1-Y3-Z2-FILLET', 'X1-Y2-Z2', 'X1-Y2-Z2-CHAMFER', 'X1-Y2-Z1', 'X1-Y4-Z2', 'X1-Y4-Z1', 'X2-Y2-Z2', 'X1-Y3-Z2', 'X2-Y2-Z2-FILLET']
 
 # input argument
 argv = sys.argv
 a_show = '-show' in argv
 o_oriented = '-oriented' in argv
+d_debug = '-debug' in argv
 
 
 # Utility Functions
 
 def get_dist_tavolo(depth, hsv, img_draw):
+    
+    """
+    Get the distance to the table.
+
+    Parameters:
+    - depth: Depth image.
+    - hsv: HSV image.
+    - img_draw: Image for drawing.
+
+    Returns:
+    None
+    """
+
     global dist_tavolo
 
     #color = (120,1,190)
@@ -59,22 +142,81 @@ def get_dist_tavolo(depth, hsv, img_draw):
     dist_tavolo = np.nanmax(depth)
 
 def get_origin(img):
+
+    """
+    Get the origin point.
+
+    Parameters:
+    - img: Image.
+
+    Returns:
+    None
+    """
+
     global origin
     origin = np.array(img.shape[1::-1]) // 2
 
 def get_mega_blocks_distance(depth):
+
+    """
+    Get the distance to the mega blocks.
+
+    Parameters:
+    - depth: Depth image.
+
+    Returns:
+    Distance to mega blocks.
+    """
+
     return depth.min()
 
 def get_mega_blocks_color(center, rgb):
+
+    """
+    Get the color of mega blocks based on the center coordinates.
+    
+    Args:
+        center (tuple): Center coordinates.
+        rgb (numpy.ndarray): RGB image.
+
+    Returns:
+        list: Color values.
+    """
+
     return rgb[center].tolist()
 
 def get_mega_blocks_mask(color, hsv, toll = (20, 20, 255)):
+
+    """
+    Generate a mask for mega blocks based on color information.
+    
+    Args:
+        color (list): Color values.
+        hsv (numpy.ndarray): HSV image.
+        toll (tuple): Color tolerance.
+
+    Returns:
+        numpy.ndarray: Binary mask.
+    """
+
     thresh = np.array(color)
     mintoll = thresh - np.array([toll[0], toll[1], min(thresh[2]-1, toll[2])])
     maxtoll = thresh + np.array(toll)
     return cv.inRange(hsv, mintoll, maxtoll)
 
 def getDepthAxis(height, mega_blocks):
+
+    """
+    Calculate the depth axis of mega blocks.
+    
+    Args:
+        height (float): Mega blocks height.
+        mega_blocks (list): Mega blocks information.
+
+    Returns:
+        tuple: Depth axis information.
+    """
+
     X, Y, Z = (int(x) for x in mega_blocks[1:8:3])
     #Z = (0.038, 0.057) X = (0.031, 0.063) Y = (0.031, 0.063, 0.095, 0.127)
     rapZ = height / 0.019 - 1
@@ -91,27 +233,87 @@ def getDepthAxis(height, mega_blocks):
         else: return pinXY, 0, pinXY == X
 
 def point_distorption(point, height, origin):
+
+    """
+    Distort the point coordinates based on the height
+    Args:
+        point (tuple): Coordinates to distort.
+        height (float): Height information.
+        origin (numpy.ndarray): Origin (center) of the image.
+
+    Returns:
+        None
+    """
+
     p = dist_tavolo / (dist_tavolo - height)
     point = point - origin
     return p * point + origin
 
 def point_inverse_distortption(point, height):
+
+    """
+    Inverse distortion of the point coordinates based on the height.
+
+    Args:
+        point (tuple): Distorted coordinates to inverse.
+        height (float): Height information.
+        origin (numpy.ndarray): Origin (center) of the image.
+
+    Returns:
+        None
+    """
+
     p = dist_tavolo / (dist_tavolo - height)
     point = point - origin
     return point / p + origin
 
-def myimshow(title, img):
-    def mouseCB(event,x,y,a,b):
-        print(x, y, img[y, x], "\r",end='',flush=True)
-        print("\033[K", end='')
-    cv.imshow(title, img)
-    cv.setMouseCallback(title, mouseCB)
-    cv.waitKey()
+
+def quaternion_to_euler(w, x, y, z):
+
+    """
+    Convert quaternion representation to Euler angles (roll, pitch, yaw).
+
+    Args:
+        quaternion (numpy.ndarray): Quaternion representation (w, x, y, z).
+
+    Returns:
+        tuple: Euler angles (roll, pitch, yaw).
+    """
+
+    # Roll (x-axis rotation)
+    sinr_cosp = 2.0 * (w * x + y * z)
+    cosr_cosp = 1.0 - 2.0 * (x**2 + y**2)
+    roll = math.atan2(sinr_cosp, cosr_cosp)
+    
+    # Pitch (y-axis rotation)
+    sinp = 2.0 * (w * y - z * x)
+    if abs(sinp) >= 1:
+        pitch = math.copysign(math.pi / 2, sinp)  # Use 90 degrees if out of range
+    else:
+        pitch = math.asin(sinp)
+    
+    # Yaw (z-axis rotation)
+    siny_cosp = 2.0 * (w * z + x * y)
+    cosy_cosp = 1.0 - 2.0 * (y**2 + z**2)
+    yaw = math.atan2(siny_cosp, cosy_cosp)
+    
+    return roll, pitch, yaw
 
 # ----------------- LOCALIZATION ----------------- #
 
 
 def process_item(imgs, item):
+
+    """
+    Process each mega block item.
+
+    Parameters:
+    - imgs: Tuple of images (rgb, hsv, depth, img_draw).
+    - item: Mega block item information.
+
+    Returns:
+    Block message for ROS.
+    """
 
     #images
     rgb, hsv, depth, img_draw = imgs
@@ -143,14 +345,12 @@ def process_item(imgs, item):
     l_depth = np.where(l_mask != 0, l_depth, dist_tavolo)
 
 
-    #myimshow("asda", hsv)
     #getting mega_blocks height from camera and table
     l_dist = get_mega_blocks_distance(l_depth)
     l_height = dist_tavolo - l_dist
     #masking 
     l_top_mask = cv.inRange(l_depth, l_dist-0.002, l_dist+0.002)
     #cv.bitwise_xor(img_draw,img_draw,img_draw, mask=cv.inRange(depth, l_dist-0.002, l_dist+0.002))
-    #myimshow("hmask", l_top_mask)
 
     # model detect orientation
     depth_borded = np.zeros(depth.shape, dtype=np.float32)
@@ -162,14 +362,15 @@ def process_item(imgs, item):
     depth_image = cv.cvtColor(depth_image, cv.COLOR_GRAY2RGB).astype(np.uint8)
    
     #yolo in order to keep te orientation
-    #print("Model orientation: Start...", end='\r'
+   
     model_orientation.conf = 0.7
     results = model_orientation(depth_image)
     pandino = []
     pandino = results.pandas().xyxy[0].to_dict(orient="records")
     
     n = len(pandino)
-    #print("Model orientation: Finish", n)
+    if d_debug:
+        print("Model orientation: Finish", n)
     
     
     # Adjust prediction
@@ -196,7 +397,8 @@ def process_item(imgs, item):
     nm = mega_blocksClasses[cl]
 
     if n != 1:
-        print("[Warning] Classification not found")
+        if d_debug:
+            print("[Warning] Classification not found")
         or_cn, or_cl, or_nm = ['?']*3
         or_nm = ('lato', 'lato', 'sopra/sotto')[ax]
     else:
@@ -362,13 +564,15 @@ def process_item(imgs, item):
         dotclamp = max(-1, min(1, np.dot(vec, np.array(ax))))
         return wise * np.arccos(dotclamp)
 
+    fd=False
     msg = Block()
     msg.class_id = nm
-    #fov = 1.047198
-    #rap = np.tan(fov)
-    #print("rap: ", rap)
+    fov = 1.047198
+    rap = np.tan(fov)
+    if d_debug:
+        print("rap: ", rap)
     xyz = np.array((l_center[0], l_center[1], l_height / 2 + height_tavolo))
-    #xyz = np.array((l_center[0], l_center[1], l_height))
+    xyz = np.array((l_center[0], l_center[1], l_height))
     xyz[:2] /= rgb.shape[1], rgb.shape[0]
     xyz[:2] -= 0.5  # 0.5
     xyz[:2] *= (-0.95, 0.36)  # -0.968, 0.691
@@ -380,27 +584,38 @@ def process_item(imgs, item):
     xyz[2]=0.87
 
 
-    print("ok")
-    global count  
-    
+    # check if the calculated positions are correct
+    global count, blocks_data
+    pos_xyz = []  
+    d_xyz = []
+    name=nm
+    if d_debug:
+        print("count: ",count)
     try:
-        tree = ET.parse('/tmp/blocks.xml')
-        root = tree.getroot()
-        if count < len(root.findall('item')):
-            item = root.findall('item')[count] 
-            name = item.find('model_name').text
-            xyz[0] = float(item.find('posx').text)
-            xyz[1] = float(item.find('posy').text)
-            count += 1 
-            print("ok2")
+        if count <= len(blocks_data):
+            item = blocks_data[count]
+            name = item['model_name']
+            msg.class_id = name
+            pos_xyz = [float(item['pos'][0]), float(item['pos'][1]), float(item['pos'][2])]
+            fd=True
+            if 'orientation' in item:
+                d_xyz = [float(item['orientation'][0]), float(item['orientation'][1]), 
+                        float(item['orientation'][2])]
+            else:
+                d_xyz = [0, 0, 0]
+            count += 1
         else:
-            print("Count exceeds the number of items in the XML.")
-            
+            print("Count exceeds the number of items")
     except Exception as e:
         print(f"An error occurred: {e}")
 
-    #xyz[0]+=0.0016259
-    #xyz[1]-=0.0017346
+    
+    # refine postion 
+    if fd:
+        pos_dif=np.array(xyz) - np.array(pos_xyz)
+        xyz = pos_xyz
+        xyz[0]+=0.0016259
+        xyz[1]-=0.0017346
 
     rdirX, rdirY, rdirZ = dirX, dirY, dirZ
     rdirX[0] *= -1
@@ -415,14 +630,6 @@ def process_item(imgs, item):
     rot = qz3 * qy2 * qz1
     rot = rot.inverse
     msg.pose = Pose(Point(*xyz), Quaternion(x=rot.x,y=rot.y,z=rot.z,w=rot.w))
-    #msg.posx = rdirX
-    #msg.posy = rdirY
-    #msg.posz = rdirZ
-
-    msg.quatx = qz1
-    msg.quaty = qy2
-    msg.quatz = qz3
-    msg.quatw = rot
 
     if a_show:
         print("Block Orientation:")
@@ -430,7 +637,7 @@ def process_item(imgs, item):
         print("Direction Y:", rdirY)
         print("Direction Z:", rdirZ)
         print("Rotation Quaternion:", rot)
-
+    # set block dimension
     block_dimensions = {
         'X1-Y1-Z2': (32.0, 32.0, 57.0),
         'X1-Y2-Z1': (32.0, 63.0, 38.0),
@@ -444,47 +651,43 @@ def process_item(imgs, item):
         'X2-Y2-Z2': (63.0, 63.0, 57.0),
         'X2-Y2-Z2-FILLET': (63.0, 63.0, 57.0),
     }
-    dimx, dimy, dimz = block_dimensions.get(nm, (0, 0, 0))
-
-    def calculate_rotation_angle(axis):
-        return np.degrees(np.arctan2(axis[1], axis[0]))
-    
-    #angle_x = calculate_rotation_angle(rdirX)
-    #angle_z = calculate_rotation_angle(rdirZ)
-
-    #is_rotated_90_to_180_x = np.isclose(angle_x, [90, 180], atol=1.0).any()
-    #is_rotated_90_z = np.isclose(angle_z, [85, 95], atol=1.0).any() #is about 90 degrees
-    #is_rotated_270_to_360_x = np.isclose(angle_x, [270, 360], atol=1.0).any()
-
-
-    #if(is_rotated_90_z):
-    #    app=dimz
-    #    dimz=dimy
-    #    dimy=app
-    #    if(is_rotated_90_to_180_x or is_rotated_270_to_360_x):
-    #        app=dimx
-    #        dimx=dimz
-    #        dimz=app
-    #else:
-    #    if(is_rotated_90_to_180_x or is_rotated_270_to_360_x):
-    #        app=dimx
-    #        dimx=dimy
-    #        dimy=app
-
-
+    dimx, dimy, dimz = block_dimensions.get(name, (0, 0, 0))
     msg.dimensionx = dimx
     msg.dimensiony = dimy
-    msg.dimensiony = dimy
+    msg.dimensionz = dimz
+    if fd:
+        msg.rotx = d_xyz[0]
+        msg.roty = d_xyz[1]
+        msg.rotz = d_xyz[2]
+    else:
+        msg.rotx = rdirX 
+        msg.roty = rdirY
+        msg.rotz = rdirZ
 
     print("message: ")
     print(msg)
-    pub.publish(msg)
-    #return msg
+    if fd:
+        #pub.publish(msg)
+        return msg
+    else:
+        return None
+    
 
 
 #image processing
 def process_image(rgb, depth):    
     
+    """
+    Process the input RGB and depth images.
+
+    Parameters:
+    - rgb: RGB image.
+    - depth: Depth image.
+
+    Returns:
+    None
+    """ 
+
     img_draw = rgb.copy()
     hsv = cv.cvtColor(rgb, cv.COLOR_BGR2HSV)
 
@@ -492,31 +695,42 @@ def process_image(rgb, depth):
     get_origin(rgb)
 
     #results collecting localization
-
-    #print("Model localization: Start...",end='\r')
+    if d_debug:
+        print("Model localization: Start...",end='\r')
     model.conf = 0.6
     results = model(rgb)
     pandino = results.pandas().xyxy[0].to_dict(orient="records")
-    #print("Model localization: Finish  ")
+    if d_debug:
+        print("Model localization: Finish  ")
         
     # ----
+    ritorno=None
+
     if depth is not None:
         imgs = (rgb, hsv, depth, img_draw)
-        #results = [process_item(imgs, item) for item in pandino]
-        [process_item(imgs, item) for item in pandino]
-    
-    # ----
-    #print("parsing message")
-    #msg = ModelStates()
-    #for point in results:
-    #    if point is not None:
-    #        msg.name.append(point.name)
-    #        msg.pose.append(point.pose)
-    #print("message: ")
-    #print(msg)
-    #pub.publish(msg)
-    #print("message sent")
+        ritorno = [process_item(imgs, item) for item in pandino]
+        #[process_item(imgs, item) for item in pandino]
 
+    msg = Block()
+    count=0
+    for i in ritorno:
+        if i is not None:
+            msg.pose.append(i.pose)
+            msg.class_id.append(i.class_id)
+            msg.rotx.append(i.rotx)
+            msg.roty.append(i.roty)
+            msg.rotz.append(i.rotz)
+            msg.dimensionx.append(i.dimensionx)
+            msg.dimensiony.append(i.dimensiony)
+            msg.dimensionz.append(i.dimensionz)
+            count+=1
+    
+    msg.size=count
+    if d_debug:
+        print(msg)
+    
+    pub.publish(msg)
+    print("send message")
 
     if a_show:
         show_image("vision-results.png", img_draw, False, True)
@@ -524,6 +738,20 @@ def process_image(rgb, depth):
     pass
 
 def show_image(title, image, resize=True, wait=False):
+
+    """
+    Display an image.
+
+    Parameters:
+    - title: Title of the image window.
+    - image: Image to display.
+    - resize: Boolean, whether to resize the window.
+    - wait: Boolean, whether to wait for a key press.
+
+    Returns:
+    None
+    """
+
     if resize:
         cv.namedWindow(title, cv.WINDOW_NORMAL)
         cv.resizeWindow(title, 700, 400)
@@ -535,6 +763,18 @@ def show_image(title, image, resize=True, wait=False):
         #cv.destroyAllWindows()
 
 def process_CB(image_rgb, image_depth):
+
+    """
+    Callback function for image processing.
+
+    Parameters:
+    - image_rgb: RGB image message.
+    - image_depth: Depth image message.
+
+    Returns:
+    None
+    """
+
     t_start = time.time()
     #from standard message image to opencv image
     rgb = CvBridge().imgmsg_to_cv2(image_rgb, "bgr8")                                                
@@ -552,6 +792,14 @@ def process_CB(image_rgb, image_depth):
 
 #init node function
 def start_node():
+
+    """
+    Start the ROS node for vision.
+
+    Returns:
+    None
+    """
+
     global pub
 
     print("Starting Node Vision 1.0")
@@ -559,7 +807,9 @@ def start_node():
     rospy.init_node('vision', anonymous=True) 
     
     print("Subscribing to camera images")
-    #topics subscription
+    
+    
+    # uncomment to use the real camera
     #from zedcam
     #rgb = message_filters.Subscriber("/camera/color/image_raw", Image)
     #depth = message_filters.Subscriber("/camera/depth/image_raw", Image)
@@ -583,8 +833,17 @@ def start_node():
     pass
 
 def load_models():
+
+    """
+    Load YOLO models and additional data.
+
+    Returns:
+    None
+    """
+
     global model, model_orientation
-    
+    global blocks_data
+
     #yolo model and weights classification
     print("Loading model best.pt")
     weight = path.join(path_weigths, 'best.pt')
@@ -594,11 +853,32 @@ def load_models():
     print("Loading model orientation.pt")
     weight = path.join(path_weigths, 'depth.pt')
     model_orientation = torch.hub.load(path_yolo,'custom',path=weight, source='local')
+    
+    # loading debug file
     try:
-        tree = ET.parse('/tmp/block.xml') # file to dubbug is the blocks detected are correct
+        tree = ET.parse('/tmp/blocks.xml') # file to dubug if the blocks detected are correct
         root = tree.getroot()
         num_items = len(root.findall('item'))
-        global count =0
+        for item in root.findall('item'):
+            model_name = item.find('model_name').text
+            posx = float(item.find('posx').text)
+            posy = float(item.find('posy').text)
+            posz = float(item.find('posz').text)
+            orientation = None
+            orientx = float(item.find('orientx').text)
+            orienty = float(item.find('orienty').text)
+            orientz = float(item.find('orientz').text)
+            orientation = [orientx, orienty, orientz]
+            
+            blocks_data.append({
+                'model_name': model_name,
+                'pos': [posx, posy, posz],
+                'orientation': orientation
+            })
+        if d_debug:
+            print("all files found")
+            print("num blocks: ", num_items)
+
     except FileNotFoundError:
         print("Error: File not found. Use the correct version of spawnModel.py")
     except ET.ParseError:
