@@ -16,6 +16,15 @@
 #include "geometry_msgs/Pose.h"
 #include "vision/Block.h"
 
+
+/**
+ * @brief Get a geometry_msgs::Pose with the specified position coordinates.
+ * 
+ * @param x X-coordinate of the pose.
+ * @param y Y-coordinate of the pose.
+ * @param z Z-coordinate of the pose.
+ * @return geometry_msgs::Pose Pose with the specified position.
+ */
 geometry_msgs::Pose getPose(double x, double y, double z){
     geometry_msgs::Pose pose;
 
@@ -30,6 +39,12 @@ geometry_msgs::Pose getPose(double x, double y, double z){
     return pose;
 }
 
+/**
+ * @brief Send desired joint states and gripper position to the robot.
+ * 
+ * @param joint_pos Vector containing joint positions.
+ * @param gripper_pos Gripper position represented as Eigen::Vector3d.
+ */
 void sendDesJstate(const Vector6d & joint_pos, const Eigen::Vector3d & gripper_pos){    
     /* GRIPPER MANAGEMENT */
     if(gripper_sim){
@@ -54,6 +69,11 @@ void sendDesJstate(const Vector6d & joint_pos, const Eigen::Vector3d & gripper_p
     pub.publish(jointState_msg_robot);
 }
 
+/**
+ * @brief Move the gripper to a specified diameter using the gripper client.
+ * 
+ * @param diameter Desired diameter for the gripper.
+ */
 void moveGripper(const double diameter){
     ros_impedance_controller::generic_float::Request req;
     ros_impedance_controller::generic_float::Response res;
@@ -67,6 +87,12 @@ void moveGripper(const double diameter){
     }
 }
 
+/**
+ * @brief Map the desired diameter to gripper joint positions based on gripper type.
+ * 
+ * @param diameter Desired diameter for the gripper.
+ * @return double Gripper joint position corresponding to the desired diameter.
+ */
 double mapToGripperJoints(double diameter){
     if(soft_gripper){
         int D0 = 40;
@@ -79,19 +105,40 @@ double mapToGripperJoints(double diameter){
     }
 }
 
+/**
+ * @brief Set the joint positions for the robot.
+ * 
+ * @param q Vector containing joint positions.
+ */
 void setJoints(Vector6d q){
     jointsAndGripper.joints = q;
 }
 
+/**
+ * @brief Set the gripper position for the robot.
+ * 
+ * @param gripper Gripper position represented as Eigen::Vector3d.
+ */
 void setGripper(Eigen::Vector3d gripper){
     jointsAndGripper.gripper = gripper;
 }
 
+/**
+ * @brief Set both joint positions and gripper position for the robot.
+ * 
+ * @param q Vector containing joint positions.
+ * @param gripper Gripper position represented as Eigen::Vector3d.
+ */
 void setJointsAndGripper(Vector6d q, Eigen::Vector3d gripper){
     jointsAndGripper.joints = q;
     jointsAndGripper.gripper = gripper;
 }
 
+/**
+ * @brief Set a new gripper position based on the desired diameter.
+ * 
+ * @param diameter Desired diameter for the gripper.
+ */
 void setNewGripperPosition(double diameter){
     double q = mapToGripperJoints(diameter);
 
@@ -101,6 +148,14 @@ void setNewGripperPosition(double diameter){
     setGripper(v);
 }
 
+/**
+ * @brief Attach two blocks in Gazebo using the specified models and links.
+ * 
+ * @param model1 Name of the first block model.
+ * @param link1 Name of the first block link.
+ * @param model2 Name of the second block model.
+ * @param link2 Name of the second block link.
+ */
 void attachBlock(const char* model1, const char* link1, const char* model2, const char* link2){
     gazebo_ros_link_attacher::Attach::Request req;
     gazebo_ros_link_attacher::Attach::Response res;
@@ -115,6 +170,14 @@ void attachBlock(const char* model1, const char* link1, const char* model2, cons
     }
 }
 
+/**
+ * @brief Detach two blocks in Gazebo using the specified models and links.
+ * 
+ * @param model1 Name of the first block model.
+ * @param link1 Name of the first block link.
+ * @param model2 Name of the second block model.
+ * @param link2 Name of the second block link.
+ */
 void detachBlock(const char* model1, const char* link1, const char* model2, const char* link2){
     gazebo_ros_link_attacher::Attach::Request req;
     gazebo_ros_link_attacher::Attach::Response res;
@@ -129,6 +192,11 @@ void detachBlock(const char* model1, const char* link1, const char* model2, cons
     }
 }
 
+/**
+ * @brief Move the gripper to a specified diameter or simulate the movement based on the robot type.
+ * 
+ * @param diameter Desired diameter for the gripper.
+ */
 void move_gripper(double diameter){ 
     if(real_robot){
         moveGripper(diameter);
@@ -138,6 +206,9 @@ void move_gripper(double diameter){
     }
 }
 
+/**
+ * @brief Read joint states from the robot and update the gripper and joint information.
+ */
 void readJoints(){
     sensor_msgs::JointState::ConstPtr msg = ros::topic::waitForMessage<sensor_msgs::JointState>("/ur5/joint_states");
 
@@ -153,6 +224,12 @@ void readJoints(){
     jointsAndGripper.joints = joints.block<6,1>(0,0); 
 }
 
+/**
+ * @brief Move the robot to a specified pose and orientation using inverse differential kinematics.
+ * 
+ * @param poseF Desired position represented as Eigen::Vector3d.
+ * @param orientF Desired orientation represented as Eigen::Vector3d.
+ */
 void move(Eigen::Vector3d poseF, Eigen::Vector3d orientF){
     ros::Rate loop_rate(250.);
     readJoints();
@@ -182,6 +259,12 @@ void move2(Eigen::Vector3d poseF, Eigen::Vector3d orientF){
     setJoints(traj.block<6,1>(0,i-1));
 } */
 
+/**
+ * @brief Transform a point from world coordinates to robot coordinates.
+ * 
+ * @param p Point in world coordinates represented as Eigen::Vector3d.
+ * @return Eigen::Vector3d Transformed point in robot coordinates.
+ */
 Eigen::Vector3d transformWrldToRbt(Eigen::Vector3d p){
     Eigen::Vector4d pe;
     pe << p(0), p(1), p(2), 1;
@@ -195,6 +278,12 @@ Eigen::Vector3d transformWrldToRbt(Eigen::Vector3d p){
     return (t0b*pe).block<3,1>(0,0);
 } 
 
+/**
+ * @brief Transform a point from robot coordinates to world coordinates.
+ * 
+ * @param p Point in robot coordinates represented as Eigen::Vector3d.
+ * @return Eigen::Vector3d Transformed point in world coordinates.
+ */
 Eigen::Vector3d transformRbtToWrld(Eigen::Vector3d p){
     Eigen::Vector4d pe;
     pe << p(0), p(1), p(2), 1;
@@ -208,6 +297,12 @@ Eigen::Vector3d transformRbtToWrld(Eigen::Vector3d p){
     return (t0b*pe).block<3,1>(0,0);
 }
 
+/**
+ * @brief Get the block pose information based on the block name.
+ * 
+ * @param blockName Name of the block.
+ * @return blockInfo Information about the block's pose.
+ */
 blockInfo getBlockPose(std::string blockName){
     blockInfo block;
 
@@ -328,6 +423,15 @@ blockInfo getBlockPose(std::string blockName){
     return block;
 }
 
+/**
+ * @brief Get the index of a block from the visionSim array based on the block number.
+ *
+ * This function searches for the block with the specified class ID in the visionSim array.
+ *
+ * @param visionNode Pointer to an array of visionSim structures representing vision data.
+ * @param num The block number to search for.
+ * @return The index of the block in the array, or 0 if not found.
+ */
 int getBlockIndexFromArrayDefault(visionSim* visionNode, int num){
     int k=0;
     for(int i=0; i<4; i++){
@@ -339,6 +443,15 @@ int getBlockIndexFromArrayDefault(visionSim* visionNode, int num){
     return k;
 }
 
+/**
+ * @brief Get the index of a block from the vision::Block::ConstPtr array based on the block number.
+ *
+ * This function searches for the block with the specified class ID in the vision::Block::ConstPtr array.
+ *
+ * @param visionNode Pointer to a vision::Block::ConstPtr structure representing vision data.
+ * @param num The block number to search for.
+ * @return The index of the block in the array, or 0 if not found.
+ */
 int getBlockIndexFromArray(vision::Block::ConstPtr visionNode, int num){
     int k=0;
     for(int i=0; i<4; i++){
@@ -350,6 +463,16 @@ int getBlockIndexFromArray(vision::Block::ConstPtr visionNode, int num){
     return k;
 }
 
+/**
+ * @brief Move an object from initial position to final position using a point-to-point strategy.
+ *
+ * This function moves an object from the initial position to the final position, grasping and releasing the block.
+ *
+ * @param posI Initial position of the object.
+ * @param posF Final position of the object.
+ * @param blockName Name of the block to be moved.
+ * @param gripperClosure Gripper closure value during the operation.
+ */
 void moveP2PObject(Eigen::Vector3d posI, Eigen::Vector3d posF, const char* blockName, double gripperClosure){
     move(transformWrldToRbt({posI(0), posI(1), workingH}), {0.,0.,0.});
     move_gripper(80); 
@@ -365,6 +488,15 @@ void moveP2PObject(Eigen::Vector3d posI, Eigen::Vector3d posF, const char* block
     move(transformWrldToRbt({posF(0), posF(1), workingH}), {0.,0.,0.});
 }
 
+/**
+ * @brief Set up a block in a specific configuration.
+ *
+ * This function sets up a block at a specified position and orientation.
+ *
+ * @param pos Position of the block.
+ * @param rot Rotation angles (roll, pitch, yaw) of the block.
+ * @param block Information about the block.
+ */
 void setBlockUp(Eigen::Vector3d pos, Eigen::Vector3d rot, blockInfo block){
     double x = pos(0);
     double y = pos(1);
@@ -465,6 +597,17 @@ void setBlockUp(Eigen::Vector3d pos, Eigen::Vector3d rot, blockInfo block){
 
 }
 
+
+/**
+ * @brief Move for castle construction using a specific strategy.
+ *
+ * This function performs a sequence of movements for castle construction, including grasping and releasing blocks.
+ *
+ * @param posI Initial position of the object.
+ * @param posF Final position of the object.
+ * @param blockName Name of the block to be moved.
+ * @param gripperClosure Gripper closure value during the operation.
+ */
 void moveForCastleConstruction(Eigen::Vector3d posI, Eigen::Vector3d posF, const char* blockName, double gripperClosure){
     move(transformWrldToRbt({posI(0), posI(1), workingH}), {0.,0.,0.});
     move_gripper(80); 
@@ -481,6 +624,15 @@ void moveForCastleConstruction(Eigen::Vector3d posI, Eigen::Vector3d posF, const
     move(transformWrldToRbt({posF(0), posF(1), restingH}), {0.,0.,0.});
 }
 
+/**
+ * @brief Move a straight object to the target position using a specific strategy.
+ *
+ * This function moves a straight object to the target position, grasping and releasing the block.
+ *
+ * @param posI Initial position of the object.
+ * @param blockName Information about the block.
+ * @param posF Target position of the object.
+ */
 void moveStraightObjToTargetPos(Eigen::Vector3d posI, blockInfo blockName, Eigen::Vector3d posF){
     move(transformWrldToRbt({posI(0), posI(1), workingH}), {0.,0.,0.});
     move_gripper(80); 
@@ -498,6 +650,15 @@ void moveStraightObjToTargetPos(Eigen::Vector3d posI, blockInfo blockName, Eigen
     move(transformWrldToRbt(dflHndlPos), {0.,0.,0.});
 }
 
+/**
+ * @brief Main function for the kinematics node.
+ *
+ * The main function initializes ROS, parses command line arguments, and performs specific tasks based on the provided task number.
+ *
+ * @param argc Number of command line arguments.
+ * @param argv Array of command line arguments.
+ * @return 0 on successful execution, 1 otherwise.
+ */
 int main(int argc, char **argv){
     ros::init(argc, argv, "kinematics");
     ros::NodeHandle nH;

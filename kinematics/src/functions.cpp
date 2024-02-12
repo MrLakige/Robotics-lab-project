@@ -57,6 +57,13 @@
     return J;
 } */
 
+/**
+ * @brief Computes the Jacobian matrix for the given joint angles.
+ *
+ * @param Th Vector of joint angles.
+ * @return Jacobian matrix (Matrix66d).
+ */
+
 Matrix66d jacobian(Vector6d Th){
     Matrix66d J;
     Vector6d J1, J2, J3, J4, J5, J6;
@@ -113,9 +120,23 @@ Matrix66d jacobian(Vector6d Th){
     return J;
 }
 
+/**
+ * @brief Computes the attractive force for position control.
+ *
+ * @param error Error vector in position.
+ * @return Attractive force vector.
+ */
+
 Eigen::Vector3d attrForce_pos(Eigen::Vector3d error){
     return -0.001*(error)/error.norm();
 }
+
+/**
+ * @brief Computes the repulsive force for obstacle avoidance.
+ *
+ * @param xe End effector position vector.
+ * @return Repulsive force vector.
+ */
 
 Eigen::Vector3d repulForce(Eigen::Vector3d xe){
 
@@ -131,6 +152,14 @@ Eigen::Vector3d repulForce(Eigen::Vector3d xe){
     }
 }
 
+/**
+ * @brief Computes the desired end effector position for position control.
+ *
+ * @param xe Current end effector position.
+ * @param xf Desired end effector position.
+ * @return Updated end effector position.
+ */
+
 Eigen::Vector3d desPos(Eigen::Vector3d xe, Eigen::Vector3d xf){
 
     Eigen::Vector3d errPos = xe - xf;
@@ -145,6 +174,17 @@ Eigen::Vector3d desPos(Eigen::Vector3d xe, Eigen::Vector3d xf){
 
     return xe;
 }
+
+/**
+ * @brief Computes the joint velocity vector for control.
+ *
+ * @param qk Current joint configuration.
+ * @param xe Current end effector position.
+ * @param xd Desired end effector position.
+ * @param Re Current end effector orientation matrix.
+ * @param phid Desired end effector orientation angles.
+ * @return Joint velocity vector.
+ */
 
 Eigen::VectorXd dotQ(Vector6d qk, Eigen::Vector3d xe, Eigen::Vector3d xd, Eigen::Matrix3d Re, Eigen::Vector3d phid){
     Eigen::MatrixXd Jac;
@@ -167,6 +207,15 @@ Eigen::VectorXd dotQ(Vector6d qk, Eigen::Vector3d xe, Eigen::Vector3d xd, Eigen:
     return (Jac + Eigen::MatrixXd::Identity(6,6)*(0.001)).inverse()*V;
 }
 
+/**
+ * @brief Computes the desired end effector position for trajectory planning.
+ *
+ * @param t Time parameter.
+ * @param xef Final end effector position.
+ * @param xe0 Initial end effector position.
+ * @return Desired end effector position.
+ */
+
 Eigen::Vector3d pd(double t, Eigen::Vector3d xef, Eigen::Vector3d xe0){
     Eigen::Vector3d xd;
     double Tm  = 1.;
@@ -178,6 +227,15 @@ Eigen::Vector3d pd(double t, Eigen::Vector3d xef, Eigen::Vector3d xe0){
     }
 }
 
+/**
+ * @brief Computes the desired end effector orientation for trajectory planning.
+ *
+ * @param t Time parameter.
+ * @param phief Final end effector orientation angles.
+ * @param phie0 Initial end effector orientation angles.
+ * @return Desired end effector orientation.
+ */
+
 Eigen::Vector3d phid(double t, Eigen::Vector3d phief, Eigen::Vector3d phie0){
     Eigen::Vector3d phid;
     double Tm  = 1.;
@@ -188,6 +246,13 @@ Eigen::Vector3d phid(double t, Eigen::Vector3d phief, Eigen::Vector3d phie0){
         return phid = (tb)*phief + (1-tb)*phie0;
     }
 }
+
+/**
+ * @brief Converts a rotation matrix to axis-angle representation.
+ *
+ * @param R Rotation matrix.
+ * @return Axis-angle representation vector.
+ */
 
 Eigen::Vector3d rotmToAngleAxis(Eigen::Matrix3d R) {
     Eigen::Vector3d l;
@@ -211,6 +276,19 @@ Eigen::Vector3d rotmToAngleAxis(Eigen::Matrix3d R) {
     }
     return alphaR;
 }
+
+/**
+ * @brief Computes the joint velocity vector for control considering complete dynamics.
+ *
+ * @param q Current joint configuration.
+ * @param xe Current end effector position.
+ * @param xd Desired end effector position.
+ * @param vd Desired end effector velocity.
+ * @param Re Current end effector orientation matrix.
+ * @param phid Desired end effector orientation angles.
+ * @param phidDot Desired end effector angular velocity.
+ * @return Joint velocity vector.
+ */
 
 Vector6d dotQControlComplete(Vector6d q, Eigen::Vector3d xe, Eigen::Vector3d xd, Eigen::Vector3d vd, Eigen::Matrix3d Re, Eigen::Vector3d phid, Eigen::Vector3d phidDot){
     Vector6d dotQ;    
@@ -254,6 +332,19 @@ Vector6d dotQControlComplete(Vector6d q, Eigen::Vector3d xe, Eigen::Vector3d xd,
     return dotQ;
 }
 
+/**
+ * @brief Computes the joint velocity vector for control considering complete dynamics with axis-angle representation.
+ *
+ * @param q Current joint configuration.
+ * @param xe Current end effector position.
+ * @param xd Desired end effector position.
+ * @param vd Desired end effector velocity.
+ * @param Re Current end effector orientation matrix.
+ * @param phid Desired end effector orientation angles.
+ * @param phidDot Desired end effector angular velocity.
+ * @return Joint velocity vector.
+ */
+
 Vector6d dotQControlCompleteAangleAxis(Vector6d q, Eigen::Vector3d xe, Eigen::Vector3d xd, Eigen::Vector3d vd, Eigen::Matrix3d Re, Eigen::Vector3d phid, Eigen::Vector3d phidDot){
     Vector6d dotQ;    
     Matrix66d Jac;
@@ -288,6 +379,14 @@ Vector6d dotQControlCompleteAangleAxis(Vector6d q, Eigen::Vector3d xe, Eigen::Ve
     return dotQ;
 }
 
+/**
+ * @brief Computes the orientation error between two rotation matrices.
+ *
+ * @param w_R_e Current end effector orientation matrix.
+ * @param w_R_d Desired end effector orientation matrix.
+ * @return Orientation error vector.
+ */
+
 Eigen::Vector3d computeOrientationErrorW(Eigen::Matrix3d w_R_e, Eigen::Matrix3d w_R_d){
         Eigen::Vector3d error; 
         //computaion of the relative orientation 
@@ -310,6 +409,14 @@ Eigen::Vector3d computeOrientationErrorW(Eigen::Matrix3d w_R_e, Eigen::Matrix3d 
         return error;
 }
 
+/**
+ * @brief Computes the position error between the current and desired end effector positions.
+ *
+ * @param xe Current end effector position vector.
+ * @param xd Desired end effector position vector.
+ * @return Position error vector.
+ */
+
 Eigen::Vector3d computePositionError(Eigen::Vector3d xe, Eigen::Vector3d xd){
 
     Eigen::Vector3d error = xd - xe;
@@ -320,6 +427,13 @@ Eigen::Vector3d computePositionError(Eigen::Vector3d xe, Eigen::Vector3d xd){
 
     return error;
 }
+
+/**
+ * @brief Converts Euler angles to a rotation matrix.
+ *
+ * @param euler Vector of Euler angles (roll, pitch, yaw).
+ * @return Rotation matrix.
+ */
 
 Eigen::Matrix3d eulerToRotationMatrix(Eigen::Vector3d euler){
 
@@ -336,6 +450,13 @@ Eigen::Matrix3d eulerToRotationMatrix(Eigen::Vector3d euler){
     return R;
 
 }
+
+/**
+ * @brief Converts a rotation matrix to Euler angles.
+ *
+ * @param rotMatrix Rotation matrix.
+ * @return Vector of Euler angles (roll, pitch, yaw).
+ */
 
 Eigen::Vector3d rotMatToEuler(Eigen::Matrix3d rotMatrix){
     double sy = sqrt(pow(rotMatrix(0,0),2) + pow(rotMatrix(1,0),2));
@@ -355,6 +476,13 @@ Eigen::Vector3d rotMatToEuler(Eigen::Matrix3d rotMatrix){
 
     return Eigen::Vector3d(x,y,z);
 }
+
+/**
+ * @brief Computes the pseudo-inverse of a 6x6 Jacobian matrix.
+ *
+ * @param J Jacobian matrix (6x6).
+ * @return Pseudo-inverse of the Jacobian matrix.
+ */
 
 Matrix66d pseudoInverse(Matrix66d J){
     Matrix66d pseudoInverse;

@@ -5,6 +5,12 @@
 #include "EigenLib.h"
 #include "typedefs.h"
 
+/**
+ * @brief Transformation matrix for joint 1 to joint 0.
+ * @param th Joint angle for joint 1.
+ * @return Transformation matrix T10.
+ */
+
 Eigen::Matrix4d T10f(double th){
     Eigen::Matrix4d T10{
                         {cos(th),  -sin(th),  0, 0}, 
@@ -14,6 +20,12 @@ Eigen::Matrix4d T10f(double th){
                         };
     return T10;
 }     
+
+/**
+ * @brief Transformation matrix for joint 2 to joint 1.
+ * @param th Joint angle for joint 2.
+ * @return Transformation matrix T21.
+ */
 
 Eigen::Matrix4d T21f(double th){
     Eigen::Matrix4d T21{
@@ -25,6 +37,12 @@ Eigen::Matrix4d T21f(double th){
     return T21;
 }   
 
+/**
+ * @brief Transformation matrix for joint 3 to joint 2.
+ * @param th Joint angle for joint 3.
+ * @return Transformation matrix T32.
+ */
+
 Eigen::Matrix4d T32f(double th){
     Eigen::Matrix4d T32{
                         {cos(th),  -sin(th),  0, A[1]}, 
@@ -34,6 +52,12 @@ Eigen::Matrix4d T32f(double th){
                         }; 
     return T32;
 } 
+
+/**
+ * @brief Transformation matrix for joint 4 to joint 3.
+ * @param th Joint angle for joint 4.
+ * @return Transformation matrix T43.
+ */
 
 Eigen::Matrix4d T43f(double th){
     Eigen::Matrix4d T43{
@@ -45,6 +69,12 @@ Eigen::Matrix4d T43f(double th){
     return T43;
 }    
 
+/**
+ * @brief Transformation matrix for joint 5 to joint 4.
+ * @param th Joint angle for joint 5.
+ * @return Transformation matrix T54.
+ */
+
 Eigen::Matrix4d T54f(double th){
     Eigen::Matrix4d T54{
                         {cos(th),  -sin(th),  0, 0}, 
@@ -55,6 +85,12 @@ Eigen::Matrix4d T54f(double th){
     return T54;
 }
     
+/**
+ * @brief Transformation matrix for end effector to joint 5.
+ * @param th Joint angle for joint 6.
+ * @return Transformation matrix T65.
+ */
+
  Eigen::Matrix4d T65f(double th){
     Eigen::Matrix4d T65{
                         {cos(th),  -sin(th),  0, 0}, 
@@ -180,9 +216,23 @@ Eigen::Matrix4d T54f(double th){
     return Th;
 } */
 
+
+/**
+ * @brief Check if a given value is almost zero.
+ * @param x Value to check.
+ * @return True if the value is almost zero, false otherwise.
+ */
+
 bool almostZero(double x){
     return (abs(x)< 1e-7);
 }
+
+/**
+ * @brief General transformation matrix for a specific joint and angle.
+ * @param th Joint angle.
+ * @param i Joint index.
+ * @return Transformation matrix.
+ */
 
 Eigen::Matrix4d generalTransformationMatrix(double th,int i){
     return Eigen::Matrix4d{
@@ -192,6 +242,13 @@ Eigen::Matrix4d generalTransformationMatrix(double th,int i){
     {0, 0, 0, 1}
     };
 }
+
+/**
+ * @brief Inverse kinematics for the UR5 robot arm with error handling.
+ * @param p60 End effector position.
+ * @param R60 End effector orientation matrix.
+ * @return Matrix of joint angles corresponding to multiple solutions.
+ */
 
 Matrix68d ur5inverseKinematics(Eigen::Vector3d p60, Eigen::Matrix3d R60){
     Eigen::Matrix4d T60 {

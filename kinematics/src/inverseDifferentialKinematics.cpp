@@ -1,8 +1,38 @@
+/**
+ * @file inverseDifferentialKinematics.h
+ * @brief Header file for inverse differential kinematics functions.
+ */
+
+/**
+ * @file functions.h
+ * @brief Header file for utility functions.
+ */
+
+/**
+ * @file directKinematics.h
+ * @brief Header file for direct kinematics functions.
+ */
+
+/**
+ * @file kinematics.h
+ * @brief Header file for kinematics functions.
+ */
+
+
 #include "inverseDifferentialKinematics.h"
 #include "functions.h"
 #include "directKinematics.h"
 #include <iostream>
 #include "kinematics.h"
+
+/**
+ * @brief Computes the inverse differential kinematics to achieve a desired end effector position and orientation.
+ *
+ * @param th Initial joint configuration.
+ * @param endPos Desired end effector position.
+ * @param endOrientation Desired end effector orientation.
+ * @return Matrix containing joint configurations over time.
+ */
 
 Eigen::MatrixXd inverseDiffKinematics(Eigen::VectorXd th, Eigen::Vector3d endPos, Eigen::Vector3d endOrientation){
     
@@ -54,6 +84,15 @@ Eigen::MatrixXd inverseDiffKinematics(Eigen::VectorXd th, Eigen::Vector3d endPos
     return joints_config;
 }
 
+
+/**
+ * @brief Computes the inverse differential kinematics with complete control for position and orientation.
+ *
+ * @param th Initial joint configuration.
+ * @param endPos Desired end effector position.
+ * @param endOrientation Desired end effector orientation.
+ * @return Matrix containing joint configurations over time.
+ */
 
 Eigen::MatrixXd inverseDiffKinematicsControlComplete(Vector6d th, Eigen::Vector3d endPos, Eigen::Vector3d endOrientation){
     Eigen::MatrixXd joints_config = th;

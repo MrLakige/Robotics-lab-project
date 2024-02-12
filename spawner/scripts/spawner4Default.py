@@ -31,14 +31,15 @@ def delete_model(name):
 
 # Array containing all Lego blocks names
 blocks = ['X1-Y1-Z2', 'X1-Y2-Z1', 'X1-Y2-Z2', 'X1-Y2-Z2-CHAMFER', 'X1-Y2-Z2-TWINFILLET', 'X1-Y3-Z2', 'X1-Y3-Z2-FILLET', 'X1-Y4-Z1', 'X1-Y4-Z2', 'X2-Y2-Z2', 'X2-Y2-Z2-FILLET']
-castleBlocks = ['X1-Y3-Z2', 'X1-Y1-Z2', 'X1-Y2-Z2']
+castleBlocks = ['X1-Y4-Z2', 'X1-Y3-Z2', 'X1-Y1-Z2', 'X1-Y2-Z2']
 
 # Predefined initial positions for Lego blocks
 initialBlockPositions = [
-		['X1-Y2-Z2', 0.470980, 0.725608, 0.870002, 0., 0., 0., 0.],
-		['X1-Y1-Z2', 0.355449, 0.708060, 0.870002, 0., 0., 0., 0.],
+		['X1-Y2-Z2', 0.280577, 0.691699, 0.870002, 0., 0., 0., 0.],
+		['X1-Y1-Z2', 0.123776, 0.672390, 0.870002, 0., 0., 0., 0.],
+		['X1-Y4-Z2', 0.414135, 0.725608, 0.870002, 0., 0., 0., 0.],
 		['X1-Y3-Z2', 0.367994, 0.598631, 0.920000, 0., 0.7071, -0.7071, 0.]
-        ]
+]
 
 # Clean the table in case there are blocks on it
 for block in blocks:	
@@ -47,7 +48,7 @@ for block in blocks:
 clean()
 
 # Spawn Lego blocks at predefined initial positions
-for i in range(3):
+for i in range(4):
     # Get a random Lego block from all legos
     brick = initialBlockPositions[i][0]
     pos = Pose(Point(initialBlockPositions[i][1], initialBlockPositions[i][2], initialBlockPositions[i][3]), Quaternion(initialBlockPositions[i][4], initialBlockPositions[i][5], initialBlockPositions[i][6], initialBlockPositions[i][7]))

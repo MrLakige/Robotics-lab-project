@@ -1,5 +1,16 @@
 #include "directKinematics.h"
 
+/**
+ * @brief Calculates the general transformation matrix for a given joint angle.
+ *
+ * This function computes the 4x4 transformation matrix for a specific joint angle, 
+ * given the Denavit-Hartenberg parameters.
+ *
+ * @param th The joint angle vector.
+ * @param i The index of the joint.
+ * @return Eigen::Matrix4d The 4x4 transformation matrix.
+ */
+
 Eigen::Matrix4d generalTransformationMatrix(Vector6d th,int i){
     return Eigen::Matrix4d{
     {cos(th(i)), -sin(th(i))*cos(Alpha(i)), sin(th(i))*sin(Alpha(i)), A(i)*cos(th(i))},
@@ -8,6 +19,16 @@ Eigen::Matrix4d generalTransformationMatrix(Vector6d th,int i){
     {0, 0, 0, 1}
     };
 }
+
+/**
+ * @brief Calculates the direct kinematics of a UR5 robot.
+ *
+ * This function computes the end-effector position and orientation (direct kinematics)
+ * for a given set of joint angles of a UR5 robot.
+ *
+ * @param Th Vector6d representing the joint angles.
+ * @return directK A structure containing the end-effector position (pe) and orientation (Re).
+ */
 
 directK ur5DirectKinematics(Vector6d Th){
     directK direct;
