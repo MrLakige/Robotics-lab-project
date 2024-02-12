@@ -71,7 +71,7 @@ source devel/setup.bash
     ```bash
     rosrun spawner spawner4.py
     ```
-4. Run kinematics, 2 levels are available<br>
+4. Run kinematics, are available 4 levels are available<br>
     LEVELS: <br>
     Level 1
    ```bash
