@@ -1,0 +1,456 @@
+\hypertarget{namespacevision__node}{}\doxysection{vision\+\_\+node Namespace Reference}
+\label{namespacevision__node}\index{vision\_node@{vision\_node}}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{namespacevision__node_a0210b65f52c0e1013769c35649d5f4ad}{get\+\_\+dist\+\_\+tavolo}} (depth, hsv, img\+\_\+draw)
+\item 
+def \mbox{\hyperlink{namespacevision__node_ac6041d788af5e20d65cd19a5183ff713}{get\+\_\+origin}} (img)
+\item 
+def \mbox{\hyperlink{namespacevision__node_a3b7eb2867c49c3052304f2fcdce92775}{get\+\_\+mega\+\_\+blocks\+\_\+distance}} (depth)
+\item 
+def \mbox{\hyperlink{namespacevision__node_ada750fa8009abd8be414291caf11de79}{get\+\_\+mega\+\_\+blocks\+\_\+color}} (center, rgb)
+\item 
+def \mbox{\hyperlink{namespacevision__node_a9203b9bb3cc9568cf9c5eaef235fc969}{get\+\_\+mega\+\_\+blocks\+\_\+mask}} (color, hsv, toll=(20, 20, 255))
+\item 
+def \mbox{\hyperlink{namespacevision__node_ac59b3c0f49fd76c2ccf5b96941150b67}{get\+Depth\+Axis}} (height, mega\+\_\+blocks)
+\item 
+def \mbox{\hyperlink{namespacevision__node_ae5656b20a82c6fb0abdc793ea5d0dd9a}{point\+\_\+distorption}} (point, height, \mbox{\hyperlink{namespacevision__node_a8c66c533aa388480ccd002a44b83575b}{origin}})
+\item 
+def \mbox{\hyperlink{namespacevision__node_a8bc61882b05e027162b9a63bf6afca90}{point\+\_\+inverse\+\_\+distortption}} (point, height)
+\item 
+def \mbox{\hyperlink{namespacevision__node_a020a738cca06cacffc6c29c4d21cb96e}{quaternion\+\_\+to\+\_\+euler}} (w, x, y, z)
+\item 
+def \mbox{\hyperlink{namespacevision__node_a316a4878274e8e8fc0dbb174bc251967}{process\+\_\+item}} (imgs, item)
+\item 
+def \mbox{\hyperlink{namespacevision__node_af8214df3f19f0d23684f1cdf0339b627}{process\+\_\+image}} (rgb, depth)
+\item 
+def \mbox{\hyperlink{namespacevision__node_a3acf87f179aaabcb700bb5e247abce51}{show\+\_\+image}} (title, image, resize=True, wait=False)
+\item 
+def \mbox{\hyperlink{namespacevision__node_ac274f6da176f189b149392a9223b6ef8}{process\+\_\+\+CB}} (image\+\_\+rgb, image\+\_\+depth)
+\item 
+def \mbox{\hyperlink{namespacevision__node_a5d8b3f4998dbedab59b355f4549ca8a6}{start\+\_\+node}} ()
+\item 
+def \mbox{\hyperlink{namespacevision__node_ab108cbe21edbe6ded099223b27410f86}{load\+\_\+models}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{namespacevision__node_ab346d0b407e46f95551d3908df945675}{path\+\_\+yolo}} = path.\+join(path.\+expanduser(\textquotesingle{}$\sim$\textquotesingle{}), \textquotesingle{}yolov5\textquotesingle{})
+\item 
+\mbox{\hyperlink{namespacevision__node_ad1b149e71a857c7d15154dfd16118533}{path\+\_\+vision}} = Ros\+Pack().get\+\_\+path(\textquotesingle{}vision\textquotesingle{})
+\item 
+\mbox{\hyperlink{namespacevision__node_aee14899583e01b5067dfc1d29fb9e7d3}{path\+\_\+weigths}} = path.\+join(\mbox{\hyperlink{namespacevision__node_ad1b149e71a857c7d15154dfd16118533}{path\+\_\+vision}}, \textquotesingle{}weigths\textquotesingle{})
+\item 
+tuple \mbox{\hyperlink{namespacevision__node_a41aac5ab073e5368927f3b5781f28042}{cam\+\_\+point}} = (-\/0.\+08, 0.\+555, -\/0.\+55)
+\item 
+float \mbox{\hyperlink{namespacevision__node_ab200336033ea7ee8636bda47634b244a}{height\+\_\+tavolo}} = 0.\+87
+\item 
+\mbox{\hyperlink{namespacevision__node_ad5f0adc1695dcf5d59ec7546d88bbe82}{dist\+\_\+tavolo}} = None
+\item 
+\mbox{\hyperlink{namespacevision__node_a8c66c533aa388480ccd002a44b83575b}{origin}} = None
+\item 
+\mbox{\hyperlink{namespacevision__node_a75e03e4d53f555c79c0fb7a2679f61cb}{model}} = None
+\item 
+\mbox{\hyperlink{namespacevision__node_a4bfffa692f3af83b965f509d2ec2013a}{model\+\_\+orientation}} = None
+\item 
+list \mbox{\hyperlink{namespacevision__node_a4b69f78e85e2fae1da638ad13cbdff90}{blocks\+\_\+data}} = \mbox{[}$\,$\mbox{]}
+\item 
+int \mbox{\hyperlink{namespacevision__node_aeb4cb40f88f0fc0494c1eaf0e5714b1c}{count}} = 0
+\item 
+list \mbox{\hyperlink{namespacevision__node_ae02e263e55e9b8d796bdbe8708d602cb}{mega\+\_\+blocks\+Classes}} = \mbox{[}\textquotesingle{}X1-\/Y1-\/Z2\textquotesingle{}, \textquotesingle{}X1-\/Y3-\/Z2-\/FILLET\textquotesingle{}, \textquotesingle{}X1-\/Y2-\/Z2\textquotesingle{}, \textquotesingle{}X1-\/Y2-\/Z2-\/CHAMFER\textquotesingle{}, \textquotesingle{}X1-\/Y2-\/Z1\textquotesingle{}, \textquotesingle{}X1-\/Y4-\/Z2\textquotesingle{}, \textquotesingle{}X1-\/Y4-\/Z1\textquotesingle{}, \textquotesingle{}X2-\/Y2-\/Z2\textquotesingle{}, \textquotesingle{}X1-\/Y3-\/Z2\textquotesingle{}, \textquotesingle{}X2-\/Y2-\/Z2-\/FILLET\textquotesingle{}\mbox{]}
+\item 
+\mbox{\hyperlink{namespacevision__node_ab50ba31a1bac929e62851bb56b90f0f0}{argv}} = sys.\+argv
+\item 
+string \mbox{\hyperlink{namespacevision__node_a63bf8a40edcfc7f9aa5e910320a67376}{a\+\_\+show}} = \textquotesingle{}-\/show\textquotesingle{} in \mbox{\hyperlink{namespacevision__node_ab50ba31a1bac929e62851bb56b90f0f0}{argv}}
+\item 
+string \mbox{\hyperlink{namespacevision__node_adb686abe8b03f7a66feafa1e7cf8c757}{o\+\_\+oriented}} = \textquotesingle{}-\/oriented\textquotesingle{} in \mbox{\hyperlink{namespacevision__node_ab50ba31a1bac929e62851bb56b90f0f0}{argv}}
+\item 
+string \mbox{\hyperlink{namespacevision__node_a53ef496ac20f06bb2fe8e64a61fc4708}{d\+\_\+debug}} = \textquotesingle{}-\/debug\textquotesingle{} in \mbox{\hyperlink{namespacevision__node_ab50ba31a1bac929e62851bb56b90f0f0}{argv}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyVerb}@package vision
+@brief This module provides object detection and localization using YOLO models.
+
+@version 1.0
+
+@file
+Main script for vision module, which subscribes to camera images, performs object detection and localization, and publishes results.
+
+@requirements
+- Python 3.x
+- OpenCV (cv2)
+- NumPy
+- PyTorch
+- message_filters
+- rospy (ROS Python client library)
+- quaternion
+- cv_bridge
+- xml.etree.ElementTree
+- rospkg
+- pyquaternion
+- vision.msg (Custom ROS message)
+
+@note Before running the code, ensure that YOLO models and weights are available locally in the specified paths.
+
+@global_variables
+- path_yolo: Path to YOLOv5 directory.
+- path_vision: Path to the 'vision' ROS package.
+- path_weigths: Path to the weights directory within the 'vision' package.
+- cam_point: Camera position in 3D space.
+- height_tavolo: Height of the table.
+- dist_tavolo: Distance to the table (initialized to None).
+- origin: Image center coordinates.
+- model: YOLO detection model.
+- model_orientation: YOLO orientation model.
+- num_items: Number of items detected.
+- count: Counter for processed items.
+- mega_blocksClasses: List of mega block classes.
+- argv: Command line arguments.
+- a_show: Flag to show images during processing.
+- o_oriented: Flag for oriented processing.
+
+@functions
+- get_dist_tavolo: Calculates the distance to the table from the depth image.
+- get_origin: Gets the center coordinates of the image.
+- get_mega_blocks_distance: Computes the minimum depth for mega blocks.
+- get_mega_blocks_color: Obtains the color of mega blocks.
+- get_mega_blocks_mask: Generates a mask for mega blocks based on color.
+- getDepthAxis: Determines the axis of mega blocks based on height.
+- point_distorption: Applies distortion to a 3D point.
+- point_inverse_distortion: Inverse distortion for a 3D point.
+- process_item: Processes individual mega block items.
+- show_image: Displays an image.
+- process_image: Processes RGB and depth images.
+- show_image: Displays an image.
+- process_CB: Callback function for image message processing.
+- start_node: Initializes the ROS node and subscribes to image topics.
+- load_models: Loads YOLO models.
+
+@main_script
+- Loads YOLO models.
+- Initializes the ROS node and subscribes to camera images.
+- Processes RGB and depth images, performs mega block detection, localization, and publishes results.\end{DoxyVerb}
+ 
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespacevision__node_a0210b65f52c0e1013769c35649d5f4ad}\label{namespacevision__node_a0210b65f52c0e1013769c35649d5f4ad}} 
+\index{vision\_node@{vision\_node}!get\_dist\_tavolo@{get\_dist\_tavolo}}
+\index{get\_dist\_tavolo@{get\_dist\_tavolo}!vision\_node@{vision\_node}}
+\doxysubsubsection{\texorpdfstring{get\_dist\_tavolo()}{get\_dist\_tavolo()}}
+{\footnotesize\ttfamily def vision\+\_\+node.\+get\+\_\+dist\+\_\+tavolo (\begin{DoxyParamCaption}\item[{}]{depth,  }\item[{}]{hsv,  }\item[{}]{img\+\_\+draw }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Get the distance to the table.
+
+Parameters:
+- depth: Depth image.
+- hsv: HSV image.
+- img_draw: Image for drawing.
+
+Returns:
+None
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacevision__node_ada750fa8009abd8be414291caf11de79}\label{namespacevision__node_ada750fa8009abd8be414291caf11de79}} 
+\index{vision\_node@{vision\_node}!get\_mega\_blocks\_color@{get\_mega\_blocks\_color}}
+\index{get\_mega\_blocks\_color@{get\_mega\_blocks\_color}!vision\_node@{vision\_node}}
+\doxysubsubsection{\texorpdfstring{get\_mega\_blocks\_color()}{get\_mega\_blocks\_color()}}
+{\footnotesize\ttfamily def vision\+\_\+node.\+get\+\_\+mega\+\_\+blocks\+\_\+color (\begin{DoxyParamCaption}\item[{}]{center,  }\item[{}]{rgb }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Get the color of mega blocks based on the center coordinates.
+
+Args:
+    center (tuple): Center coordinates.
+    rgb (numpy.ndarray): RGB image.
+
+Returns:
+    list: Color values.
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacevision__node_a3b7eb2867c49c3052304f2fcdce92775}\label{namespacevision__node_a3b7eb2867c49c3052304f2fcdce92775}} 
+\index{vision\_node@{vision\_node}!get\_mega\_blocks\_distance@{get\_mega\_blocks\_distance}}
+\index{get\_mega\_blocks\_distance@{get\_mega\_blocks\_distance}!vision\_node@{vision\_node}}
+\doxysubsubsection{\texorpdfstring{get\_mega\_blocks\_distance()}{get\_mega\_blocks\_distance()}}
+{\footnotesize\ttfamily def vision\+\_\+node.\+get\+\_\+mega\+\_\+blocks\+\_\+distance (\begin{DoxyParamCaption}\item[{}]{depth }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Get the distance to the mega blocks.
+
+Parameters:
+- depth: Depth image.
+
+Returns:
+Distance to mega blocks.
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacevision__node_a9203b9bb3cc9568cf9c5eaef235fc969}\label{namespacevision__node_a9203b9bb3cc9568cf9c5eaef235fc969}} 
+\index{vision\_node@{vision\_node}!get\_mega\_blocks\_mask@{get\_mega\_blocks\_mask}}
+\index{get\_mega\_blocks\_mask@{get\_mega\_blocks\_mask}!vision\_node@{vision\_node}}
+\doxysubsubsection{\texorpdfstring{get\_mega\_blocks\_mask()}{get\_mega\_blocks\_mask()}}
+{\footnotesize\ttfamily def vision\+\_\+node.\+get\+\_\+mega\+\_\+blocks\+\_\+mask (\begin{DoxyParamCaption}\item[{}]{color,  }\item[{}]{hsv,  }\item[{}]{toll = {\ttfamily (20,~20,~255)} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Generate a mask for mega blocks based on color information.
+
+Args:
+    color (list): Color values.
+    hsv (numpy.ndarray): HSV image.
+    toll (tuple): Color tolerance.
+
+Returns:
+    numpy.ndarray: Binary mask.
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacevision__node_ac6041d788af5e20d65cd19a5183ff713}\label{namespacevision__node_ac6041d788af5e20d65cd19a5183ff713}} 
+\index{vision\_node@{vision\_node}!get\_origin@{get\_origin}}
+\index{get\_origin@{get\_origin}!vision\_node@{vision\_node}}
+\doxysubsubsection{\texorpdfstring{get\_origin()}{get\_origin()}}
+{\footnotesize\ttfamily def vision\+\_\+node.\+get\+\_\+origin (\begin{DoxyParamCaption}\item[{}]{img }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Get the origin point.
+
+Parameters:
+- img: Image.
+
+Returns:
+None
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacevision__node_ac59b3c0f49fd76c2ccf5b96941150b67}\label{namespacevision__node_ac59b3c0f49fd76c2ccf5b96941150b67}} 
+\index{vision\_node@{vision\_node}!getDepthAxis@{getDepthAxis}}
+\index{getDepthAxis@{getDepthAxis}!vision\_node@{vision\_node}}
+\doxysubsubsection{\texorpdfstring{getDepthAxis()}{getDepthAxis()}}
+{\footnotesize\ttfamily def vision\+\_\+node.\+get\+Depth\+Axis (\begin{DoxyParamCaption}\item[{}]{height,  }\item[{}]{mega\+\_\+blocks }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Calculate the depth axis of mega blocks.
+
+Args:
+    height (float): Mega blocks height.
+    mega_blocks (list): Mega blocks information.
+
+Returns:
+    tuple: Depth axis information.
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacevision__node_ab108cbe21edbe6ded099223b27410f86}\label{namespacevision__node_ab108cbe21edbe6ded099223b27410f86}} 
+\index{vision\_node@{vision\_node}!load\_models@{load\_models}}
+\index{load\_models@{load\_models}!vision\_node@{vision\_node}}
+\doxysubsubsection{\texorpdfstring{load\_models()}{load\_models()}}
+{\footnotesize\ttfamily def vision\+\_\+node.\+load\+\_\+models (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Load YOLO models and additional data.
+
+Returns:
+None
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacevision__node_ae5656b20a82c6fb0abdc793ea5d0dd9a}\label{namespacevision__node_ae5656b20a82c6fb0abdc793ea5d0dd9a}} 
+\index{vision\_node@{vision\_node}!point\_distorption@{point\_distorption}}
+\index{point\_distorption@{point\_distorption}!vision\_node@{vision\_node}}
+\doxysubsubsection{\texorpdfstring{point\_distorption()}{point\_distorption()}}
+{\footnotesize\ttfamily def vision\+\_\+node.\+point\+\_\+distorption (\begin{DoxyParamCaption}\item[{}]{point,  }\item[{}]{height,  }\item[{}]{origin }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Distort the point coordinates based on the height
+Args:
+    point (tuple): Coordinates to distort.
+    height (float): Height information.
+    origin (numpy.ndarray): Origin (center) of the image.
+
+Returns:
+    None
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacevision__node_a8bc61882b05e027162b9a63bf6afca90}\label{namespacevision__node_a8bc61882b05e027162b9a63bf6afca90}} 
+\index{vision\_node@{vision\_node}!point\_inverse\_distortption@{point\_inverse\_distortption}}
+\index{point\_inverse\_distortption@{point\_inverse\_distortption}!vision\_node@{vision\_node}}
+\doxysubsubsection{\texorpdfstring{point\_inverse\_distortption()}{point\_inverse\_distortption()}}
+{\footnotesize\ttfamily def vision\+\_\+node.\+point\+\_\+inverse\+\_\+distortption (\begin{DoxyParamCaption}\item[{}]{point,  }\item[{}]{height }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Inverse distortion of the point coordinates based on the height.
+
+Args:
+    point (tuple): Distorted coordinates to inverse.
+    height (float): Height information.
+    origin (numpy.ndarray): Origin (center) of the image.
+
+Returns:
+    None
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacevision__node_ac274f6da176f189b149392a9223b6ef8}\label{namespacevision__node_ac274f6da176f189b149392a9223b6ef8}} 
+\index{vision\_node@{vision\_node}!process\_CB@{process\_CB}}
+\index{process\_CB@{process\_CB}!vision\_node@{vision\_node}}
+\doxysubsubsection{\texorpdfstring{process\_CB()}{process\_CB()}}
+{\footnotesize\ttfamily def vision\+\_\+node.\+process\+\_\+\+CB (\begin{DoxyParamCaption}\item[{}]{image\+\_\+rgb,  }\item[{}]{image\+\_\+depth }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Callback function for image processing.
+
+Parameters:
+- image_rgb: RGB image message.
+- image_depth: Depth image message.
+
+Returns:
+None
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacevision__node_af8214df3f19f0d23684f1cdf0339b627}\label{namespacevision__node_af8214df3f19f0d23684f1cdf0339b627}} 
+\index{vision\_node@{vision\_node}!process\_image@{process\_image}}
+\index{process\_image@{process\_image}!vision\_node@{vision\_node}}
+\doxysubsubsection{\texorpdfstring{process\_image()}{process\_image()}}
+{\footnotesize\ttfamily def vision\+\_\+node.\+process\+\_\+image (\begin{DoxyParamCaption}\item[{}]{rgb,  }\item[{}]{depth }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Process the input RGB and depth images.
+
+Parameters:
+- rgb: RGB image.
+- depth: Depth image.
+
+Returns:
+None
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacevision__node_a316a4878274e8e8fc0dbb174bc251967}\label{namespacevision__node_a316a4878274e8e8fc0dbb174bc251967}} 
+\index{vision\_node@{vision\_node}!process\_item@{process\_item}}
+\index{process\_item@{process\_item}!vision\_node@{vision\_node}}
+\doxysubsubsection{\texorpdfstring{process\_item()}{process\_item()}}
+{\footnotesize\ttfamily def vision\+\_\+node.\+process\+\_\+item (\begin{DoxyParamCaption}\item[{}]{imgs,  }\item[{}]{item }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Process each mega block item.
+
+Parameters:
+- imgs: Tuple of images (rgb, hsv, depth, img_draw).
+- item: Mega block item information.
+
+Returns:
+Block message for ROS.
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacevision__node_a020a738cca06cacffc6c29c4d21cb96e}\label{namespacevision__node_a020a738cca06cacffc6c29c4d21cb96e}} 
+\index{vision\_node@{vision\_node}!quaternion\_to\_euler@{quaternion\_to\_euler}}
+\index{quaternion\_to\_euler@{quaternion\_to\_euler}!vision\_node@{vision\_node}}
+\doxysubsubsection{\texorpdfstring{quaternion\_to\_euler()}{quaternion\_to\_euler()}}
+{\footnotesize\ttfamily def vision\+\_\+node.\+quaternion\+\_\+to\+\_\+euler (\begin{DoxyParamCaption}\item[{}]{w,  }\item[{}]{x,  }\item[{}]{y,  }\item[{}]{z }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Convert quaternion representation to Euler angles (roll, pitch, yaw).
+
+Args:
+    quaternion (numpy.ndarray): Quaternion representation (w, x, y, z).
+
+Returns:
+    tuple: Euler angles (roll, pitch, yaw).
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacevision__node_a3acf87f179aaabcb700bb5e247abce51}\label{namespacevision__node_a3acf87f179aaabcb700bb5e247abce51}} 
+\index{vision\_node@{vision\_node}!show\_image@{show\_image}}
+\index{show\_image@{show\_image}!vision\_node@{vision\_node}}
+\doxysubsubsection{\texorpdfstring{show\_image()}{show\_image()}}
+{\footnotesize\ttfamily def vision\+\_\+node.\+show\+\_\+image (\begin{DoxyParamCaption}\item[{}]{title,  }\item[{}]{image,  }\item[{}]{resize = {\ttfamily True},  }\item[{}]{wait = {\ttfamily False} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Display an image.
+
+Parameters:
+- title: Title of the image window.
+- image: Image to display.
+- resize: Boolean, whether to resize the window.
+- wait: Boolean, whether to wait for a key press.
+
+Returns:
+None
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacevision__node_a5d8b3f4998dbedab59b355f4549ca8a6}\label{namespacevision__node_a5d8b3f4998dbedab59b355f4549ca8a6}} 
+\index{vision\_node@{vision\_node}!start\_node@{start\_node}}
+\index{start\_node@{start\_node}!vision\_node@{vision\_node}}
+\doxysubsubsection{\texorpdfstring{start\_node()}{start\_node()}}
+{\footnotesize\ttfamily def vision\+\_\+node.\+start\+\_\+node (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Start the ROS node for vision.
+
+Returns:
+None
+\end{DoxyVerb}
+ 
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{namespacevision__node_a63bf8a40edcfc7f9aa5e910320a67376}\label{namespacevision__node_a63bf8a40edcfc7f9aa5e910320a67376}} 
+\index{vision\_node@{vision\_node}!a\_show@{a\_show}}
+\index{a\_show@{a\_show}!vision\_node@{vision\_node}}
+\doxysubsubsection{\texorpdfstring{a\_show}{a\_show}}
+{\footnotesize\ttfamily string vision\+\_\+node.\+a\+\_\+show = \textquotesingle{}-\/show\textquotesingle{} in \mbox{\hyperlink{namespacevision__node_ab50ba31a1bac929e62851bb56b90f0f0}{argv}}}
+
+\mbox{\Hypertarget{namespacevision__node_ab50ba31a1bac929e62851bb56b90f0f0}\label{namespacevision__node_ab50ba31a1bac929e62851bb56b90f0f0}} 
+\index{vision\_node@{vision\_node}!argv@{argv}}
+\index{argv@{argv}!vision\_node@{vision\_node}}
+\doxysubsubsection{\texorpdfstring{argv}{argv}}
+{\footnotesize\ttfamily vision\+\_\+node.\+argv = sys.\+argv}
+
+\mbox{\Hypertarget{namespacevision__node_a4b69f78e85e2fae1da638ad13cbdff90}\label{namespacevision__node_a4b69f78e85e2fae1da638ad13cbdff90}} 
+\index{vision\_node@{vision\_node}!blocks\_data@{blocks\_data}}
+\index{blocks\_data@{blocks\_data}!vision\_node@{vision\_node}}
+\doxysubsubsection{\texorpdfstring{blocks\_data}{blocks\_data}}
+{\footnotesize\ttfamily list vision\+\_\+node.\+blocks\+\_\+data = \mbox{[}$\,$\mbox{]}}
+
+\mbox{\Hypertarget{namespacevision__node_a41aac5ab073e5368927f3b5781f28042}\label{namespacevision__node_a41aac5ab073e5368927f3b5781f28042}} 
+\index{vision\_node@{vision\_node}!cam\_point@{cam\_point}}
+\index{cam\_point@{cam\_point}!vision\_node@{vision\_node}}
+\doxysubsubsection{\texorpdfstring{cam\_point}{cam\_point}}
+{\footnotesize\ttfamily tuple vision\+\_\+node.\+cam\+\_\+point = (-\/0.\+08, 0.\+555, -\/0.\+55)}
+
+\mbox{\Hypertarget{namespacevision__node_aeb4cb40f88f0fc0494c1eaf0e5714b1c}\label{namespacevision__node_aeb4cb40f88f0fc0494c1eaf0e5714b1c}} 
+\index{vision\_node@{vision\_node}!count@{count}}
+\index{count@{count}!vision\_node@{vision\_node}}
+\doxysubsubsection{\texorpdfstring{count}{count}}
+{\footnotesize\ttfamily int vision\+\_\+node.\+count = 0}
+
+\mbox{\Hypertarget{namespacevision__node_a53ef496ac20f06bb2fe8e64a61fc4708}\label{namespacevision__node_a53ef496ac20f06bb2fe8e64a61fc4708}} 
+\index{vision\_node@{vision\_node}!d\_debug@{d\_debug}}
+\index{d\_debug@{d\_debug}!vision\_node@{vision\_node}}
+\doxysubsubsection{\texorpdfstring{d\_debug}{d\_debug}}
+{\footnotesize\ttfamily string vision\+\_\+node.\+d\+\_\+debug = \textquotesingle{}-\/debug\textquotesingle{} in \mbox{\hyperlink{namespacevision__node_ab50ba31a1bac929e62851bb56b90f0f0}{argv}}}
+
+\mbox{\Hypertarget{namespacevision__node_ad5f0adc1695dcf5d59ec7546d88bbe82}\label{namespacevision__node_ad5f0adc1695dcf5d59ec7546d88bbe82}} 
+\index{vision\_node@{vision\_node}!dist\_tavolo@{dist\_tavolo}}
+\index{dist\_tavolo@{dist\_tavolo}!vision\_node@{vision\_node}}
+\doxysubsubsection{\texorpdfstring{dist\_tavolo}{dist\_tavolo}}
+{\footnotesize\ttfamily vision\+\_\+node.\+dist\+\_\+tavolo = None}
+
+\mbox{\Hypertarget{namespacevision__node_ab200336033ea7ee8636bda47634b244a}\label{namespacevision__node_ab200336033ea7ee8636bda47634b244a}} 
+\index{vision\_node@{vision\_node}!height\_tavolo@{height\_tavolo}}
+\index{height\_tavolo@{height\_tavolo}!vision\_node@{vision\_node}}
+\doxysubsubsection{\texorpdfstring{height\_tavolo}{height\_tavolo}}
+{\footnotesize\ttfamily float vision\+\_\+node.\+height\+\_\+tavolo = 0.\+87}
+
+\mbox{\Hypertarget{namespacevision__node_ae02e263e55e9b8d796bdbe8708d602cb}\label{namespacevision__node_ae02e263e55e9b8d796bdbe8708d602cb}} 
+\index{vision\_node@{vision\_node}!mega\_blocksClasses@{mega\_blocksClasses}}
+\index{mega\_blocksClasses@{mega\_blocksClasses}!vision\_node@{vision\_node}}
+\doxysubsubsection{\texorpdfstring{mega\_blocksClasses}{mega\_blocksClasses}}
+{\footnotesize\ttfamily list vision\+\_\+node.\+mega\+\_\+blocks\+Classes = \mbox{[}\textquotesingle{}X1-\/Y1-\/Z2\textquotesingle{}, \textquotesingle{}X1-\/Y3-\/Z2-\/FILLET\textquotesingle{}, \textquotesingle{}X1-\/Y2-\/Z2\textquotesingle{}, \textquotesingle{}X1-\/Y2-\/Z2-\/CHAMFER\textquotesingle{}, \textquotesingle{}X1-\/Y2-\/Z1\textquotesingle{}, \textquotesingle{}X1-\/Y4-\/Z2\textquotesingle{}, \textquotesingle{}X1-\/Y4-\/Z1\textquotesingle{}, \textquotesingle{}X2-\/Y2-\/Z2\textquotesingle{}, \textquotesingle{}X1-\/Y3-\/Z2\textquotesingle{}, \textquotesingle{}X2-\/Y2-\/Z2-\/FILLET\textquotesingle{}\mbox{]}}
+
+\mbox{\Hypertarget{namespacevision__node_a75e03e4d53f555c79c0fb7a2679f61cb}\label{namespacevision__node_a75e03e4d53f555c79c0fb7a2679f61cb}} 
+\index{vision\_node@{vision\_node}!model@{model}}
+\index{model@{model}!vision\_node@{vision\_node}}
+\doxysubsubsection{\texorpdfstring{model}{model}}
+{\footnotesize\ttfamily vision\+\_\+node.\+model = None}
+
+\mbox{\Hypertarget{namespacevision__node_a4bfffa692f3af83b965f509d2ec2013a}\label{namespacevision__node_a4bfffa692f3af83b965f509d2ec2013a}} 
+\index{vision\_node@{vision\_node}!model\_orientation@{model\_orientation}}
+\index{model\_orientation@{model\_orientation}!vision\_node@{vision\_node}}
+\doxysubsubsection{\texorpdfstring{model\_orientation}{model\_orientation}}
+{\footnotesize\ttfamily vision\+\_\+node.\+model\+\_\+orientation = None}
+
+\mbox{\Hypertarget{namespacevision__node_adb686abe8b03f7a66feafa1e7cf8c757}\label{namespacevision__node_adb686abe8b03f7a66feafa1e7cf8c757}} 
+\index{vision\_node@{vision\_node}!o\_oriented@{o\_oriented}}
+\index{o\_oriented@{o\_oriented}!vision\_node@{vision\_node}}
+\doxysubsubsection{\texorpdfstring{o\_oriented}{o\_oriented}}
+{\footnotesize\ttfamily string vision\+\_\+node.\+o\+\_\+oriented = \textquotesingle{}-\/oriented\textquotesingle{} in \mbox{\hyperlink{namespacevision__node_ab50ba31a1bac929e62851bb56b90f0f0}{argv}}}
+
+\mbox{\Hypertarget{namespacevision__node_a8c66c533aa388480ccd002a44b83575b}\label{namespacevision__node_a8c66c533aa388480ccd002a44b83575b}} 
+\index{vision\_node@{vision\_node}!origin@{origin}}
+\index{origin@{origin}!vision\_node@{vision\_node}}
+\doxysubsubsection{\texorpdfstring{origin}{origin}}
+{\footnotesize\ttfamily vision\+\_\+node.\+origin = None}
+
+\mbox{\Hypertarget{namespacevision__node_ad1b149e71a857c7d15154dfd16118533}\label{namespacevision__node_ad1b149e71a857c7d15154dfd16118533}} 
+\index{vision\_node@{vision\_node}!path\_vision@{path\_vision}}
+\index{path\_vision@{path\_vision}!vision\_node@{vision\_node}}
+\doxysubsubsection{\texorpdfstring{path\_vision}{path\_vision}}
+{\footnotesize\ttfamily vision\+\_\+node.\+path\+\_\+vision = Ros\+Pack().get\+\_\+path(\textquotesingle{}vision\textquotesingle{})}
+
+\mbox{\Hypertarget{namespacevision__node_aee14899583e01b5067dfc1d29fb9e7d3}\label{namespacevision__node_aee14899583e01b5067dfc1d29fb9e7d3}} 
+\index{vision\_node@{vision\_node}!path\_weigths@{path\_weigths}}
+\index{path\_weigths@{path\_weigths}!vision\_node@{vision\_node}}
+\doxysubsubsection{\texorpdfstring{path\_weigths}{path\_weigths}}
+{\footnotesize\ttfamily vision\+\_\+node.\+path\+\_\+weigths = path.\+join(\mbox{\hyperlink{namespacevision__node_ad1b149e71a857c7d15154dfd16118533}{path\+\_\+vision}}, \textquotesingle{}weigths\textquotesingle{})}
+
+\mbox{\Hypertarget{namespacevision__node_ab346d0b407e46f95551d3908df945675}\label{namespacevision__node_ab346d0b407e46f95551d3908df945675}} 
+\index{vision\_node@{vision\_node}!path\_yolo@{path\_yolo}}
+\index{path\_yolo@{path\_yolo}!vision\_node@{vision\_node}}
+\doxysubsubsection{\texorpdfstring{path\_yolo}{path\_yolo}}
+{\footnotesize\ttfamily vision\+\_\+node.\+path\+\_\+yolo = path.\+join(path.\+expanduser(\textquotesingle{}$\sim$\textquotesingle{}), \textquotesingle{}yolov5\textquotesingle{})}
+

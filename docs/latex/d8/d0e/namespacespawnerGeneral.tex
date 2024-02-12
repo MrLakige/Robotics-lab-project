@@ -1,0 +1,157 @@
+\hypertarget{namespacespawnerGeneral}{}\doxysection{spawner\+General Namespace Reference}
+\label{namespacespawnerGeneral}\index{spawnerGeneral@{spawnerGeneral}}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{namespacespawnerGeneral_acd5edd740d5239119e81e02884fe1efb}{get\+Level}} ()
+\item 
+def \mbox{\hyperlink{namespacespawnerGeneral_ae707070d61a3deb5de64bdccacafecac}{spawn\+Block}} (brick, pos)
+\item 
+def \mbox{\hyperlink{namespacespawnerGeneral_a1fbea6cd4f00bc19d411e567ad0ba085}{get\+Pose}} (rotated=False)
+\item 
+def \mbox{\hyperlink{namespacespawnerGeneral_acbd4f41ae92ac4576a527d9e09e69713}{spawn\+Lego\+Per\+Level}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+dictionary \mbox{\hyperlink{namespacespawnerGeneral_a238750d8d058c32ba19ac82b93ee1dba}{blocks}}
+\item 
+list \mbox{\hyperlink{namespacespawnerGeneral_af42b3add728a2d989dc3efd66d7bcc4b}{blocks\+Name}} = \mbox{[}\textquotesingle{}X1-\/Y1-\/Z2\textquotesingle{}, \textquotesingle{}X1-\/Y2-\/Z1\textquotesingle{}, \textquotesingle{}X1-\/Y2-\/Z2\textquotesingle{}, \textquotesingle{}X1-\/Y2-\/Z2-\/CHAMFER\textquotesingle{}, \textquotesingle{}X1-\/Y2-\/Z2-\/TWINFILLET\textquotesingle{}, \textquotesingle{}X1-\/Y3-\/Z2\textquotesingle{}, \textquotesingle{}X1-\/Y3-\/Z2-\/FILLET\textquotesingle{}, \textquotesingle{}X1-\/Y4-\/Z1\textquotesingle{}, \textquotesingle{}X1-\/Y4-\/Z2\textquotesingle{}, \textquotesingle{}X2-\/Y2-\/Z2\textquotesingle{}, \textquotesingle{}X2-\/Y2-\/Z2-\/FILLET\textquotesingle{}\mbox{]}
+\item 
+list \mbox{\hyperlink{namespacespawnerGeneral_aeacf39583328e899bcb5682929d4704a}{shufflable\+Block\+Array}} = \mbox{[}\textquotesingle{}X1-\/Y1-\/Z2\textquotesingle{}, \textquotesingle{}X1-\/Y2-\/Z1\textquotesingle{}, \textquotesingle{}X1-\/Y2-\/Z2\textquotesingle{}, \textquotesingle{}X1-\/Y2-\/Z2-\/CHAMFER\textquotesingle{}, \textquotesingle{}X1-\/Y2-\/Z2-\/TWINFILLET\textquotesingle{}, \textquotesingle{}X1-\/Y3-\/Z2\textquotesingle{}, \textquotesingle{}X1-\/Y3-\/Z2-\/FILLET\textquotesingle{}, \textquotesingle{}X1-\/Y4-\/Z1\textquotesingle{}, \textquotesingle{}X1-\/Y4-\/Z2\textquotesingle{}, \textquotesingle{}X2-\/Y2-\/Z2\textquotesingle{}, \textquotesingle{}X2-\/Y2-\/Z2-\/FILLET\textquotesingle{}\mbox{]}
+\item 
+list \mbox{\hyperlink{namespacespawnerGeneral_ab6fbd96a65c2d5433ff4333112f771b7}{possible\+Rotations}} = \mbox{[}0., 1.\+57, 3.\+14, 4.\+71, 6.\+28\mbox{]}
+\item 
+list \mbox{\hyperlink{namespacespawnerGeneral_a3b4b5394d11335110311fd7a4dd1b7da}{positions\+Used}} = \mbox{[}$\,$\mbox{]}
+\item 
+\mbox{\hyperlink{namespacespawnerGeneral_aabe78b8fc38e4ada0bbc6faae683d27d}{block\+List}} = list(blocks.\+keys())
+\item 
+\mbox{\hyperlink{namespacespawnerGeneral_a1d82a87e240c8ccf196619d74df0d003}{level}} = None
+\item 
+\mbox{\hyperlink{namespacespawnerGeneral_ac78bece035e219ea9935e81abfc191b7}{spawn\+\_\+model\+\_\+client}} = rospy.\+Service\+Proxy(\textquotesingle{}/gazebo/spawn\+\_\+sdf\+\_\+model\textquotesingle{}, Spawn\+Model)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyVerb}@package spawn
+@brief spawn block in gazebo
+
+@version 1.0
+@author Hafsa, Michele, Sara
+\end{DoxyVerb}
+ 
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespacespawnerGeneral_acd5edd740d5239119e81e02884fe1efb}\label{namespacespawnerGeneral_acd5edd740d5239119e81e02884fe1efb}} 
+\index{spawnerGeneral@{spawnerGeneral}!getLevel@{getLevel}}
+\index{getLevel@{getLevel}!spawnerGeneral@{spawnerGeneral}}
+\doxysubsubsection{\texorpdfstring{getLevel()}{getLevel()}}
+{\footnotesize\ttfamily def spawner\+General.\+get\+Level (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Get the level of the task from the command line argument.
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacespawnerGeneral_a1fbea6cd4f00bc19d411e567ad0ba085}\label{namespacespawnerGeneral_a1fbea6cd4f00bc19d411e567ad0ba085}} 
+\index{spawnerGeneral@{spawnerGeneral}!getPose@{getPose}}
+\index{getPose@{getPose}!spawnerGeneral@{spawnerGeneral}}
+\doxysubsubsection{\texorpdfstring{getPose()}{getPose()}}
+{\footnotesize\ttfamily def spawner\+General.\+get\+Pose (\begin{DoxyParamCaption}\item[{}]{rotated = {\ttfamily False} }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Generate a random Pose for the Lego block.
+
+Args:
+    rotated (bool): If True, generate a rotated Pose.
+
+Returns:
+    Pose: The generated Pose.
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacespawnerGeneral_ae707070d61a3deb5de64bdccacafecac}\label{namespacespawnerGeneral_ae707070d61a3deb5de64bdccacafecac}} 
+\index{spawnerGeneral@{spawnerGeneral}!spawnBlock@{spawnBlock}}
+\index{spawnBlock@{spawnBlock}!spawnerGeneral@{spawnerGeneral}}
+\doxysubsubsection{\texorpdfstring{spawnBlock()}{spawnBlock()}}
+{\footnotesize\ttfamily def spawner\+General.\+spawn\+Block (\begin{DoxyParamCaption}\item[{}]{brick,  }\item[{}]{pos }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Spawn a Lego block in Gazebo.
+
+Args:
+    brick (str): The Lego block name.
+    pos (Pose): The position and orientation of the Lego block.
+
+Returns:
+    None
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacespawnerGeneral_acbd4f41ae92ac4576a527d9e09e69713}\label{namespacespawnerGeneral_acbd4f41ae92ac4576a527d9e09e69713}} 
+\index{spawnerGeneral@{spawnerGeneral}!spawnLegoPerLevel@{spawnLegoPerLevel}}
+\index{spawnLegoPerLevel@{spawnLegoPerLevel}!spawnerGeneral@{spawnerGeneral}}
+\doxysubsubsection{\texorpdfstring{spawnLegoPerLevel()}{spawnLegoPerLevel()}}
+{\footnotesize\ttfamily def spawner\+General.\+spawn\+Lego\+Per\+Level (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Spawn Lego blocks based on the specified level.
+\end{DoxyVerb}
+ 
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{namespacespawnerGeneral_aabe78b8fc38e4ada0bbc6faae683d27d}\label{namespacespawnerGeneral_aabe78b8fc38e4ada0bbc6faae683d27d}} 
+\index{spawnerGeneral@{spawnerGeneral}!blockList@{blockList}}
+\index{blockList@{blockList}!spawnerGeneral@{spawnerGeneral}}
+\doxysubsubsection{\texorpdfstring{blockList}{blockList}}
+{\footnotesize\ttfamily spawner\+General.\+block\+List = list(blocks.\+keys())}
+
+\mbox{\Hypertarget{namespacespawnerGeneral_a238750d8d058c32ba19ac82b93ee1dba}\label{namespacespawnerGeneral_a238750d8d058c32ba19ac82b93ee1dba}} 
+\index{spawnerGeneral@{spawnerGeneral}!blocks@{blocks}}
+\index{blocks@{blocks}!spawnerGeneral@{spawnerGeneral}}
+\doxysubsubsection{\texorpdfstring{blocks}{blocks}}
+{\footnotesize\ttfamily dictionary spawner\+General.\+blocks}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 =  \{ \(\backslash\)}
+\DoxyCodeLine{2         \textcolor{stringliteral}{'X1-\/Y1-\/Z2'}: (0,(0.031,0.031,0.057)), \(\backslash\)}
+\DoxyCodeLine{3         \textcolor{stringliteral}{'X1-\/Y2-\/Z1'}: (1,(0.031,0.063,0.038)), \(\backslash\)}
+\DoxyCodeLine{4         \textcolor{stringliteral}{'X1-\/Y2-\/Z2'}: (2,(0.031,0.063,0.057)), \(\backslash\)}
+\DoxyCodeLine{5         \textcolor{stringliteral}{'X1-\/Y2-\/Z2-\/CHAMFER'}: (3,(0.031,0.063,0.057)), \(\backslash\)}
+\DoxyCodeLine{6         \textcolor{stringliteral}{'X1-\/Y2-\/Z2-\/TWINFILLET'}: (4,(0.031,0.063,0.057)), \(\backslash\)}
+\DoxyCodeLine{7         \textcolor{stringliteral}{'X1-\/Y3-\/Z2'}: (5,(0.031,0.095,0.057)), \(\backslash\)}
+\DoxyCodeLine{8         \textcolor{stringliteral}{'X1-\/Y3-\/Z2-\/FILLET'}: (6,(0.031,0.095,0.057)), \(\backslash\)}
+\DoxyCodeLine{9         \textcolor{stringliteral}{'X1-\/Y4-\/Z1'}: (7,(0.031,0.127,0.038)), \(\backslash\)}
+\DoxyCodeLine{10         \textcolor{stringliteral}{'X1-\/Y4-\/Z2'}: (8,(0.031,0.127,0.057)), \(\backslash\)}
+\DoxyCodeLine{11         \textcolor{stringliteral}{'X2-\/Y2-\/Z2'}: (9,(0.063,0.063,0.057)), \(\backslash\)}
+\DoxyCodeLine{12         \textcolor{stringliteral}{'X2-\/Y2-\/Z2-\/FILLET'}: (10,(0.063,0.063,0.057)) \(\backslash\)}
+\DoxyCodeLine{13         \}}
+
+\end{DoxyCode}
+\mbox{\Hypertarget{namespacespawnerGeneral_af42b3add728a2d989dc3efd66d7bcc4b}\label{namespacespawnerGeneral_af42b3add728a2d989dc3efd66d7bcc4b}} 
+\index{spawnerGeneral@{spawnerGeneral}!blocksName@{blocksName}}
+\index{blocksName@{blocksName}!spawnerGeneral@{spawnerGeneral}}
+\doxysubsubsection{\texorpdfstring{blocksName}{blocksName}}
+{\footnotesize\ttfamily list spawner\+General.\+blocks\+Name = \mbox{[}\textquotesingle{}X1-\/Y1-\/Z2\textquotesingle{}, \textquotesingle{}X1-\/Y2-\/Z1\textquotesingle{}, \textquotesingle{}X1-\/Y2-\/Z2\textquotesingle{}, \textquotesingle{}X1-\/Y2-\/Z2-\/CHAMFER\textquotesingle{}, \textquotesingle{}X1-\/Y2-\/Z2-\/TWINFILLET\textquotesingle{}, \textquotesingle{}X1-\/Y3-\/Z2\textquotesingle{}, \textquotesingle{}X1-\/Y3-\/Z2-\/FILLET\textquotesingle{}, \textquotesingle{}X1-\/Y4-\/Z1\textquotesingle{}, \textquotesingle{}X1-\/Y4-\/Z2\textquotesingle{}, \textquotesingle{}X2-\/Y2-\/Z2\textquotesingle{}, \textquotesingle{}X2-\/Y2-\/Z2-\/FILLET\textquotesingle{}\mbox{]}}
+
+\mbox{\Hypertarget{namespacespawnerGeneral_a1d82a87e240c8ccf196619d74df0d003}\label{namespacespawnerGeneral_a1d82a87e240c8ccf196619d74df0d003}} 
+\index{spawnerGeneral@{spawnerGeneral}!level@{level}}
+\index{level@{level}!spawnerGeneral@{spawnerGeneral}}
+\doxysubsubsection{\texorpdfstring{level}{level}}
+{\footnotesize\ttfamily spawner\+General.\+level = None}
+
+\mbox{\Hypertarget{namespacespawnerGeneral_a3b4b5394d11335110311fd7a4dd1b7da}\label{namespacespawnerGeneral_a3b4b5394d11335110311fd7a4dd1b7da}} 
+\index{spawnerGeneral@{spawnerGeneral}!positionsUsed@{positionsUsed}}
+\index{positionsUsed@{positionsUsed}!spawnerGeneral@{spawnerGeneral}}
+\doxysubsubsection{\texorpdfstring{positionsUsed}{positionsUsed}}
+{\footnotesize\ttfamily list spawner\+General.\+positions\+Used = \mbox{[}$\,$\mbox{]}}
+
+\mbox{\Hypertarget{namespacespawnerGeneral_ab6fbd96a65c2d5433ff4333112f771b7}\label{namespacespawnerGeneral_ab6fbd96a65c2d5433ff4333112f771b7}} 
+\index{spawnerGeneral@{spawnerGeneral}!possibleRotations@{possibleRotations}}
+\index{possibleRotations@{possibleRotations}!spawnerGeneral@{spawnerGeneral}}
+\doxysubsubsection{\texorpdfstring{possibleRotations}{possibleRotations}}
+{\footnotesize\ttfamily list spawner\+General.\+possible\+Rotations = \mbox{[}0., 1.\+57, 3.\+14, 4.\+71, 6.\+28\mbox{]}}
+
+\mbox{\Hypertarget{namespacespawnerGeneral_aeacf39583328e899bcb5682929d4704a}\label{namespacespawnerGeneral_aeacf39583328e899bcb5682929d4704a}} 
+\index{spawnerGeneral@{spawnerGeneral}!shufflableBlockArray@{shufflableBlockArray}}
+\index{shufflableBlockArray@{shufflableBlockArray}!spawnerGeneral@{spawnerGeneral}}
+\doxysubsubsection{\texorpdfstring{shufflableBlockArray}{shufflableBlockArray}}
+{\footnotesize\ttfamily list spawner\+General.\+shufflable\+Block\+Array = \mbox{[}\textquotesingle{}X1-\/Y1-\/Z2\textquotesingle{}, \textquotesingle{}X1-\/Y2-\/Z1\textquotesingle{}, \textquotesingle{}X1-\/Y2-\/Z2\textquotesingle{}, \textquotesingle{}X1-\/Y2-\/Z2-\/CHAMFER\textquotesingle{}, \textquotesingle{}X1-\/Y2-\/Z2-\/TWINFILLET\textquotesingle{}, \textquotesingle{}X1-\/Y3-\/Z2\textquotesingle{}, \textquotesingle{}X1-\/Y3-\/Z2-\/FILLET\textquotesingle{}, \textquotesingle{}X1-\/Y4-\/Z1\textquotesingle{}, \textquotesingle{}X1-\/Y4-\/Z2\textquotesingle{}, \textquotesingle{}X2-\/Y2-\/Z2\textquotesingle{}, \textquotesingle{}X2-\/Y2-\/Z2-\/FILLET\textquotesingle{}\mbox{]}}
+
+\mbox{\Hypertarget{namespacespawnerGeneral_ac78bece035e219ea9935e81abfc191b7}\label{namespacespawnerGeneral_ac78bece035e219ea9935e81abfc191b7}} 
+\index{spawnerGeneral@{spawnerGeneral}!spawn\_model\_client@{spawn\_model\_client}}
+\index{spawn\_model\_client@{spawn\_model\_client}!spawnerGeneral@{spawnerGeneral}}
+\doxysubsubsection{\texorpdfstring{spawn\_model\_client}{spawn\_model\_client}}
+{\footnotesize\ttfamily spawner\+General.\+spawn\+\_\+model\+\_\+client = rospy.\+Service\+Proxy(\textquotesingle{}/gazebo/spawn\+\_\+sdf\+\_\+model\textquotesingle{}, Spawn\+Model)}
+

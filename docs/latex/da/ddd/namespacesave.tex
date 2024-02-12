@@ -1,0 +1,59 @@
+\hypertarget{namespacesave}{}\doxysection{save Namespace Reference}
+\label{namespacesave}\index{save@{save}}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{namespacesave_add7ebbb0a6f46001e6841f2e3ef7afb1}{quaternion\+To\+Euler\+Angles}} (quaternion)
+\item 
+def \mbox{\hyperlink{namespacesave_a2c0b46bf673bd0890fd6737c3d94ab71}{clean}} ()
+\item 
+def \mbox{\hyperlink{namespacesave_a5b21545a46e23b5b482ad9cfd06421fc}{save\+To\+Xml}} (model\+\_\+name, pos, orientation)
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyVerb}@package spawn
+@brief library to save blocks in xml file
+
+@version 1.0
+@author Hafsa, Michele, Sara
+\end{DoxyVerb}
+ 
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespacesave_a2c0b46bf673bd0890fd6737c3d94ab71}\label{namespacesave_a2c0b46bf673bd0890fd6737c3d94ab71}} 
+\index{save@{save}!clean@{clean}}
+\index{clean@{clean}!save@{save}}
+\doxysubsubsection{\texorpdfstring{clean()}{clean()}}
+{\footnotesize\ttfamily def save.\+clean (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Remove the existing XML file if it exists.
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacesave_add7ebbb0a6f46001e6841f2e3ef7afb1}\label{namespacesave_add7ebbb0a6f46001e6841f2e3ef7afb1}} 
+\index{save@{save}!quaternionToEulerAngles@{quaternionToEulerAngles}}
+\index{quaternionToEulerAngles@{quaternionToEulerAngles}!save@{save}}
+\doxysubsubsection{\texorpdfstring{quaternionToEulerAngles()}{quaternionToEulerAngles()}}
+{\footnotesize\ttfamily def save.\+quaternion\+To\+Euler\+Angles (\begin{DoxyParamCaption}\item[{}]{quaternion }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Convert a quaternion to Euler angles (XYZ order).
+
+Args:
+    quaternion (list or tuple): The input quaternion [x, y, z, w].
+
+Returns:
+    list: Euler angles in degrees [roll, pitch, yaw].
+\end{DoxyVerb}
+ \mbox{\Hypertarget{namespacesave_a5b21545a46e23b5b482ad9cfd06421fc}\label{namespacesave_a5b21545a46e23b5b482ad9cfd06421fc}} 
+\index{save@{save}!saveToXml@{saveToXml}}
+\index{saveToXml@{saveToXml}!save@{save}}
+\doxysubsubsection{\texorpdfstring{saveToXml()}{saveToXml()}}
+{\footnotesize\ttfamily def save.\+save\+To\+Xml (\begin{DoxyParamCaption}\item[{}]{model\+\_\+name,  }\item[{}]{pos,  }\item[{}]{orientation }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Save model information to an XML file.
+
+Args:
+    model_name (str): The name of the model.
+    pos (tf.Transform): The position of the model.
+    orientation (list or tuple or None): The orientation of the model as a quaternion [x, y, z, w]. None if not provided.
+\end{DoxyVerb}
+ 

@@ -1,0 +1,200 @@
+\hypertarget{inverseKinematics_8cpp}{}\doxysection{kinematics/src/inverse\+Kinematics.cpp File Reference}
+\label{inverseKinematics_8cpp}\index{kinematics/src/inverseKinematics.cpp@{kinematics/src/inverseKinematics.cpp}}
+{\ttfamily \#include $<$cmath$>$}\newline
+{\ttfamily \#include $<$complex$>$}\newline
+{\ttfamily \#include \char`\"{}inverse\+Kinematics.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$iostream$>$}\newline
+{\ttfamily \#include \char`\"{}Eigen\+Lib.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}typedefs.\+h\char`\"{}}\newline
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+Eigen\+::\+Matrix4d \mbox{\hyperlink{inverseKinematics_8cpp_a49af96945488b3aa737b0535cf6fa1d2}{T10f}} (double th)
+\begin{DoxyCompactList}\small\item\em Transformation matrix for joint 1 to joint 0. \end{DoxyCompactList}\item 
+Eigen\+::\+Matrix4d \mbox{\hyperlink{inverseKinematics_8cpp_a5a6d155f2fba0eec83d3b2bccb54ad3e}{T21f}} (double th)
+\begin{DoxyCompactList}\small\item\em Transformation matrix for joint 2 to joint 1. \end{DoxyCompactList}\item 
+Eigen\+::\+Matrix4d \mbox{\hyperlink{inverseKinematics_8cpp_a098a89fa805da72f8e23736e433fd101}{T32f}} (double th)
+\begin{DoxyCompactList}\small\item\em Transformation matrix for joint 3 to joint 2. \end{DoxyCompactList}\item 
+Eigen\+::\+Matrix4d \mbox{\hyperlink{inverseKinematics_8cpp_a576593abe1fb8660202cd4c3fad05230}{T43f}} (double th)
+\begin{DoxyCompactList}\small\item\em Transformation matrix for joint 4 to joint 3. \end{DoxyCompactList}\item 
+Eigen\+::\+Matrix4d \mbox{\hyperlink{inverseKinematics_8cpp_a5e8fd0e3209aeb33848de8d234ddbb89}{T54f}} (double th)
+\begin{DoxyCompactList}\small\item\em Transformation matrix for joint 5 to joint 4. \end{DoxyCompactList}\item 
+Eigen\+::\+Matrix4d \mbox{\hyperlink{inverseKinematics_8cpp_a4410e0eefac29c9747173c5144c7ef73}{T65f}} (double th)
+\begin{DoxyCompactList}\small\item\em Transformation matrix for end effector to joint 5. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{inverseKinematics_8cpp_ab318d3ba263e0b9f0632088ffcb43636}{almost\+Zero}} (double x)
+\begin{DoxyCompactList}\small\item\em Check if a given value is almost zero. \end{DoxyCompactList}\item 
+Eigen\+::\+Matrix4d \mbox{\hyperlink{inverseKinematics_8cpp_a50e211d0fb0d5d3b4de6699398728c24}{general\+Transformation\+Matrix}} (double th, int i)
+\begin{DoxyCompactList}\small\item\em General transformation matrix for a specific joint and angle. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{typedefs_8h_a6b50f3f54a92c8e512fcf9220d2b3ebc}{Matrix68d}} \mbox{\hyperlink{inverseKinematics_8cpp_a95298c555785b155abd0f5e0a5ea64ec}{ur5inverse\+Kinematics}} (Eigen\+::\+Vector3d p60, Eigen\+::\+Matrix3d R60)
+\begin{DoxyCompactList}\small\item\em Inverse kinematics for the UR5 robot arm with error handling. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{inverseKinematics_8cpp_ab318d3ba263e0b9f0632088ffcb43636}\label{inverseKinematics_8cpp_ab318d3ba263e0b9f0632088ffcb43636}} 
+\index{inverseKinematics.cpp@{inverseKinematics.cpp}!almostZero@{almostZero}}
+\index{almostZero@{almostZero}!inverseKinematics.cpp@{inverseKinematics.cpp}}
+\doxysubsubsection{\texorpdfstring{almostZero()}{almostZero()}}
+{\footnotesize\ttfamily bool almost\+Zero (\begin{DoxyParamCaption}\item[{double}]{x }\end{DoxyParamCaption})}
+
+
+
+Check if a given value is almost zero. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em x} & Value to check. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if the value is almost zero, false otherwise. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{inverseKinematics_8cpp_a50e211d0fb0d5d3b4de6699398728c24}\label{inverseKinematics_8cpp_a50e211d0fb0d5d3b4de6699398728c24}} 
+\index{inverseKinematics.cpp@{inverseKinematics.cpp}!generalTransformationMatrix@{generalTransformationMatrix}}
+\index{generalTransformationMatrix@{generalTransformationMatrix}!inverseKinematics.cpp@{inverseKinematics.cpp}}
+\doxysubsubsection{\texorpdfstring{generalTransformationMatrix()}{generalTransformationMatrix()}}
+{\footnotesize\ttfamily Eigen\+::\+Matrix4d general\+Transformation\+Matrix (\begin{DoxyParamCaption}\item[{double}]{th,  }\item[{int}]{i }\end{DoxyParamCaption})}
+
+
+
+General transformation matrix for a specific joint and angle. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em th} & Joint angle. \\
+\hline
+{\em i} & Joint index. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Transformation matrix. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{inverseKinematics_8cpp_a49af96945488b3aa737b0535cf6fa1d2}\label{inverseKinematics_8cpp_a49af96945488b3aa737b0535cf6fa1d2}} 
+\index{inverseKinematics.cpp@{inverseKinematics.cpp}!T10f@{T10f}}
+\index{T10f@{T10f}!inverseKinematics.cpp@{inverseKinematics.cpp}}
+\doxysubsubsection{\texorpdfstring{T10f()}{T10f()}}
+{\footnotesize\ttfamily Eigen\+::\+Matrix4d T10f (\begin{DoxyParamCaption}\item[{double}]{th }\end{DoxyParamCaption})}
+
+
+
+Transformation matrix for joint 1 to joint 0. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em th} & Joint angle for joint 1. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Transformation matrix T10. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{inverseKinematics_8cpp_a5a6d155f2fba0eec83d3b2bccb54ad3e}\label{inverseKinematics_8cpp_a5a6d155f2fba0eec83d3b2bccb54ad3e}} 
+\index{inverseKinematics.cpp@{inverseKinematics.cpp}!T21f@{T21f}}
+\index{T21f@{T21f}!inverseKinematics.cpp@{inverseKinematics.cpp}}
+\doxysubsubsection{\texorpdfstring{T21f()}{T21f()}}
+{\footnotesize\ttfamily Eigen\+::\+Matrix4d T21f (\begin{DoxyParamCaption}\item[{double}]{th }\end{DoxyParamCaption})}
+
+
+
+Transformation matrix for joint 2 to joint 1. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em th} & Joint angle for joint 2. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Transformation matrix T21. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{inverseKinematics_8cpp_a098a89fa805da72f8e23736e433fd101}\label{inverseKinematics_8cpp_a098a89fa805da72f8e23736e433fd101}} 
+\index{inverseKinematics.cpp@{inverseKinematics.cpp}!T32f@{T32f}}
+\index{T32f@{T32f}!inverseKinematics.cpp@{inverseKinematics.cpp}}
+\doxysubsubsection{\texorpdfstring{T32f()}{T32f()}}
+{\footnotesize\ttfamily Eigen\+::\+Matrix4d T32f (\begin{DoxyParamCaption}\item[{double}]{th }\end{DoxyParamCaption})}
+
+
+
+Transformation matrix for joint 3 to joint 2. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em th} & Joint angle for joint 3. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Transformation matrix T32. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{inverseKinematics_8cpp_a576593abe1fb8660202cd4c3fad05230}\label{inverseKinematics_8cpp_a576593abe1fb8660202cd4c3fad05230}} 
+\index{inverseKinematics.cpp@{inverseKinematics.cpp}!T43f@{T43f}}
+\index{T43f@{T43f}!inverseKinematics.cpp@{inverseKinematics.cpp}}
+\doxysubsubsection{\texorpdfstring{T43f()}{T43f()}}
+{\footnotesize\ttfamily Eigen\+::\+Matrix4d T43f (\begin{DoxyParamCaption}\item[{double}]{th }\end{DoxyParamCaption})}
+
+
+
+Transformation matrix for joint 4 to joint 3. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em th} & Joint angle for joint 4. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Transformation matrix T43. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{inverseKinematics_8cpp_a5e8fd0e3209aeb33848de8d234ddbb89}\label{inverseKinematics_8cpp_a5e8fd0e3209aeb33848de8d234ddbb89}} 
+\index{inverseKinematics.cpp@{inverseKinematics.cpp}!T54f@{T54f}}
+\index{T54f@{T54f}!inverseKinematics.cpp@{inverseKinematics.cpp}}
+\doxysubsubsection{\texorpdfstring{T54f()}{T54f()}}
+{\footnotesize\ttfamily Eigen\+::\+Matrix4d T54f (\begin{DoxyParamCaption}\item[{double}]{th }\end{DoxyParamCaption})}
+
+
+
+Transformation matrix for joint 5 to joint 4. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em th} & Joint angle for joint 5. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Transformation matrix T54. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{inverseKinematics_8cpp_a4410e0eefac29c9747173c5144c7ef73}\label{inverseKinematics_8cpp_a4410e0eefac29c9747173c5144c7ef73}} 
+\index{inverseKinematics.cpp@{inverseKinematics.cpp}!T65f@{T65f}}
+\index{T65f@{T65f}!inverseKinematics.cpp@{inverseKinematics.cpp}}
+\doxysubsubsection{\texorpdfstring{T65f()}{T65f()}}
+{\footnotesize\ttfamily Eigen\+::\+Matrix4d T65f (\begin{DoxyParamCaption}\item[{double}]{th }\end{DoxyParamCaption})}
+
+
+
+Transformation matrix for end effector to joint 5. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em th} & Joint angle for joint 6. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Transformation matrix T65. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{inverseKinematics_8cpp_a95298c555785b155abd0f5e0a5ea64ec}\label{inverseKinematics_8cpp_a95298c555785b155abd0f5e0a5ea64ec}} 
+\index{inverseKinematics.cpp@{inverseKinematics.cpp}!ur5inverseKinematics@{ur5inverseKinematics}}
+\index{ur5inverseKinematics@{ur5inverseKinematics}!inverseKinematics.cpp@{inverseKinematics.cpp}}
+\doxysubsubsection{\texorpdfstring{ur5inverseKinematics()}{ur5inverseKinematics()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{typedefs_8h_a6b50f3f54a92c8e512fcf9220d2b3ebc}{Matrix68d}} ur5inverse\+Kinematics (\begin{DoxyParamCaption}\item[{Eigen\+::\+Vector3d}]{p60,  }\item[{Eigen\+::\+Matrix3d}]{R60 }\end{DoxyParamCaption})}
+
+
+
+Inverse kinematics for the UR5 robot arm with error handling. 
+
+Comutation of the inverse kinematics for the UR5 robotic arm.
+
+
+\begin{DoxyParams}{Parameters}
+{\em p60} & End effector position. \\
+\hline
+{\em R60} & End effector orientation matrix. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Matrix of joint angles corresponding to multiple solutions. 
+\end{DoxyReturn}

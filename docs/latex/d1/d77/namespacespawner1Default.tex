@@ -1,0 +1,111 @@
+\hypertarget{namespacespawner1Default}{}\doxysection{spawner1\+Default Namespace Reference}
+\label{namespacespawner1Default}\index{spawner1Default@{spawner1Default}}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{namespacespawner1Default_a229f6ebc17f30db78c6ea5ff3de9ec5d}{delete\+\_\+model}} (name)
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+string \mbox{\hyperlink{namespacespawner1Default_a349fbf246f5d1f9e69fdc49c49cbf687}{block}} = \textquotesingle{}X1-\/Y2-\/Z2\textquotesingle{}
+\item 
+\mbox{\hyperlink{namespacespawner1Default_a494330c5f8c12d4149e76ae5f03ccf73}{pos}} = Pose(Point(0.\+280577, 0.\+691699, 0.\+863913), Quaternion(0, 0, 0, 0))
+\item 
+string \mbox{\hyperlink{namespacespawner1Default_a5697feccdc0d44a79d4f469262827ee8}{brick}} = \mbox{\hyperlink{namespacespawner1Default_a349fbf246f5d1f9e69fdc49c49cbf687}{block}}
+\item 
+\mbox{\hyperlink{namespacespawner1Default_ae5d0bd6e59bdad615e33c6ff80edb84b}{spawn\+\_\+model\+\_\+client}} = rospy.\+Service\+Proxy(\textquotesingle{}/gazebo/spawn\+\_\+sdf\+\_\+model\textquotesingle{}, Spawn\+Model)
+\item 
+\mbox{\hyperlink{namespacespawner1Default_ac53aed14110ac00193705fbb52a012cd}{model\+\_\+name}}
+\item 
+\mbox{\hyperlink{namespacespawner1Default_a1136b8525def99f56335e70262f1ac88}{model\+\_\+xml}}
+\item 
+\mbox{\hyperlink{namespacespawner1Default_af8c6bafed43cbdebcd027fe816d833e8}{robot\+\_\+namespace}}
+\item 
+\mbox{\hyperlink{namespacespawner1Default_ac01b3308d2b722442a6b14465969f664}{initial\+\_\+pose}}
+\item 
+\mbox{\hyperlink{namespacespawner1Default_a3ad901ff81817b8d368f402a371268b3}{reference\+\_\+frame}}
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\begin{DoxyVerb}@package spawn
+@brief spawn block in gazebo, level 1 with default values
+
+@version 1.0
+@author Hafsa, Michele, Sara
+\end{DoxyVerb}
+ 
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespacespawner1Default_a229f6ebc17f30db78c6ea5ff3de9ec5d}\label{namespacespawner1Default_a229f6ebc17f30db78c6ea5ff3de9ec5d}} 
+\index{spawner1Default@{spawner1Default}!delete\_model@{delete\_model}}
+\index{delete\_model@{delete\_model}!spawner1Default@{spawner1Default}}
+\doxysubsubsection{\texorpdfstring{delete\_model()}{delete\_model()}}
+{\footnotesize\ttfamily def spawner1\+Default.\+delete\+\_\+model (\begin{DoxyParamCaption}\item[{}]{name }\end{DoxyParamCaption})}
+
+\begin{DoxyVerb}Delete a Gazebo model by its name.
+
+Args:
+    name (str): The name of the model to be deleted.
+
+Returns:
+    bool: True if the model deletion was successful, False otherwise.
+\end{DoxyVerb}
+ 
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{namespacespawner1Default_a349fbf246f5d1f9e69fdc49c49cbf687}\label{namespacespawner1Default_a349fbf246f5d1f9e69fdc49c49cbf687}} 
+\index{spawner1Default@{spawner1Default}!block@{block}}
+\index{block@{block}!spawner1Default@{spawner1Default}}
+\doxysubsubsection{\texorpdfstring{block}{block}}
+{\footnotesize\ttfamily string spawner1\+Default.\+block = \textquotesingle{}X1-\/Y2-\/Z2\textquotesingle{}}
+
+\mbox{\Hypertarget{namespacespawner1Default_a5697feccdc0d44a79d4f469262827ee8}\label{namespacespawner1Default_a5697feccdc0d44a79d4f469262827ee8}} 
+\index{spawner1Default@{spawner1Default}!brick@{brick}}
+\index{brick@{brick}!spawner1Default@{spawner1Default}}
+\doxysubsubsection{\texorpdfstring{brick}{brick}}
+{\footnotesize\ttfamily string spawner1\+Default.\+brick = \mbox{\hyperlink{namespacespawner1Default_a349fbf246f5d1f9e69fdc49c49cbf687}{block}}}
+
+\mbox{\Hypertarget{namespacespawner1Default_ac01b3308d2b722442a6b14465969f664}\label{namespacespawner1Default_ac01b3308d2b722442a6b14465969f664}} 
+\index{spawner1Default@{spawner1Default}!initial\_pose@{initial\_pose}}
+\index{initial\_pose@{initial\_pose}!spawner1Default@{spawner1Default}}
+\doxysubsubsection{\texorpdfstring{initial\_pose}{initial\_pose}}
+{\footnotesize\ttfamily spawner1\+Default.\+initial\+\_\+pose}
+
+\mbox{\Hypertarget{namespacespawner1Default_ac53aed14110ac00193705fbb52a012cd}\label{namespacespawner1Default_ac53aed14110ac00193705fbb52a012cd}} 
+\index{spawner1Default@{spawner1Default}!model\_name@{model\_name}}
+\index{model\_name@{model\_name}!spawner1Default@{spawner1Default}}
+\doxysubsubsection{\texorpdfstring{model\_name}{model\_name}}
+{\footnotesize\ttfamily spawner1\+Default.\+model\+\_\+name}
+
+\mbox{\Hypertarget{namespacespawner1Default_a1136b8525def99f56335e70262f1ac88}\label{namespacespawner1Default_a1136b8525def99f56335e70262f1ac88}} 
+\index{spawner1Default@{spawner1Default}!model\_xml@{model\_xml}}
+\index{model\_xml@{model\_xml}!spawner1Default@{spawner1Default}}
+\doxysubsubsection{\texorpdfstring{model\_xml}{model\_xml}}
+{\footnotesize\ttfamily spawner1\+Default.\+model\+\_\+xml}
+
+\mbox{\Hypertarget{namespacespawner1Default_a494330c5f8c12d4149e76ae5f03ccf73}\label{namespacespawner1Default_a494330c5f8c12d4149e76ae5f03ccf73}} 
+\index{spawner1Default@{spawner1Default}!pos@{pos}}
+\index{pos@{pos}!spawner1Default@{spawner1Default}}
+\doxysubsubsection{\texorpdfstring{pos}{pos}}
+{\footnotesize\ttfamily spawner1\+Default.\+pos = Pose(Point(0.\+280577, 0.\+691699, 0.\+863913), Quaternion(0, 0, 0, 0))}
+
+\mbox{\Hypertarget{namespacespawner1Default_a3ad901ff81817b8d368f402a371268b3}\label{namespacespawner1Default_a3ad901ff81817b8d368f402a371268b3}} 
+\index{spawner1Default@{spawner1Default}!reference\_frame@{reference\_frame}}
+\index{reference\_frame@{reference\_frame}!spawner1Default@{spawner1Default}}
+\doxysubsubsection{\texorpdfstring{reference\_frame}{reference\_frame}}
+{\footnotesize\ttfamily spawner1\+Default.\+reference\+\_\+frame}
+
+\mbox{\Hypertarget{namespacespawner1Default_af8c6bafed43cbdebcd027fe816d833e8}\label{namespacespawner1Default_af8c6bafed43cbdebcd027fe816d833e8}} 
+\index{spawner1Default@{spawner1Default}!robot\_namespace@{robot\_namespace}}
+\index{robot\_namespace@{robot\_namespace}!spawner1Default@{spawner1Default}}
+\doxysubsubsection{\texorpdfstring{robot\_namespace}{robot\_namespace}}
+{\footnotesize\ttfamily spawner1\+Default.\+robot\+\_\+namespace}
+
+\mbox{\Hypertarget{namespacespawner1Default_ae5d0bd6e59bdad615e33c6ff80edb84b}\label{namespacespawner1Default_ae5d0bd6e59bdad615e33c6ff80edb84b}} 
+\index{spawner1Default@{spawner1Default}!spawn\_model\_client@{spawn\_model\_client}}
+\index{spawn\_model\_client@{spawn\_model\_client}!spawner1Default@{spawner1Default}}
+\doxysubsubsection{\texorpdfstring{spawn\_model\_client}{spawn\_model\_client}}
+{\footnotesize\ttfamily spawner1\+Default.\+spawn\+\_\+model\+\_\+client = rospy.\+Service\+Proxy(\textquotesingle{}/gazebo/spawn\+\_\+sdf\+\_\+model\textquotesingle{}, Spawn\+Model)}
+

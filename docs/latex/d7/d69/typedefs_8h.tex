@@ -1,0 +1,128 @@
+\hypertarget{typedefs_8h}{}\doxysection{kinematics/include/typedefs.h File Reference}
+\label{typedefs_8h}\index{kinematics/include/typedefs.h@{kinematics/include/typedefs.h}}
+
+
+Contains various typedefs, constants, and structures used in the project.  
+
+
+{\ttfamily \#include \char`\"{}Eigen\+Lib.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}geometry\+\_\+msgs/\+Pose.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$unistd.\+h$>$}\newline
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{structdirectK}{directK}}
+\begin{DoxyCompactList}\small\item\em Structure representing direct kinematics information. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structblockInfo}{block\+Info}}
+\begin{DoxyCompactList}\small\item\em Structure representing information about a block. \end{DoxyCompactList}\item 
+struct \mbox{\hyperlink{structvisionSim}{vision\+Sim}}
+\begin{DoxyCompactList}\small\item\em Structure representing simulated vision information. \end{DoxyCompactList}\item 
+struct {\bfseries joints\+And\+Gripper}
+\begin{DoxyCompactList}\small\item\em Structure representing joint angles and gripper state. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef Eigen\+::\+Matrix$<$ double, 6, 1 $>$ \mbox{\hyperlink{typedefs_8h_a13a6330b4a41b96b124a1ab827e22be8}{Vector6d}}
+\begin{DoxyCompactList}\small\item\em 6-\/dimensional vector of doubles. \end{DoxyCompactList}\item 
+typedef Eigen\+::\+Matrix$<$ double, 9, 1 $>$ \mbox{\hyperlink{typedefs_8h_ab8dd5c0572073f0a612237d2a6b527df}{Vector9d}}
+\begin{DoxyCompactList}\small\item\em 9-\/dimensional vector of doubles. \end{DoxyCompactList}\item 
+typedef Eigen\+::\+Matrix$<$ double, 8, 6 $>$ \mbox{\hyperlink{typedefs_8h_a7b033b686ef28751877104650a998596}{Matrix86d}}
+\begin{DoxyCompactList}\small\item\em 8x6 matrix of doubles. \end{DoxyCompactList}\item 
+typedef Eigen\+::\+Matrix$<$ double, 6, 8 $>$ \mbox{\hyperlink{typedefs_8h_a6b50f3f54a92c8e512fcf9220d2b3ebc}{Matrix68d}}
+\begin{DoxyCompactList}\small\item\em 6x8 matrix of doubles. \end{DoxyCompactList}\item 
+typedef Eigen\+::\+Matrix$<$ double, 6, 6 $>$ \mbox{\hyperlink{typedefs_8h_a16e6a0b9ee4501eb85564fa86b7011fa}{Matrix66d}}
+\begin{DoxyCompactList}\small\item\em 6x6 matrix of doubles. \end{DoxyCompactList}\item 
+typedef struct \mbox{\hyperlink{structdirectK}{directK}} \mbox{\hyperlink{typedefs_8h_a328a74987dca133958ebccfbc688c54e}{directK}}
+\begin{DoxyCompactList}\small\item\em Structure representing direct kinematics information. \end{DoxyCompactList}\item 
+typedef struct \mbox{\hyperlink{structblockInfo}{block\+Info}} \mbox{\hyperlink{typedefs_8h_a89ec75f6cb7a670c29e7a03b3bb9b236}{block\+Info}}
+\begin{DoxyCompactList}\small\item\em Structure representing information about a block. \end{DoxyCompactList}\item 
+typedef struct \mbox{\hyperlink{structvisionSim}{vision\+Sim}} \mbox{\hyperlink{typedefs_8h_a2203ef8b1ed5b93049e2c0351f57179e}{vision\+Sim}}
+\begin{DoxyCompactList}\small\item\em Structure representing simulated vision information. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Contains various typedefs, constants, and structures used in the project. 
+
+
+
+\doxysubsection{Typedef Documentation}
+\mbox{\Hypertarget{typedefs_8h_a89ec75f6cb7a670c29e7a03b3bb9b236}\label{typedefs_8h_a89ec75f6cb7a670c29e7a03b3bb9b236}} 
+\index{typedefs.h@{typedefs.h}!blockInfo@{blockInfo}}
+\index{blockInfo@{blockInfo}!typedefs.h@{typedefs.h}}
+\doxysubsubsection{\texorpdfstring{blockInfo}{blockInfo}}
+{\footnotesize\ttfamily typedef struct \mbox{\hyperlink{structblockInfo}{block\+Info}} \mbox{\hyperlink{structblockInfo}{block\+Info}}}
+
+
+
+Structure representing information about a block. 
+
+\mbox{\Hypertarget{typedefs_8h_a328a74987dca133958ebccfbc688c54e}\label{typedefs_8h_a328a74987dca133958ebccfbc688c54e}} 
+\index{typedefs.h@{typedefs.h}!directK@{directK}}
+\index{directK@{directK}!typedefs.h@{typedefs.h}}
+\doxysubsubsection{\texorpdfstring{directK}{directK}}
+{\footnotesize\ttfamily typedef struct \mbox{\hyperlink{structdirectK}{directK}} \mbox{\hyperlink{structdirectK}{directK}}}
+
+
+
+Structure representing direct kinematics information. 
+
+\mbox{\Hypertarget{typedefs_8h_a16e6a0b9ee4501eb85564fa86b7011fa}\label{typedefs_8h_a16e6a0b9ee4501eb85564fa86b7011fa}} 
+\index{typedefs.h@{typedefs.h}!Matrix66d@{Matrix66d}}
+\index{Matrix66d@{Matrix66d}!typedefs.h@{typedefs.h}}
+\doxysubsubsection{\texorpdfstring{Matrix66d}{Matrix66d}}
+{\footnotesize\ttfamily typedef Eigen\+::\+Matrix$<$double, 6, 6$>$ \mbox{\hyperlink{typedefs_8h_a16e6a0b9ee4501eb85564fa86b7011fa}{Matrix66d}}}
+
+
+
+6x6 matrix of doubles. 
+
+\mbox{\Hypertarget{typedefs_8h_a6b50f3f54a92c8e512fcf9220d2b3ebc}\label{typedefs_8h_a6b50f3f54a92c8e512fcf9220d2b3ebc}} 
+\index{typedefs.h@{typedefs.h}!Matrix68d@{Matrix68d}}
+\index{Matrix68d@{Matrix68d}!typedefs.h@{typedefs.h}}
+\doxysubsubsection{\texorpdfstring{Matrix68d}{Matrix68d}}
+{\footnotesize\ttfamily typedef Eigen\+::\+Matrix$<$double, 6, 8$>$ \mbox{\hyperlink{typedefs_8h_a6b50f3f54a92c8e512fcf9220d2b3ebc}{Matrix68d}}}
+
+
+
+6x8 matrix of doubles. 
+
+\mbox{\Hypertarget{typedefs_8h_a7b033b686ef28751877104650a998596}\label{typedefs_8h_a7b033b686ef28751877104650a998596}} 
+\index{typedefs.h@{typedefs.h}!Matrix86d@{Matrix86d}}
+\index{Matrix86d@{Matrix86d}!typedefs.h@{typedefs.h}}
+\doxysubsubsection{\texorpdfstring{Matrix86d}{Matrix86d}}
+{\footnotesize\ttfamily typedef Eigen\+::\+Matrix$<$double, 8, 6$>$ \mbox{\hyperlink{typedefs_8h_a7b033b686ef28751877104650a998596}{Matrix86d}}}
+
+
+
+8x6 matrix of doubles. 
+
+\mbox{\Hypertarget{typedefs_8h_a13a6330b4a41b96b124a1ab827e22be8}\label{typedefs_8h_a13a6330b4a41b96b124a1ab827e22be8}} 
+\index{typedefs.h@{typedefs.h}!Vector6d@{Vector6d}}
+\index{Vector6d@{Vector6d}!typedefs.h@{typedefs.h}}
+\doxysubsubsection{\texorpdfstring{Vector6d}{Vector6d}}
+{\footnotesize\ttfamily typedef Eigen\+::\+Matrix$<$double, 6, 1$>$ \mbox{\hyperlink{typedefs_8h_a13a6330b4a41b96b124a1ab827e22be8}{Vector6d}}}
+
+
+
+6-\/dimensional vector of doubles. 
+
+\mbox{\Hypertarget{typedefs_8h_ab8dd5c0572073f0a612237d2a6b527df}\label{typedefs_8h_ab8dd5c0572073f0a612237d2a6b527df}} 
+\index{typedefs.h@{typedefs.h}!Vector9d@{Vector9d}}
+\index{Vector9d@{Vector9d}!typedefs.h@{typedefs.h}}
+\doxysubsubsection{\texorpdfstring{Vector9d}{Vector9d}}
+{\footnotesize\ttfamily typedef Eigen\+::\+Matrix$<$double, 9, 1$>$ \mbox{\hyperlink{typedefs_8h_ab8dd5c0572073f0a612237d2a6b527df}{Vector9d}}}
+
+
+
+9-\/dimensional vector of doubles. 
+
+\mbox{\Hypertarget{typedefs_8h_a2203ef8b1ed5b93049e2c0351f57179e}\label{typedefs_8h_a2203ef8b1ed5b93049e2c0351f57179e}} 
+\index{typedefs.h@{typedefs.h}!visionSim@{visionSim}}
+\index{visionSim@{visionSim}!typedefs.h@{typedefs.h}}
+\doxysubsubsection{\texorpdfstring{visionSim}{visionSim}}
+{\footnotesize\ttfamily typedef struct \mbox{\hyperlink{structvisionSim}{vision\+Sim}} \mbox{\hyperlink{structvisionSim}{vision\+Sim}}}
+
+
+
+Structure representing simulated vision information. 
+

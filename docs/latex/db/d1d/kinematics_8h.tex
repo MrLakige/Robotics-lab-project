@@ -1,0 +1,892 @@
+\hypertarget{kinematics_8h}{}\doxysection{kinematics/include/kinematics.h File Reference}
+\label{kinematics_8h}\index{kinematics/include/kinematics.h@{kinematics/include/kinematics.h}}
+
+
+Header file for kinematics functions.  
+
+
+{\ttfamily \#include \char`\"{}typedefs.\+h\char`\"{}}\newline
+{\ttfamily \#include $<$std\+\_\+msgs/\+Float64\+Multi\+Array.\+h$>$}\newline
+{\ttfamily \#include $<$ros/ros.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}vision/\+Block.\+h\char`\"{}}\newline
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+geometry\+\_\+msgs\+::\+Pose \mbox{\hyperlink{kinematics_8h_a4526ea5a55d7e60508f562b10cd47dd3}{get\+Pose}} (double x, double y, double z)
+\begin{DoxyCompactList}\small\item\em Function to get a 3D pose. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{kinematics_8h_ae7f67be64efd2126299cc9efd9e35c29}{send\+Des\+Jstate}} (const \mbox{\hyperlink{typedefs_8h_a13a6330b4a41b96b124a1ab827e22be8}{Vector6d}} \&joint\+\_\+pos, const Eigen\+::\+Vector3d \&gripper\+\_\+pos)
+\begin{DoxyCompactList}\small\item\em Function to send the desired joints configuration. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{kinematics_8h_aba0c2f9348b99019a9288be2d31adfbe}{move\+Gripper}} (const double diameter)
+\begin{DoxyCompactList}\small\item\em Function to call the serice to open/close the real gripper. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{kinematics_8h_abcd497589d19607c8d32d3202ff0a9d7}{map\+To\+Gripper\+Joints}} (double diameter)
+\begin{DoxyCompactList}\small\item\em Function to map the diametre to the gripper goints to make the movement smooth. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{kinematics_8h_a060fb753dd0176d2dab1e32f5378af13}{set\+Joints}} (\mbox{\hyperlink{typedefs_8h_a13a6330b4a41b96b124a1ab827e22be8}{Vector6d}} q)
+\begin{DoxyCompactList}\small\item\em Function to set the robotic arm joints in the struct to take trace of them. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{kinematics_8h_ac53ef7ca5fe2d90033033a22b3400d4c}{set\+Gripper}} (Eigen\+::\+Vector3d gripper)
+\begin{DoxyCompactList}\small\item\em Function to set the gripper joints in the struct to take trace of them. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{kinematics_8h_a1028f26bc3f50c0edc25e291e19aeec9}{set\+Joints\+And\+Gripper}} (\mbox{\hyperlink{typedefs_8h_a13a6330b4a41b96b124a1ab827e22be8}{Vector6d}} q, Eigen\+::\+Vector3d gripper)
+\begin{DoxyCompactList}\small\item\em Function to set the roboti arm and gripper joints in the struct to take trace of them. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{kinematics_8h_ad7288a5ec0d4d9197df315fa16b774a8}{set\+New\+Gripper\+Position}} (double diameter)
+\begin{DoxyCompactList}\small\item\em Function to set the gripper joints after computing the map\+To\+Gripper\+Joints func. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{kinematics_8h_a2e5156fe02f8b61a0860ad05548568c9}{attach\+Block}} (const char $\ast$model1, const char $\ast$link1, const char $\ast$model2, const char $\ast$link2)
+\begin{DoxyCompactList}\small\item\em Function to call the attach service. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{kinematics_8h_a34a7eef0ebe994cf8028734e1f3b4fa0}{detach\+Block}} (const char $\ast$model1, const char $\ast$link1, const char $\ast$model2, const char $\ast$link2)
+\begin{DoxyCompactList}\small\item\em Function to call the detach service. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{kinematics_8h_a5ae73dba635ec32cb2e29aee12929626}{move\+\_\+gripper}} (double diameter)
+\begin{DoxyCompactList}\small\item\em Function to open the gripper after all computations. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{kinematics_8h_aff698c7d643d12222edd80373685d110}{read\+Joints}} ()
+\begin{DoxyCompactList}\small\item\em Function to read the joint configuration from the robot and save them in the function to keep trace of them. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{kinematics_8h_ae3c0dfa92f6ce36cc4e0b55ee1079482}{move}} (Eigen\+::\+Vector3d poseF, Eigen\+::\+Vector3d orientF)
+\begin{DoxyCompactList}\small\item\em Function to move the robotic arm. \end{DoxyCompactList}\item 
+Eigen\+::\+Vector3d \mbox{\hyperlink{kinematics_8h_adb3bc74ca1e503e9ea303103163e04ad}{transform\+Wrld\+To\+Rbt}} (Eigen\+::\+Vector3d p)
+\begin{DoxyCompactList}\small\item\em Function to transform the coordinates from the world frame to the robot frame. \end{DoxyCompactList}\item 
+Eigen\+::\+Vector3d \mbox{\hyperlink{kinematics_8h_adaea4790291cec3205020338aa92faa7}{transform\+Rbt\+To\+Wrld}} (Eigen\+::\+Vector3d p)
+\begin{DoxyCompactList}\small\item\em Function to transform the coordinates from the robot frame to the world frame. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{structblockInfo}{block\+Info}} \mbox{\hyperlink{kinematics_8h_ad7cab269590db476c8f89e2d3dfb528a}{get\+Block\+Pose}} (std\+::string block\+Name)
+\begin{DoxyCompactList}\small\item\em Function to get several values for each block for different computations. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{kinematics_8h_a74c3aebcc6e30b0d65ff6763c30742b6}{get\+Block\+Index\+From\+Array\+Default}} (\mbox{\hyperlink{structvisionSim}{vision\+Sim}} $\ast$vision\+Node, int num)
+\begin{DoxyCompactList}\small\item\em Function to get the index of the required block to create the castle based on the layer number. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{kinematics_8h_a63120e692988a1e0a612adf852489012}{get\+Block\+Index\+From\+Array}} (vision\+::\+Block\+::\+Const\+Ptr vision\+Node, int num)
+\begin{DoxyCompactList}\small\item\em Function to get the index of the required block to create the castle based on the layer number. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{kinematics_8h_ab784f73ae7ff77b199a6ad8fb8c2ebce}{move\+P2\+PObject}} (Eigen\+::\+Vector3d posI, Eigen\+::\+Vector3d posF, const char $\ast$block\+Name, double gripper\+Closure)
+\begin{DoxyCompactList}\small\item\em Function to move an object from one point to another one . \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{kinematics_8h_a99b2c2a8b8b4092085e201b6fd395f3a}{set\+Block\+Up}} (Eigen\+::\+Vector3d pos, Eigen\+::\+Vector3d rot, \mbox{\hyperlink{structblockInfo}{block\+Info}} block)
+\begin{DoxyCompactList}\small\item\em Function to set the block straight based on the position of the block. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{kinematics_8h_a2c3d7996c5e01c5c301e60b97755bc9d}{move\+For\+Castle\+Construction}} (Eigen\+::\+Vector3d posI, Eigen\+::\+Vector3d posF, const char $\ast$block\+Name, double gripper\+Closure)
+\begin{DoxyCompactList}\small\item\em Function to move the block to construct the castle. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{kinematics_8h_a77a46500e6a7e3e8cbac51ee3d830d52}{move\+Straight\+Obj\+To\+Target\+Pos}} (Eigen\+::\+Vector3d posI, \mbox{\hyperlink{structblockInfo}{block\+Info}} block\+Name, Eigen\+::\+Vector3d posF)
+\begin{DoxyCompactList}\small\item\em Function to move a standing/straight block to a atrget position. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Header file for kinematics functions. 
+
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{kinematics_8h_a2e5156fe02f8b61a0860ad05548568c9}\label{kinematics_8h_a2e5156fe02f8b61a0860ad05548568c9}} 
+\index{kinematics.h@{kinematics.h}!attachBlock@{attachBlock}}
+\index{attachBlock@{attachBlock}!kinematics.h@{kinematics.h}}
+\doxysubsubsection{\texorpdfstring{attachBlock()}{attachBlock()}}
+{\footnotesize\ttfamily void attach\+Block (\begin{DoxyParamCaption}\item[{const char $\ast$}]{model1,  }\item[{const char $\ast$}]{link1,  }\item[{const char $\ast$}]{model2,  }\item[{const char $\ast$}]{link2 }\end{DoxyParamCaption})}
+
+
+
+Function to call the attach service. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em model1} & first model name. \\
+\hline
+{\em link1} & first link name. \\
+\hline
+{\em model2} & second model name. \\
+\hline
+{\em link2} & second link name.\\
+\hline
+\end{DoxyParams}
+Function to call the attach service.
+
+
+\begin{DoxyParams}{Parameters}
+{\em model1} & The model name of the first object. \\
+\hline
+{\em link1} & The link name of the first object. \\
+\hline
+{\em model2} & The model name of the second object. \\
+\hline
+{\em link2} & The link name of the second object.\\
+\hline
+\end{DoxyParams}
+Function to call the attach service.
+
+
+\begin{DoxyParams}{Parameters}
+{\em model1} & Name of the first block model. \\
+\hline
+{\em link1} & Name of the first block link. \\
+\hline
+{\em model2} & Name of the second block model. \\
+\hline
+{\em link2} & Name of the second block link. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{kinematics_8h_a34a7eef0ebe994cf8028734e1f3b4fa0}\label{kinematics_8h_a34a7eef0ebe994cf8028734e1f3b4fa0}} 
+\index{kinematics.h@{kinematics.h}!detachBlock@{detachBlock}}
+\index{detachBlock@{detachBlock}!kinematics.h@{kinematics.h}}
+\doxysubsubsection{\texorpdfstring{detachBlock()}{detachBlock()}}
+{\footnotesize\ttfamily void detach\+Block (\begin{DoxyParamCaption}\item[{const char $\ast$}]{model1,  }\item[{const char $\ast$}]{link1,  }\item[{const char $\ast$}]{model2,  }\item[{const char $\ast$}]{link2 }\end{DoxyParamCaption})}
+
+
+
+Function to call the detach service. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em model1} & first model name. \\
+\hline
+{\em link1} & first link name. \\
+\hline
+{\em model2} & second model name. \\
+\hline
+{\em link2} & second link name.\\
+\hline
+\end{DoxyParams}
+Function to call the detach service.
+
+
+\begin{DoxyParams}{Parameters}
+{\em model1} & The model name of the first object. \\
+\hline
+{\em link1} & The link name of the first object. \\
+\hline
+{\em model2} & The model name of the second object. \\
+\hline
+{\em link2} & The link name of the second object.\\
+\hline
+\end{DoxyParams}
+Function to call the detach service.
+
+
+\begin{DoxyParams}{Parameters}
+{\em model1} & Name of the first block model. \\
+\hline
+{\em link1} & Name of the first block link. \\
+\hline
+{\em model2} & Name of the second block model. \\
+\hline
+{\em link2} & Name of the second block link. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{kinematics_8h_a63120e692988a1e0a612adf852489012}\label{kinematics_8h_a63120e692988a1e0a612adf852489012}} 
+\index{kinematics.h@{kinematics.h}!getBlockIndexFromArray@{getBlockIndexFromArray}}
+\index{getBlockIndexFromArray@{getBlockIndexFromArray}!kinematics.h@{kinematics.h}}
+\doxysubsubsection{\texorpdfstring{getBlockIndexFromArray()}{getBlockIndexFromArray()}}
+{\footnotesize\ttfamily int get\+Block\+Index\+From\+Array (\begin{DoxyParamCaption}\item[{vision\+::\+Block\+::\+Const\+Ptr}]{vision\+Node,  }\item[{int}]{num }\end{DoxyParamCaption})}
+
+
+
+Function to get the index of the required block to create the castle based on the layer number. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em vision\+Node} & message from the vision node. \\
+\hline
+{\em num} & number of the layer. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the index value
+\end{DoxyReturn}
+Function to get the index of the required block to create the castle based on the layer number.
+
+
+\begin{DoxyParams}{Parameters}
+{\em vision\+Node} & The vision node containing block information. \\
+\hline
+{\em num} & The block number. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The index of the block in the array.
+\end{DoxyReturn}
+Function to get the index of the required block to create the castle based on the layer number.
+
+This function searches for the block with the specified class ID in the vision\+::\+Block\+::\+Const\+Ptr array.
+
+
+\begin{DoxyParams}{Parameters}
+{\em vision\+Node} & Pointer to a vision\+::\+Block\+::\+Const\+Ptr structure representing vision data. \\
+\hline
+{\em num} & The block number to search for. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The index of the block in the array, or 0 if not found. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{kinematics_8h_a74c3aebcc6e30b0d65ff6763c30742b6}\label{kinematics_8h_a74c3aebcc6e30b0d65ff6763c30742b6}} 
+\index{kinematics.h@{kinematics.h}!getBlockIndexFromArrayDefault@{getBlockIndexFromArrayDefault}}
+\index{getBlockIndexFromArrayDefault@{getBlockIndexFromArrayDefault}!kinematics.h@{kinematics.h}}
+\doxysubsubsection{\texorpdfstring{getBlockIndexFromArrayDefault()}{getBlockIndexFromArrayDefault()}}
+{\footnotesize\ttfamily int get\+Block\+Index\+From\+Array\+Default (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{structvisionSim}{vision\+Sim}} $\ast$}]{vision\+Node,  }\item[{int}]{num }\end{DoxyParamCaption})}
+
+
+
+Function to get the index of the required block to create the castle based on the layer number. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em vision\+Node} & simualated message from the vision node. \\
+\hline
+{\em num} & number of the layer. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the index value
+\end{DoxyReturn}
+Function to get the index of the required block to create the castle based on the layer number.
+
+This function searches for the block with the specified class ID in the given array of vision nodes and returns its index.
+
+
+\begin{DoxyParams}{Parameters}
+{\em vision\+Node} & The array of vision nodes to search. \\
+\hline
+{\em num} & The block number to find. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The index of the block in the array, or 0 if not found.
+\end{DoxyReturn}
+Function to get the index of the required block to create the castle based on the layer number.
+
+This function searches for the block with the specified class ID in the \mbox{\hyperlink{structvisionSim}{vision\+Sim}} array.
+
+
+\begin{DoxyParams}{Parameters}
+{\em vision\+Node} & Pointer to an array of \mbox{\hyperlink{structvisionSim}{vision\+Sim}} structures representing vision data. \\
+\hline
+{\em num} & The block number to search for. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The index of the block in the array, or 0 if not found. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{kinematics_8h_ad7cab269590db476c8f89e2d3dfb528a}\label{kinematics_8h_ad7cab269590db476c8f89e2d3dfb528a}} 
+\index{kinematics.h@{kinematics.h}!getBlockPose@{getBlockPose}}
+\index{getBlockPose@{getBlockPose}!kinematics.h@{kinematics.h}}
+\doxysubsubsection{\texorpdfstring{getBlockPose()}{getBlockPose()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structblockInfo}{block\+Info}} get\+Block\+Pose (\begin{DoxyParamCaption}\item[{std\+::string}]{block\+Name }\end{DoxyParamCaption})}
+
+
+
+Function to get several values for each block for different computations. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em block\+Name} & the name of the block of the required data. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\mbox{\hyperlink{structblockInfo}{block\+Info}} a struct with the needed data.
+\end{DoxyReturn}
+Function to get several values for each block for different computations.
+
+
+\begin{DoxyParams}{Parameters}
+{\em block\+Name} & The name of the block. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The block\textquotesingle{}s pose information.
+\end{DoxyReturn}
+Function to get several values for each block for different computations.
+
+
+\begin{DoxyParams}{Parameters}
+{\em block\+Name} & Name of the block. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\mbox{\hyperlink{structblockInfo}{block\+Info}} Information about the block\textquotesingle{}s pose. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{kinematics_8h_a4526ea5a55d7e60508f562b10cd47dd3}\label{kinematics_8h_a4526ea5a55d7e60508f562b10cd47dd3}} 
+\index{kinematics.h@{kinematics.h}!getPose@{getPose}}
+\index{getPose@{getPose}!kinematics.h@{kinematics.h}}
+\doxysubsubsection{\texorpdfstring{getPose()}{getPose()}}
+{\footnotesize\ttfamily geometry\+\_\+msgs\+::\+Pose get\+Pose (\begin{DoxyParamCaption}\item[{double}]{x,  }\item[{double}]{y,  }\item[{double}]{z }\end{DoxyParamCaption})}
+
+
+
+Function to get a 3D pose. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em x} & The x-\/coordinate. \\
+\hline
+{\em y} & The y-\/coordinate. \\
+\hline
+{\em z} & The z-\/coordinate. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The 3D pose as a geometry\+\_\+msgs\+::\+Pose.
+\end{DoxyReturn}
+Function to get a 3D pose.
+
+
+\begin{DoxyParams}{Parameters}
+{\em x} & X-\/coordinate of the pose. \\
+\hline
+{\em y} & Y-\/coordinate of the pose. \\
+\hline
+{\em z} & Z-\/coordinate of the pose. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+geometry\+\_\+msgs\+::\+Pose Pose with the specified position. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{kinematics_8h_abcd497589d19607c8d32d3202ff0a9d7}\label{kinematics_8h_abcd497589d19607c8d32d3202ff0a9d7}} 
+\index{kinematics.h@{kinematics.h}!mapToGripperJoints@{mapToGripperJoints}}
+\index{mapToGripperJoints@{mapToGripperJoints}!kinematics.h@{kinematics.h}}
+\doxysubsubsection{\texorpdfstring{mapToGripperJoints()}{mapToGripperJoints()}}
+{\footnotesize\ttfamily double map\+To\+Gripper\+Joints (\begin{DoxyParamCaption}\item[{double}]{diameter }\end{DoxyParamCaption})}
+
+
+
+Function to map the diametre to the gripper goints to make the movement smooth. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em diameter} & diametre of the gripper opening. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+result of the function computation.
+\end{DoxyReturn}
+Function to map the diametre to the gripper goints to make the movement smooth.
+
+
+\begin{DoxyParams}{Parameters}
+{\em diameter} & The diameter. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Gripper joint positions.
+\end{DoxyReturn}
+Function to map the diametre to the gripper goints to make the movement smooth.
+
+
+\begin{DoxyParams}{Parameters}
+{\em diameter} & Desired diameter for the gripper. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+double Gripper joint position corresponding to the desired diameter. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{kinematics_8h_ae3c0dfa92f6ce36cc4e0b55ee1079482}\label{kinematics_8h_ae3c0dfa92f6ce36cc4e0b55ee1079482}} 
+\index{kinematics.h@{kinematics.h}!move@{move}}
+\index{move@{move}!kinematics.h@{kinematics.h}}
+\doxysubsubsection{\texorpdfstring{move()}{move()}}
+{\footnotesize\ttfamily void move (\begin{DoxyParamCaption}\item[{Eigen\+::\+Vector3d}]{poseF,  }\item[{Eigen\+::\+Vector3d}]{orientF }\end{DoxyParamCaption})}
+
+
+
+Function to move the robotic arm. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em poseF} & desired end effector position. \\
+\hline
+{\em orientF} & desired end effector orientation.\\
+\hline
+\end{DoxyParams}
+Function to move the robotic arm.
+
+
+\begin{DoxyParams}{Parameters}
+{\em poseF} & The desired pose. \\
+\hline
+{\em orientF} & The desired orientation.\\
+\hline
+\end{DoxyParams}
+Function to move the robotic arm.
+
+
+\begin{DoxyParams}{Parameters}
+{\em poseF} & Desired position represented as Eigen\+::\+Vector3d. \\
+\hline
+{\em orientF} & Desired orientation represented as Eigen\+::\+Vector3d. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{kinematics_8h_a5ae73dba635ec32cb2e29aee12929626}\label{kinematics_8h_a5ae73dba635ec32cb2e29aee12929626}} 
+\index{kinematics.h@{kinematics.h}!move\_gripper@{move\_gripper}}
+\index{move\_gripper@{move\_gripper}!kinematics.h@{kinematics.h}}
+\doxysubsubsection{\texorpdfstring{move\_gripper()}{move\_gripper()}}
+{\footnotesize\ttfamily void move\+\_\+gripper (\begin{DoxyParamCaption}\item[{double}]{diameter }\end{DoxyParamCaption})}
+
+
+
+Function to open the gripper after all computations. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em diameter} & diametre of the gripper opening.\\
+\hline
+\end{DoxyParams}
+Function to open the gripper after all computations.
+
+
+\begin{DoxyParams}{Parameters}
+{\em diameter} & The desired diameter.\\
+\hline
+\end{DoxyParams}
+Function to open the gripper after all computations.
+
+
+\begin{DoxyParams}{Parameters}
+{\em diameter} & Desired diameter for the gripper. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{kinematics_8h_a2c3d7996c5e01c5c301e60b97755bc9d}\label{kinematics_8h_a2c3d7996c5e01c5c301e60b97755bc9d}} 
+\index{kinematics.h@{kinematics.h}!moveForCastleConstruction@{moveForCastleConstruction}}
+\index{moveForCastleConstruction@{moveForCastleConstruction}!kinematics.h@{kinematics.h}}
+\doxysubsubsection{\texorpdfstring{moveForCastleConstruction()}{moveForCastleConstruction()}}
+{\footnotesize\ttfamily void move\+For\+Castle\+Construction (\begin{DoxyParamCaption}\item[{Eigen\+::\+Vector3d}]{posI,  }\item[{Eigen\+::\+Vector3d}]{posF,  }\item[{const char $\ast$}]{block\+Name,  }\item[{double}]{gripper\+Closure }\end{DoxyParamCaption})}
+
+
+
+Function to move the block to construct the castle. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em posI} & initial position of the block. \\
+\hline
+{\em posF} & release positions of the block. \\
+\hline
+{\em block\+Name} & name of the handled block. \\
+\hline
+{\em gripper\+Closure} & gripper closure.\\
+\hline
+\end{DoxyParams}
+Function to move the block to construct the castle.
+
+This function moves an object from the initial position (posI) to the final position (posF) using a specific block name and gripper closure. It also handles block attachment and detachment.
+
+
+\begin{DoxyParams}{Parameters}
+{\em posI} & The initial position of the object. \\
+\hline
+{\em posF} & The final position of the object. \\
+\hline
+{\em block\+Name} & The name of the block to be moved. \\
+\hline
+{\em gripper\+Closure} & The gripper closure value during the motion.\\
+\hline
+\end{DoxyParams}
+Function to move the block to construct the castle.
+
+This function performs a sequence of movements for castle construction, including grasping and releasing blocks.
+
+
+\begin{DoxyParams}{Parameters}
+{\em posI} & Initial position of the object. \\
+\hline
+{\em posF} & Final position of the object. \\
+\hline
+{\em block\+Name} & Name of the block to be moved. \\
+\hline
+{\em gripper\+Closure} & Gripper closure value during the operation. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{kinematics_8h_aba0c2f9348b99019a9288be2d31adfbe}\label{kinematics_8h_aba0c2f9348b99019a9288be2d31adfbe}} 
+\index{kinematics.h@{kinematics.h}!moveGripper@{moveGripper}}
+\index{moveGripper@{moveGripper}!kinematics.h@{kinematics.h}}
+\doxysubsubsection{\texorpdfstring{moveGripper()}{moveGripper()}}
+{\footnotesize\ttfamily void move\+Gripper (\begin{DoxyParamCaption}\item[{const double}]{diameter }\end{DoxyParamCaption})}
+
+
+
+Function to call the serice to open/close the real gripper. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em diameter} & diametre of the gripper opening.\\
+\hline
+\end{DoxyParams}
+Function to call the serice to open/close the real gripper.
+
+
+\begin{DoxyParams}{Parameters}
+{\em diameter} & The desired diameter.\\
+\hline
+\end{DoxyParams}
+Function to call the serice to open/close the real gripper.
+
+
+\begin{DoxyParams}{Parameters}
+{\em diameter} & Desired diameter for the gripper. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{kinematics_8h_ab784f73ae7ff77b199a6ad8fb8c2ebce}\label{kinematics_8h_ab784f73ae7ff77b199a6ad8fb8c2ebce}} 
+\index{kinematics.h@{kinematics.h}!moveP2PObject@{moveP2PObject}}
+\index{moveP2PObject@{moveP2PObject}!kinematics.h@{kinematics.h}}
+\doxysubsubsection{\texorpdfstring{moveP2PObject()}{moveP2PObject()}}
+{\footnotesize\ttfamily void move\+P2\+PObject (\begin{DoxyParamCaption}\item[{Eigen\+::\+Vector3d}]{posI,  }\item[{Eigen\+::\+Vector3d}]{posF,  }\item[{const char $\ast$}]{block\+Name,  }\item[{double}]{gripper\+Closure }\end{DoxyParamCaption})}
+
+
+
+Function to move an object from one point to another one . 
+
+
+\begin{DoxyParams}{Parameters}
+{\em posI} & initial position of the block. \\
+\hline
+{\em posF} & release positions of the block. \\
+\hline
+{\em block\+Name} & name of the handled block. \\
+\hline
+{\em gripper\+Closure} & gripper closure.\\
+\hline
+\end{DoxyParams}
+Function to move an object from one point to another one .
+
+This function moves an object from the initial position (posI) to the final position (posF) using point-\/to-\/point motion. It also performs actions like attaching and detaching blocks.
+
+
+\begin{DoxyParams}{Parameters}
+{\em posI} & The initial position of the object. \\
+\hline
+{\em posF} & The final position of the object. \\
+\hline
+{\em block\+Name} & The name of the block to be moved. \\
+\hline
+{\em gripper\+Closure} & The gripper closure value during the motion.\\
+\hline
+\end{DoxyParams}
+Function to move an object from one point to another one .
+
+This function moves an object from the initial position to the final position, grasping and releasing the block.
+
+
+\begin{DoxyParams}{Parameters}
+{\em posI} & Initial position of the object. \\
+\hline
+{\em posF} & Final position of the object. \\
+\hline
+{\em block\+Name} & Name of the block to be moved. \\
+\hline
+{\em gripper\+Closure} & Gripper closure value during the operation. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{kinematics_8h_a77a46500e6a7e3e8cbac51ee3d830d52}\label{kinematics_8h_a77a46500e6a7e3e8cbac51ee3d830d52}} 
+\index{kinematics.h@{kinematics.h}!moveStraightObjToTargetPos@{moveStraightObjToTargetPos}}
+\index{moveStraightObjToTargetPos@{moveStraightObjToTargetPos}!kinematics.h@{kinematics.h}}
+\doxysubsubsection{\texorpdfstring{moveStraightObjToTargetPos()}{moveStraightObjToTargetPos()}}
+{\footnotesize\ttfamily void move\+Straight\+Obj\+To\+Target\+Pos (\begin{DoxyParamCaption}\item[{Eigen\+::\+Vector3d}]{posI,  }\item[{\mbox{\hyperlink{structblockInfo}{block\+Info}}}]{block\+Name,  }\item[{Eigen\+::\+Vector3d}]{posF }\end{DoxyParamCaption})}
+
+
+
+Function to move a standing/straight block to a atrget position. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em posI} & initial position of the block. \\
+\hline
+{\em block\+Name} & block struct with the required data of the handled block. \\
+\hline
+{\em posF} & release positions of the block.\\
+\hline
+\end{DoxyParams}
+Function to move a standing/straight block to a atrget position.
+
+This function moves a straight object from the initial position (posI) to the final position (posF) using a specific block name and gripper closure. It also handles block attachment and detachment.
+
+
+\begin{DoxyParams}{Parameters}
+{\em posI} & The initial position of the object. \\
+\hline
+{\em block\+Name} & The information about the block. \\
+\hline
+{\em posF} & The final position of the object.\\
+\hline
+\end{DoxyParams}
+Function to move a standing/straight block to a atrget position.
+
+This function moves a straight object to the target position, grasping and releasing the block.
+
+
+\begin{DoxyParams}{Parameters}
+{\em posI} & Initial position of the object. \\
+\hline
+{\em block\+Name} & Information about the block. \\
+\hline
+{\em posF} & Target position of the object. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{kinematics_8h_aff698c7d643d12222edd80373685d110}\label{kinematics_8h_aff698c7d643d12222edd80373685d110}} 
+\index{kinematics.h@{kinematics.h}!readJoints@{readJoints}}
+\index{readJoints@{readJoints}!kinematics.h@{kinematics.h}}
+\doxysubsubsection{\texorpdfstring{readJoints()}{readJoints()}}
+{\footnotesize\ttfamily void read\+Joints (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Function to read the joint configuration from the robot and save them in the function to keep trace of them. 
+
+Function to read the joint configuration from the robot and save them in the function to keep trace of them. \mbox{\Hypertarget{kinematics_8h_ae7f67be64efd2126299cc9efd9e35c29}\label{kinematics_8h_ae7f67be64efd2126299cc9efd9e35c29}} 
+\index{kinematics.h@{kinematics.h}!sendDesJstate@{sendDesJstate}}
+\index{sendDesJstate@{sendDesJstate}!kinematics.h@{kinematics.h}}
+\doxysubsubsection{\texorpdfstring{sendDesJstate()}{sendDesJstate()}}
+{\footnotesize\ttfamily void send\+Des\+Jstate (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{typedefs_8h_a13a6330b4a41b96b124a1ab827e22be8}{Vector6d}} \&}]{joint\+\_\+pos,  }\item[{const Eigen\+::\+Vector3d \&}]{gripper\+\_\+pos }\end{DoxyParamCaption})}
+
+
+
+Function to send the desired joints configuration. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em joint\+\_\+pos} & Vector x6 with the robot arm joints configutation. \\
+\hline
+{\em gripper\+\_\+pos} & Vector x3 with the gripper joints configutation.\\
+\hline
+\end{DoxyParams}
+Function to send the desired joints configuration.
+
+
+\begin{DoxyParams}{Parameters}
+{\em joint\+\_\+pos} & The joint positions. \\
+\hline
+{\em gripper\+\_\+pos} & The gripper positions.\\
+\hline
+\end{DoxyParams}
+Function to send the desired joints configuration.
+
+
+\begin{DoxyParams}{Parameters}
+{\em joint\+\_\+pos} & Vector containing joint positions. \\
+\hline
+{\em gripper\+\_\+pos} & Gripper position represented as Eigen\+::\+Vector3d. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{kinematics_8h_a99b2c2a8b8b4092085e201b6fd395f3a}\label{kinematics_8h_a99b2c2a8b8b4092085e201b6fd395f3a}} 
+\index{kinematics.h@{kinematics.h}!setBlockUp@{setBlockUp}}
+\index{setBlockUp@{setBlockUp}!kinematics.h@{kinematics.h}}
+\doxysubsubsection{\texorpdfstring{setBlockUp()}{setBlockUp()}}
+{\footnotesize\ttfamily void set\+Block\+Up (\begin{DoxyParamCaption}\item[{Eigen\+::\+Vector3d}]{pos,  }\item[{Eigen\+::\+Vector3d}]{rot,  }\item[{\mbox{\hyperlink{structblockInfo}{block\+Info}}}]{block }\end{DoxyParamCaption})}
+
+
+
+Function to set the block straight based on the position of the block. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em pos} & Position of the block. \\
+\hline
+{\em rot} & Rotation of the block. \\
+\hline
+{\em block} & block struct with the required data of the handled block.\\
+\hline
+\end{DoxyParams}
+Function to set the block straight based on the position of the block.
+
+This function sets up a block at the specified position and orientation. It handles various block orientations and performs necessary actions, such as attaching and detaching.
+
+
+\begin{DoxyParams}{Parameters}
+{\em pos} & The position of the block. \\
+\hline
+{\em rot} & The orientation of the block. \\
+\hline
+{\em block} & The information about the block.\\
+\hline
+\end{DoxyParams}
+Function to set the block straight based on the position of the block.
+
+This function sets up a block at a specified position and orientation.
+
+
+\begin{DoxyParams}{Parameters}
+{\em pos} & Position of the block. \\
+\hline
+{\em rot} & Rotation angles (roll, pitch, yaw) of the block. \\
+\hline
+{\em block} & Information about the block. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{kinematics_8h_ac53ef7ca5fe2d90033033a22b3400d4c}\label{kinematics_8h_ac53ef7ca5fe2d90033033a22b3400d4c}} 
+\index{kinematics.h@{kinematics.h}!setGripper@{setGripper}}
+\index{setGripper@{setGripper}!kinematics.h@{kinematics.h}}
+\doxysubsubsection{\texorpdfstring{setGripper()}{setGripper()}}
+{\footnotesize\ttfamily void set\+Gripper (\begin{DoxyParamCaption}\item[{Eigen\+::\+Vector3d}]{gripper }\end{DoxyParamCaption})}
+
+
+
+Function to set the gripper joints in the struct to take trace of them. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em q} & Vector x3 with the gripper joints configuration.\\
+\hline
+\end{DoxyParams}
+Function to set the gripper joints in the struct to take trace of them.
+
+
+\begin{DoxyParams}{Parameters}
+{\em gripper} & The gripper positions.\\
+\hline
+\end{DoxyParams}
+Function to set the gripper joints in the struct to take trace of them.
+
+
+\begin{DoxyParams}{Parameters}
+{\em gripper} & Gripper position represented as Eigen\+::\+Vector3d. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{kinematics_8h_a060fb753dd0176d2dab1e32f5378af13}\label{kinematics_8h_a060fb753dd0176d2dab1e32f5378af13}} 
+\index{kinematics.h@{kinematics.h}!setJoints@{setJoints}}
+\index{setJoints@{setJoints}!kinematics.h@{kinematics.h}}
+\doxysubsubsection{\texorpdfstring{setJoints()}{setJoints()}}
+{\footnotesize\ttfamily void set\+Joints (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{typedefs_8h_a13a6330b4a41b96b124a1ab827e22be8}{Vector6d}}}]{q }\end{DoxyParamCaption})}
+
+
+
+Function to set the robotic arm joints in the struct to take trace of them. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em q} & Vector x6 with the robotic arm joints configuration.\\
+\hline
+\end{DoxyParams}
+Function to set the robotic arm joints in the struct to take trace of them.
+
+
+\begin{DoxyParams}{Parameters}
+{\em q} & The joint positions.\\
+\hline
+\end{DoxyParams}
+Function to set the robotic arm joints in the struct to take trace of them.
+
+
+\begin{DoxyParams}{Parameters}
+{\em q} & Vector containing joint positions. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{kinematics_8h_a1028f26bc3f50c0edc25e291e19aeec9}\label{kinematics_8h_a1028f26bc3f50c0edc25e291e19aeec9}} 
+\index{kinematics.h@{kinematics.h}!setJointsAndGripper@{setJointsAndGripper}}
+\index{setJointsAndGripper@{setJointsAndGripper}!kinematics.h@{kinematics.h}}
+\doxysubsubsection{\texorpdfstring{setJointsAndGripper()}{setJointsAndGripper()}}
+{\footnotesize\ttfamily void set\+Joints\+And\+Gripper (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{typedefs_8h_a13a6330b4a41b96b124a1ab827e22be8}{Vector6d}}}]{q,  }\item[{Eigen\+::\+Vector3d}]{gripper }\end{DoxyParamCaption})}
+
+
+
+Function to set the roboti arm and gripper joints in the struct to take trace of them. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em q} & Vector x6 with the joints configuration.\\
+\hline
+\end{DoxyParams}
+Function to set the roboti arm and gripper joints in the struct to take trace of them.
+
+
+\begin{DoxyParams}{Parameters}
+{\em q} & The joint positions. \\
+\hline
+{\em gripper} & The gripper positions.\\
+\hline
+\end{DoxyParams}
+Function to set the roboti arm and gripper joints in the struct to take trace of them.
+
+
+\begin{DoxyParams}{Parameters}
+{\em q} & Vector containing joint positions. \\
+\hline
+{\em gripper} & Gripper position represented as Eigen\+::\+Vector3d. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{kinematics_8h_ad7288a5ec0d4d9197df315fa16b774a8}\label{kinematics_8h_ad7288a5ec0d4d9197df315fa16b774a8}} 
+\index{kinematics.h@{kinematics.h}!setNewGripperPosition@{setNewGripperPosition}}
+\index{setNewGripperPosition@{setNewGripperPosition}!kinematics.h@{kinematics.h}}
+\doxysubsubsection{\texorpdfstring{setNewGripperPosition()}{setNewGripperPosition()}}
+{\footnotesize\ttfamily void set\+New\+Gripper\+Position (\begin{DoxyParamCaption}\item[{double}]{diameter }\end{DoxyParamCaption})}
+
+
+
+Function to set the gripper joints after computing the map\+To\+Gripper\+Joints func. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em diameter} & diametre of the gripper opening.\\
+\hline
+\end{DoxyParams}
+Function to set the gripper joints after computing the map\+To\+Gripper\+Joints func.
+
+
+\begin{DoxyParams}{Parameters}
+{\em diameter} & The desired diameter.\\
+\hline
+\end{DoxyParams}
+Function to set the gripper joints after computing the map\+To\+Gripper\+Joints func.
+
+
+\begin{DoxyParams}{Parameters}
+{\em diameter} & Desired diameter for the gripper. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{kinematics_8h_adaea4790291cec3205020338aa92faa7}\label{kinematics_8h_adaea4790291cec3205020338aa92faa7}} 
+\index{kinematics.h@{kinematics.h}!transformRbtToWrld@{transformRbtToWrld}}
+\index{transformRbtToWrld@{transformRbtToWrld}!kinematics.h@{kinematics.h}}
+\doxysubsubsection{\texorpdfstring{transformRbtToWrld()}{transformRbtToWrld()}}
+{\footnotesize\ttfamily Eigen\+::\+Vector3d transform\+Rbt\+To\+Wrld (\begin{DoxyParamCaption}\item[{Eigen\+::\+Vector3d}]{p }\end{DoxyParamCaption})}
+
+
+
+Function to transform the coordinates from the robot frame to the world frame. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p} & position of the end effector in the robot frame. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+position of the end effector in the world frame after the computation.
+\end{DoxyReturn}
+Function to transform the coordinates from the robot frame to the world frame.
+
+
+\begin{DoxyParams}{Parameters}
+{\em p} & The point in the robot frame. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The transformed point in the world frame.
+\end{DoxyReturn}
+Function to transform the coordinates from the robot frame to the world frame.
+
+
+\begin{DoxyParams}{Parameters}
+{\em p} & Point in robot coordinates represented as Eigen\+::\+Vector3d. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Eigen\+::\+Vector3d Transformed point in world coordinates. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{kinematics_8h_adb3bc74ca1e503e9ea303103163e04ad}\label{kinematics_8h_adb3bc74ca1e503e9ea303103163e04ad}} 
+\index{kinematics.h@{kinematics.h}!transformWrldToRbt@{transformWrldToRbt}}
+\index{transformWrldToRbt@{transformWrldToRbt}!kinematics.h@{kinematics.h}}
+\doxysubsubsection{\texorpdfstring{transformWrldToRbt()}{transformWrldToRbt()}}
+{\footnotesize\ttfamily Eigen\+::\+Vector3d transform\+Wrld\+To\+Rbt (\begin{DoxyParamCaption}\item[{Eigen\+::\+Vector3d}]{p }\end{DoxyParamCaption})}
+
+
+
+Function to transform the coordinates from the world frame to the robot frame. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p} & position of the end effector in the world frame. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+position of the end effector in the robot frame after the computation.
+\end{DoxyReturn}
+Function to transform the coordinates from the world frame to the robot frame.
+
+
+\begin{DoxyParams}{Parameters}
+{\em p} & The point in the world frame. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The transformed point in the robot frame.
+\end{DoxyReturn}
+Function to transform the coordinates from the world frame to the robot frame.
+
+
+\begin{DoxyParams}{Parameters}
+{\em p} & Point in world coordinates represented as Eigen\+::\+Vector3d. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Eigen\+::\+Vector3d Transformed point in robot coordinates. 
+\end{DoxyReturn}

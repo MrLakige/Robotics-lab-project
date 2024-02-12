@@ -1,0 +1,51 @@
+\hypertarget{directKinematics_8h}{}\doxysection{kinematics/include/direct\+Kinematics.h File Reference}
+\label{directKinematics_8h}\index{kinematics/include/directKinematics.h@{kinematics/include/directKinematics.h}}
+
+
+Header file for direct kinematics functions.  
+
+
+{\ttfamily \#include \char`\"{}typedefs.\+h\char`\"{}}\newline
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{structdirectK}{directK}} \mbox{\hyperlink{directKinematics_8h_a6e3df9085f63ac62b1968e545bfc8aeb}{ur5\+Direct\+Kinematics}} (\mbox{\hyperlink{typedefs_8h_a13a6330b4a41b96b124a1ab827e22be8}{Vector6d}} Th)
+\begin{DoxyCompactList}\small\item\em Comutation of the direkt kinematics for the UR5 robotic arm. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Header file for direct kinematics functions. 
+
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{directKinematics_8h_a6e3df9085f63ac62b1968e545bfc8aeb}\label{directKinematics_8h_a6e3df9085f63ac62b1968e545bfc8aeb}} 
+\index{directKinematics.h@{directKinematics.h}!ur5DirectKinematics@{ur5DirectKinematics}}
+\index{ur5DirectKinematics@{ur5DirectKinematics}!directKinematics.h@{directKinematics.h}}
+\doxysubsubsection{\texorpdfstring{ur5DirectKinematics()}{ur5DirectKinematics()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{structdirectK}{directK}} ur5\+Direct\+Kinematics (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{typedefs_8h_a13a6330b4a41b96b124a1ab827e22be8}{Vector6d}}}]{Th }\end{DoxyParamCaption})}
+
+
+
+Comutation of the direkt kinematics for the UR5 robotic arm. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Th} & The vector x6 of joint angles. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\mbox{\hyperlink{structdirectK}{directK}} s struct with the position and the rotation of the end effector.
+\end{DoxyReturn}
+Comutation of the direkt kinematics for the UR5 robotic arm.
+
+This function computes the end-\/effector position and orientation (direct kinematics) for a given set of joint angles of a UR5 robot.
+
+
+\begin{DoxyParams}{Parameters}
+{\em Th} & Vector6d representing the joint angles. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\mbox{\hyperlink{structdirectK}{directK}} A structure containing the end-\/effector position (pe) and orientation (Re). 
+\end{DoxyReturn}

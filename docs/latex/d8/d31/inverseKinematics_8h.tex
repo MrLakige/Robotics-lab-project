@@ -1,0 +1,43 @@
+\hypertarget{inverseKinematics_8h}{}\doxysection{kinematics/include/inverse\+Kinematics.h File Reference}
+\label{inverseKinematics_8h}\index{kinematics/include/inverseKinematics.h@{kinematics/include/inverseKinematics.h}}
+{\ttfamily \#include \char`\"{}typedefs.\+h\char`\"{}}\newline
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{typedefs_8h_a6b50f3f54a92c8e512fcf9220d2b3ebc}{Matrix68d}} \mbox{\hyperlink{inverseKinematics_8h_a95298c555785b155abd0f5e0a5ea64ec}{ur5inverse\+Kinematics}} (Eigen\+::\+Vector3d p60, Eigen\+::\+Matrix3d R60)
+\begin{DoxyCompactList}\small\item\em Comutation of the inverse kinematics for the UR5 robotic arm. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{inverseKinematics_8h_a95298c555785b155abd0f5e0a5ea64ec}\label{inverseKinematics_8h_a95298c555785b155abd0f5e0a5ea64ec}} 
+\index{inverseKinematics.h@{inverseKinematics.h}!ur5inverseKinematics@{ur5inverseKinematics}}
+\index{ur5inverseKinematics@{ur5inverseKinematics}!inverseKinematics.h@{inverseKinematics.h}}
+\doxysubsubsection{\texorpdfstring{ur5inverseKinematics()}{ur5inverseKinematics()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{typedefs_8h_a6b50f3f54a92c8e512fcf9220d2b3ebc}{Matrix68d}} ur5inverse\+Kinematics (\begin{DoxyParamCaption}\item[{Eigen\+::\+Vector3d}]{p60,  }\item[{Eigen\+::\+Matrix3d}]{R60 }\end{DoxyParamCaption})}
+
+
+
+Comutation of the inverse kinematics for the UR5 robotic arm. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em p06} & The vector x3 with the end effector position. \\
+\hline
+{\em R60} & MAtrix 3x3 with the end effector rotation. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+MAtrix6x8 with the 8 possible solution of the computation.
+\end{DoxyReturn}
+Comutation of the inverse kinematics for the UR5 robotic arm.
+
+
+\begin{DoxyParams}{Parameters}
+{\em p60} & End effector position. \\
+\hline
+{\em R60} & End effector orientation matrix. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Matrix of joint angles corresponding to multiple solutions. 
+\end{DoxyReturn}

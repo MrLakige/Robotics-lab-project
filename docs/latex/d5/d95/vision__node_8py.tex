@@ -1,0 +1,75 @@
+\hypertarget{vision__node_8py}{}\doxysection{vision/scripts/vision\+\_\+node.py File Reference}
+\label{vision__node_8py}\index{vision/scripts/vision\_node.py@{vision/scripts/vision\_node.py}}
+\doxysubsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \mbox{\hyperlink{namespacevision__node}{vision\+\_\+node}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+def \mbox{\hyperlink{namespacevision__node_a0210b65f52c0e1013769c35649d5f4ad}{vision\+\_\+node.\+get\+\_\+dist\+\_\+tavolo}} (depth, hsv, img\+\_\+draw)
+\item 
+def \mbox{\hyperlink{namespacevision__node_ac6041d788af5e20d65cd19a5183ff713}{vision\+\_\+node.\+get\+\_\+origin}} (img)
+\item 
+def \mbox{\hyperlink{namespacevision__node_a3b7eb2867c49c3052304f2fcdce92775}{vision\+\_\+node.\+get\+\_\+mega\+\_\+blocks\+\_\+distance}} (depth)
+\item 
+def \mbox{\hyperlink{namespacevision__node_ada750fa8009abd8be414291caf11de79}{vision\+\_\+node.\+get\+\_\+mega\+\_\+blocks\+\_\+color}} (center, rgb)
+\item 
+def \mbox{\hyperlink{namespacevision__node_a9203b9bb3cc9568cf9c5eaef235fc969}{vision\+\_\+node.\+get\+\_\+mega\+\_\+blocks\+\_\+mask}} (color, hsv, toll=(20, 20, 255))
+\item 
+def \mbox{\hyperlink{namespacevision__node_ac59b3c0f49fd76c2ccf5b96941150b67}{vision\+\_\+node.\+get\+Depth\+Axis}} (height, mega\+\_\+blocks)
+\item 
+def \mbox{\hyperlink{namespacevision__node_ae5656b20a82c6fb0abdc793ea5d0dd9a}{vision\+\_\+node.\+point\+\_\+distorption}} (point, height, origin)
+\item 
+def \mbox{\hyperlink{namespacevision__node_a8bc61882b05e027162b9a63bf6afca90}{vision\+\_\+node.\+point\+\_\+inverse\+\_\+distortption}} (point, height)
+\item 
+def \mbox{\hyperlink{namespacevision__node_a020a738cca06cacffc6c29c4d21cb96e}{vision\+\_\+node.\+quaternion\+\_\+to\+\_\+euler}} (w, x, y, z)
+\item 
+def \mbox{\hyperlink{namespacevision__node_a316a4878274e8e8fc0dbb174bc251967}{vision\+\_\+node.\+process\+\_\+item}} (imgs, item)
+\item 
+def \mbox{\hyperlink{namespacevision__node_af8214df3f19f0d23684f1cdf0339b627}{vision\+\_\+node.\+process\+\_\+image}} (rgb, depth)
+\item 
+def \mbox{\hyperlink{namespacevision__node_a3acf87f179aaabcb700bb5e247abce51}{vision\+\_\+node.\+show\+\_\+image}} (title, image, resize=True, wait=False)
+\item 
+def \mbox{\hyperlink{namespacevision__node_ac274f6da176f189b149392a9223b6ef8}{vision\+\_\+node.\+process\+\_\+\+CB}} (image\+\_\+rgb, image\+\_\+depth)
+\item 
+def \mbox{\hyperlink{namespacevision__node_a5d8b3f4998dbedab59b355f4549ca8a6}{vision\+\_\+node.\+start\+\_\+node}} ()
+\item 
+def \mbox{\hyperlink{namespacevision__node_ab108cbe21edbe6ded099223b27410f86}{vision\+\_\+node.\+load\+\_\+models}} ()
+\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{namespacevision__node_ab346d0b407e46f95551d3908df945675}{vision\+\_\+node.\+path\+\_\+yolo}} = path.\+join(path.\+expanduser(\textquotesingle{}$\sim$\textquotesingle{}), \textquotesingle{}yolov5\textquotesingle{})
+\item 
+\mbox{\hyperlink{namespacevision__node_ad1b149e71a857c7d15154dfd16118533}{vision\+\_\+node.\+path\+\_\+vision}} = Ros\+Pack().get\+\_\+path(\textquotesingle{}vision\textquotesingle{})
+\item 
+\mbox{\hyperlink{namespacevision__node_aee14899583e01b5067dfc1d29fb9e7d3}{vision\+\_\+node.\+path\+\_\+weigths}} = path.\+join(path\+\_\+vision, \textquotesingle{}weigths\textquotesingle{})
+\item 
+tuple \mbox{\hyperlink{namespacevision__node_a41aac5ab073e5368927f3b5781f28042}{vision\+\_\+node.\+cam\+\_\+point}} = (-\/0.\+08, 0.\+555, -\/0.\+55)
+\item 
+float \mbox{\hyperlink{namespacevision__node_ab200336033ea7ee8636bda47634b244a}{vision\+\_\+node.\+height\+\_\+tavolo}} = 0.\+87
+\item 
+\mbox{\hyperlink{namespacevision__node_ad5f0adc1695dcf5d59ec7546d88bbe82}{vision\+\_\+node.\+dist\+\_\+tavolo}} = None
+\item 
+\mbox{\hyperlink{namespacevision__node_a8c66c533aa388480ccd002a44b83575b}{vision\+\_\+node.\+origin}} = None
+\item 
+\mbox{\hyperlink{namespacevision__node_a75e03e4d53f555c79c0fb7a2679f61cb}{vision\+\_\+node.\+model}} = None
+\item 
+\mbox{\hyperlink{namespacevision__node_a4bfffa692f3af83b965f509d2ec2013a}{vision\+\_\+node.\+model\+\_\+orientation}} = None
+\item 
+list \mbox{\hyperlink{namespacevision__node_a4b69f78e85e2fae1da638ad13cbdff90}{vision\+\_\+node.\+blocks\+\_\+data}} = \mbox{[}$\,$\mbox{]}
+\item 
+int \mbox{\hyperlink{namespacevision__node_aeb4cb40f88f0fc0494c1eaf0e5714b1c}{vision\+\_\+node.\+count}} = 0
+\item 
+list \mbox{\hyperlink{namespacevision__node_ae02e263e55e9b8d796bdbe8708d602cb}{vision\+\_\+node.\+mega\+\_\+blocks\+Classes}} = \mbox{[}\textquotesingle{}X1-\/Y1-\/Z2\textquotesingle{}, \textquotesingle{}X1-\/Y3-\/Z2-\/FILLET\textquotesingle{}, \textquotesingle{}X1-\/Y2-\/Z2\textquotesingle{}, \textquotesingle{}X1-\/Y2-\/Z2-\/CHAMFER\textquotesingle{}, \textquotesingle{}X1-\/Y2-\/Z1\textquotesingle{}, \textquotesingle{}X1-\/Y4-\/Z2\textquotesingle{}, \textquotesingle{}X1-\/Y4-\/Z1\textquotesingle{}, \textquotesingle{}X2-\/Y2-\/Z2\textquotesingle{}, \textquotesingle{}X1-\/Y3-\/Z2\textquotesingle{}, \textquotesingle{}X2-\/Y2-\/Z2-\/FILLET\textquotesingle{}\mbox{]}
+\item 
+\mbox{\hyperlink{namespacevision__node_ab50ba31a1bac929e62851bb56b90f0f0}{vision\+\_\+node.\+argv}} = sys.\+argv
+\item 
+string \mbox{\hyperlink{namespacevision__node_a63bf8a40edcfc7f9aa5e910320a67376}{vision\+\_\+node.\+a\+\_\+show}} = \textquotesingle{}-\/show\textquotesingle{} in argv
+\item 
+string \mbox{\hyperlink{namespacevision__node_adb686abe8b03f7a66feafa1e7cf8c757}{vision\+\_\+node.\+o\+\_\+oriented}} = \textquotesingle{}-\/oriented\textquotesingle{} in argv
+\item 
+string \mbox{\hyperlink{namespacevision__node_a53ef496ac20f06bb2fe8e64a61fc4708}{vision\+\_\+node.\+d\+\_\+debug}} = \textquotesingle{}-\/debug\textquotesingle{} in argv
+\end{DoxyCompactItemize}

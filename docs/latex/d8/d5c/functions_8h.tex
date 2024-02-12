@@ -1,0 +1,521 @@
+\hypertarget{functions_8h}{}\doxysection{kinematics/include/functions.h File Reference}
+\label{functions_8h}\index{kinematics/include/functions.h@{kinematics/include/functions.h}}
+
+
+Header file for utility functions.  
+
+
+{\ttfamily \#include \char`\"{}typedefs.\+h\char`\"{}}\newline
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{typedefs_8h_a16e6a0b9ee4501eb85564fa86b7011fa}{Matrix66d}} \mbox{\hyperlink{functions_8h_a6554526377e6335086b8b08f84fd4b13}{jacobian}} (\mbox{\hyperlink{typedefs_8h_a13a6330b4a41b96b124a1ab827e22be8}{Vector6d}} th)
+\begin{DoxyCompactList}\small\item\em Comutation of the jacobian of the UR5 robotic arm. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{typedefs_8h_a16e6a0b9ee4501eb85564fa86b7011fa}{Matrix66d}} \mbox{\hyperlink{functions_8h_a05933f25d5ee713c823c9a185349e49c}{pseudo\+Inverse}} (\mbox{\hyperlink{typedefs_8h_a16e6a0b9ee4501eb85564fa86b7011fa}{Matrix66d}} J)
+\begin{DoxyCompactList}\small\item\em Comutation of the pseudo inverse of the UR5 robotic arm. \end{DoxyCompactList}\item 
+Eigen\+::\+Vector\+Xd \mbox{\hyperlink{functions_8h_a3e1096960d1f34183bb318de6e5c771f}{dotQ}} (\mbox{\hyperlink{typedefs_8h_a13a6330b4a41b96b124a1ab827e22be8}{Vector6d}} qk, Eigen\+::\+Vector3d xe, Eigen\+::\+Vector3d xd, Eigen\+::\+Matrix3d Re, Eigen\+::\+Vector3d \mbox{\hyperlink{functions_8h_aa4b27d8fa11dc4a32d6fa04443b6428b}{phid}})
+\begin{DoxyCompactList}\small\item\em Computation of the derivative of joint angles with a proportional control. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{typedefs_8h_a13a6330b4a41b96b124a1ab827e22be8}{Vector6d}} \mbox{\hyperlink{functions_8h_aefae8b40c14b13a7aebf9133b3bf80ae}{dot\+QControl\+Complete}} (\mbox{\hyperlink{typedefs_8h_a13a6330b4a41b96b124a1ab827e22be8}{Vector6d}} q, Eigen\+::\+Vector3d xe, Eigen\+::\+Vector3d xd, Eigen\+::\+Vector3d vd, Eigen\+::\+Matrix3d Re, Eigen\+::\+Vector3d \mbox{\hyperlink{functions_8h_aa4b27d8fa11dc4a32d6fa04443b6428b}{phid}}, Eigen\+::\+Vector3d phid\+Dot)
+\begin{DoxyCompactList}\small\item\em Computation of the derivative for to get controlled values for the complete motion. \end{DoxyCompactList}\item 
+Eigen\+::\+Vector3d \mbox{\hyperlink{functions_8h_a552aff29981d0d71e0bc6b33ab179355}{compute\+Orientation\+ErrorW}} (Eigen\+::\+Matrix3d w\+\_\+\+R\+\_\+e, Eigen\+::\+Matrix3d w\+\_\+\+R\+\_\+d)
+\begin{DoxyCompactList}\small\item\em Comutation of the rotation error. \end{DoxyCompactList}\item 
+Eigen\+::\+Vector3d \mbox{\hyperlink{functions_8h_a0977108ea32b88fa81e3457288dcad5d}{compute\+Position\+Error}} (Eigen\+::\+Vector3d xe, Eigen\+::\+Vector3d xd)
+\begin{DoxyCompactList}\small\item\em Comutation of the posiiton error. \end{DoxyCompactList}\item 
+Eigen\+::\+Vector3d \mbox{\hyperlink{functions_8h_af2fb858d55167799814120e6022aba9e}{rotm\+To\+Angle\+Axis}} (Eigen\+::\+Matrix3d R)
+\begin{DoxyCompactList}\small\item\em Comutation of the transformation from the rotation matrix to the euler angles. \end{DoxyCompactList}\item 
+Eigen\+::\+Matrix3d \mbox{\hyperlink{functions_8h_aa6facbc0a2b16de9106fb568e6592321}{euler\+To\+Rotation\+Matrix}} (Eigen\+::\+Vector3d euler)
+\begin{DoxyCompactList}\small\item\em Comutation of the transformation from the euler angles to the rotation matrix. \end{DoxyCompactList}\item 
+Eigen\+::\+Vector3d \mbox{\hyperlink{functions_8h_aa4b27d8fa11dc4a32d6fa04443b6428b}{phid}} (double t, Eigen\+::\+Vector3d phief, Eigen\+::\+Vector3d phie0)
+\begin{DoxyCompactList}\small\item\em Comutation of the desired angular velocity for a dt. \end{DoxyCompactList}\item 
+Eigen\+::\+Vector3d \mbox{\hyperlink{functions_8h_a957c7cb97bcaa1558f284cbf3d451604}{pd}} (double t, Eigen\+::\+Vector3d xef, Eigen\+::\+Vector3d xe0)
+\begin{DoxyCompactList}\small\item\em Comutation of the desired linear velocity for a dt. \end{DoxyCompactList}\item 
+Eigen\+::\+Vector3d \mbox{\hyperlink{functions_8h_a01a5fd69110fdf22f64c78706faf64c5}{attr\+Force\+\_\+pos}} (Eigen\+::\+Vector3d error)
+\begin{DoxyCompactList}\small\item\em Comutation of the attractive force based on the normalized position error. \end{DoxyCompactList}\item 
+Eigen\+::\+Vector3d \mbox{\hyperlink{functions_8h_a1c1653c3fd3b7edc544233023617db24}{repul\+Force}} (Eigen\+::\+Vector3d xe)
+\begin{DoxyCompactList}\small\item\em Comutation of the repulsive force in order to keep the end effector away from the shoulder singularity. \end{DoxyCompactList}\item 
+Eigen\+::\+Vector3d \mbox{\hyperlink{functions_8h_ab3281b47fa80a8077ab3b46b8d2a7da9}{des\+Pos}} (Eigen\+::\+Vector3d xe, Eigen\+::\+Vector3d xf)
+\begin{DoxyCompactList}\small\item\em Comutation of the desired position of the end effector after computing the attractive and the repulsive forces. \end{DoxyCompactList}\item 
+Eigen\+::\+Vector3d \mbox{\hyperlink{functions_8h_adf563da6aa6fa51b2b4a64c4e696e8df}{rot\+Mat\+To\+Euler}} (Eigen\+::\+Matrix3d rot\+Matrix)
+\begin{DoxyCompactList}\small\item\em Comutation of the transformation from the rotation matrix to the euler angles. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+const double \mbox{\hyperlink{functions_8h_abef19d0091b013c246a9427f9787f1cc}{deltaT}} = 0.\+001
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Header file for utility functions. 
+
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{functions_8h_a01a5fd69110fdf22f64c78706faf64c5}\label{functions_8h_a01a5fd69110fdf22f64c78706faf64c5}} 
+\index{functions.h@{functions.h}!attrForce\_pos@{attrForce\_pos}}
+\index{attrForce\_pos@{attrForce\_pos}!functions.h@{functions.h}}
+\doxysubsubsection{\texorpdfstring{attrForce\_pos()}{attrForce\_pos()}}
+{\footnotesize\ttfamily Eigen\+::\+Vector3d attr\+Force\+\_\+pos (\begin{DoxyParamCaption}\item[{Eigen\+::\+Vector3d}]{error }\end{DoxyParamCaption})}
+
+
+
+Comutation of the attractive force based on the normalized position error. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em error} & Error computed between the actual and desired position of the end effector. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Vector x3 with the result of the computation of the attarctive force.
+\end{DoxyReturn}
+Comutation of the attractive force based on the normalized position error.
+
+
+\begin{DoxyParams}{Parameters}
+{\em error} & Error vector in position. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Attractive force vector. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{functions_8h_a552aff29981d0d71e0bc6b33ab179355}\label{functions_8h_a552aff29981d0d71e0bc6b33ab179355}} 
+\index{functions.h@{functions.h}!computeOrientationErrorW@{computeOrientationErrorW}}
+\index{computeOrientationErrorW@{computeOrientationErrorW}!functions.h@{functions.h}}
+\doxysubsubsection{\texorpdfstring{computeOrientationErrorW()}{computeOrientationErrorW()}}
+{\footnotesize\ttfamily Eigen\+::\+Vector3d compute\+Orientation\+ErrorW (\begin{DoxyParamCaption}\item[{Eigen\+::\+Matrix3d}]{w\+\_\+\+R\+\_\+e,  }\item[{Eigen\+::\+Matrix3d}]{w\+\_\+\+R\+\_\+d }\end{DoxyParamCaption})}
+
+
+
+Comutation of the rotation error. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em w\+\_\+\+R\+\_\+e} & Matrix 3x3 with the actual end effector rotation. \\
+\hline
+{\em w\+\_\+\+R\+\_\+d} & Matrix 3x3 with the desired end effector rotation. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Vector with the result fo the computation.
+\end{DoxyReturn}
+Comutation of the rotation error.
+
+
+\begin{DoxyParams}{Parameters}
+{\em w\+\_\+\+R\+\_\+e} & Current end effector orientation matrix. \\
+\hline
+{\em w\+\_\+\+R\+\_\+d} & Desired end effector orientation matrix. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Orientation error vector. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{functions_8h_a0977108ea32b88fa81e3457288dcad5d}\label{functions_8h_a0977108ea32b88fa81e3457288dcad5d}} 
+\index{functions.h@{functions.h}!computePositionError@{computePositionError}}
+\index{computePositionError@{computePositionError}!functions.h@{functions.h}}
+\doxysubsubsection{\texorpdfstring{computePositionError()}{computePositionError()}}
+{\footnotesize\ttfamily Eigen\+::\+Vector3d compute\+Position\+Error (\begin{DoxyParamCaption}\item[{Eigen\+::\+Vector3d}]{xe,  }\item[{Eigen\+::\+Vector3d}]{xd }\end{DoxyParamCaption})}
+
+
+
+Comutation of the posiiton error. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em w\+\_\+\+R\+\_\+e} & Vector x3 with the actual end effector position. \\
+\hline
+{\em w\+\_\+\+R\+\_\+d} & Matrix x3 with the desired end effector posiiton. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Vector with the result fo the computation.
+\end{DoxyReturn}
+Comutation of the posiiton error.
+
+
+\begin{DoxyParams}{Parameters}
+{\em xe} & Current end effector position vector. \\
+\hline
+{\em xd} & Desired end effector position vector. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Position error vector. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{functions_8h_ab3281b47fa80a8077ab3b46b8d2a7da9}\label{functions_8h_ab3281b47fa80a8077ab3b46b8d2a7da9}} 
+\index{functions.h@{functions.h}!desPos@{desPos}}
+\index{desPos@{desPos}!functions.h@{functions.h}}
+\doxysubsubsection{\texorpdfstring{desPos()}{desPos()}}
+{\footnotesize\ttfamily Eigen\+::\+Vector3d des\+Pos (\begin{DoxyParamCaption}\item[{Eigen\+::\+Vector3d}]{xe,  }\item[{Eigen\+::\+Vector3d}]{xf }\end{DoxyParamCaption})}
+
+
+
+Comutation of the desired position of the end effector after computing the attractive and the repulsive forces. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em xe} & actual end effector posiiton. \\
+\hline
+{\em xf} & desired end effector posiiton. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Vector x3 with the result of the computation of the function.
+\end{DoxyReturn}
+Comutation of the desired position of the end effector after computing the attractive and the repulsive forces.
+
+
+\begin{DoxyParams}{Parameters}
+{\em xe} & Current end effector position. \\
+\hline
+{\em xf} & Desired end effector position. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Updated end effector position. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{functions_8h_a3e1096960d1f34183bb318de6e5c771f}\label{functions_8h_a3e1096960d1f34183bb318de6e5c771f}} 
+\index{functions.h@{functions.h}!dotQ@{dotQ}}
+\index{dotQ@{dotQ}!functions.h@{functions.h}}
+\doxysubsubsection{\texorpdfstring{dotQ()}{dotQ()}}
+{\footnotesize\ttfamily Eigen\+::\+Vector\+Xd dotQ (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{typedefs_8h_a13a6330b4a41b96b124a1ab827e22be8}{Vector6d}}}]{qk,  }\item[{Eigen\+::\+Vector3d}]{xe,  }\item[{Eigen\+::\+Vector3d}]{xd,  }\item[{Eigen\+::\+Matrix3d}]{Re,  }\item[{Eigen\+::\+Vector3d}]{phid }\end{DoxyParamCaption})}
+
+
+
+Computation of the derivative of joint angles with a proportional control. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em qk} & Actual joint cinfiguration \\
+\hline
+{\em xe} & Actual end effector position \\
+\hline
+{\em xd} & Desired end effector position \\
+\hline
+{\em Re} & Acual end effector orentation \\
+\hline
+{\em phid} & Desired end effector orientation \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Vector\+Xd With the computed derivative of joint angles
+\end{DoxyReturn}
+Computation of the derivative of joint angles with a proportional control.
+
+
+\begin{DoxyParams}{Parameters}
+{\em qk} & Current joint configuration. \\
+\hline
+{\em xe} & Current end effector position. \\
+\hline
+{\em xd} & Desired end effector position. \\
+\hline
+{\em Re} & Current end effector orientation matrix. \\
+\hline
+{\em phid} & Desired end effector orientation angles. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Joint velocity vector. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{functions_8h_aefae8b40c14b13a7aebf9133b3bf80ae}\label{functions_8h_aefae8b40c14b13a7aebf9133b3bf80ae}} 
+\index{functions.h@{functions.h}!dotQControlComplete@{dotQControlComplete}}
+\index{dotQControlComplete@{dotQControlComplete}!functions.h@{functions.h}}
+\doxysubsubsection{\texorpdfstring{dotQControlComplete()}{dotQControlComplete()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{typedefs_8h_a13a6330b4a41b96b124a1ab827e22be8}{Vector6d}} dot\+QControl\+Complete (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{typedefs_8h_a13a6330b4a41b96b124a1ab827e22be8}{Vector6d}}}]{q,  }\item[{Eigen\+::\+Vector3d}]{xe,  }\item[{Eigen\+::\+Vector3d}]{xd,  }\item[{Eigen\+::\+Vector3d}]{vd,  }\item[{Eigen\+::\+Matrix3d}]{Re,  }\item[{Eigen\+::\+Vector3d}]{phid,  }\item[{Eigen\+::\+Vector3d}]{phid\+Dot }\end{DoxyParamCaption})}
+
+
+
+Computation of the derivative for to get controlled values for the complete motion. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em q} & Actual joint cinfiguration. \\
+\hline
+{\em xe} & Actual end effector position. \\
+\hline
+{\em xd} & Desired end effector position \\
+\hline
+{\em vd} & Desired velocity of the end effector position \\
+\hline
+{\em Re} & Acual end effector orentation \\
+\hline
+{\em phid} & Desired end effector orientation \\
+\hline
+{\em phid\+Dot} & Desired angular velocity of the end effector orientation \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Vector x6 with the result fo the computation.
+\end{DoxyReturn}
+Computation of the derivative for to get controlled values for the complete motion.
+
+
+\begin{DoxyParams}{Parameters}
+{\em q} & Current joint configuration. \\
+\hline
+{\em xe} & Current end effector position. \\
+\hline
+{\em xd} & Desired end effector position. \\
+\hline
+{\em vd} & Desired end effector velocity. \\
+\hline
+{\em Re} & Current end effector orientation matrix. \\
+\hline
+{\em phid} & Desired end effector orientation angles. \\
+\hline
+{\em phid\+Dot} & Desired end effector angular velocity. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Joint velocity vector. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{functions_8h_aa6facbc0a2b16de9106fb568e6592321}\label{functions_8h_aa6facbc0a2b16de9106fb568e6592321}} 
+\index{functions.h@{functions.h}!eulerToRotationMatrix@{eulerToRotationMatrix}}
+\index{eulerToRotationMatrix@{eulerToRotationMatrix}!functions.h@{functions.h}}
+\doxysubsubsection{\texorpdfstring{eulerToRotationMatrix()}{eulerToRotationMatrix()}}
+{\footnotesize\ttfamily Eigen\+::\+Matrix3d euler\+To\+Rotation\+Matrix (\begin{DoxyParamCaption}\item[{Eigen\+::\+Vector3d}]{euler }\end{DoxyParamCaption})}
+
+
+
+Comutation of the transformation from the euler angles to the rotation matrix. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em euler} & Vector x3 with the computed euler angles. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Matrix 3x3 with the roatation matrix.
+\end{DoxyReturn}
+Comutation of the transformation from the euler angles to the rotation matrix.
+
+
+\begin{DoxyParams}{Parameters}
+{\em euler} & Vector of Euler angles (roll, pitch, yaw). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Rotation matrix. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{functions_8h_a6554526377e6335086b8b08f84fd4b13}\label{functions_8h_a6554526377e6335086b8b08f84fd4b13}} 
+\index{functions.h@{functions.h}!jacobian@{jacobian}}
+\index{jacobian@{jacobian}!functions.h@{functions.h}}
+\doxysubsubsection{\texorpdfstring{jacobian()}{jacobian()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{typedefs_8h_a16e6a0b9ee4501eb85564fa86b7011fa}{Matrix66d}} jacobian (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{typedefs_8h_a13a6330b4a41b96b124a1ab827e22be8}{Vector6d}}}]{Th }\end{DoxyParamCaption})}
+
+
+
+Comutation of the jacobian of the UR5 robotic arm. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Th} & The vector of joint angles. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Matrix 6x6 with the result fo the computation.
+\end{DoxyReturn}
+Comutation of the jacobian of the UR5 robotic arm.
+
+
+\begin{DoxyParams}{Parameters}
+{\em Th} & Vector of joint angles. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Jacobian matrix (Matrix66d). 
+\end{DoxyReturn}
+\mbox{\Hypertarget{functions_8h_a957c7cb97bcaa1558f284cbf3d451604}\label{functions_8h_a957c7cb97bcaa1558f284cbf3d451604}} 
+\index{functions.h@{functions.h}!pd@{pd}}
+\index{pd@{pd}!functions.h@{functions.h}}
+\doxysubsubsection{\texorpdfstring{pd()}{pd()}}
+{\footnotesize\ttfamily Eigen\+::\+Vector3d pd (\begin{DoxyParamCaption}\item[{double}]{t,  }\item[{Eigen\+::\+Vector3d}]{xef,  }\item[{Eigen\+::\+Vector3d}]{xe0 }\end{DoxyParamCaption})}
+
+
+
+Comutation of the desired linear velocity for a dt. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em t} & current time stamp. \\
+\hline
+{\em xef} & Vector x3 Final position of the end effector. \\
+\hline
+{\em xe0} & Vector x3 Intiial position of the end effector. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Vector x3 The computed linear velocity.
+\end{DoxyReturn}
+Comutation of the desired linear velocity for a dt.
+
+
+\begin{DoxyParams}{Parameters}
+{\em t} & Time parameter. \\
+\hline
+{\em xef} & Final end effector position. \\
+\hline
+{\em xe0} & Initial end effector position. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Desired end effector position. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{functions_8h_aa4b27d8fa11dc4a32d6fa04443b6428b}\label{functions_8h_aa4b27d8fa11dc4a32d6fa04443b6428b}} 
+\index{functions.h@{functions.h}!phid@{phid}}
+\index{phid@{phid}!functions.h@{functions.h}}
+\doxysubsubsection{\texorpdfstring{phid()}{phid()}}
+{\footnotesize\ttfamily Eigen\+::\+Vector3d phid (\begin{DoxyParamCaption}\item[{double}]{t,  }\item[{Eigen\+::\+Vector3d}]{phief,  }\item[{Eigen\+::\+Vector3d}]{phie0 }\end{DoxyParamCaption})}
+
+
+
+Comutation of the desired angular velocity for a dt. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em t} & current time stamp. \\
+\hline
+{\em phief} & Vector x3 Final orientation of the end effector. \\
+\hline
+{\em phie0} & Vector x3 Intiial orientation of the end effector. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Vector x3 The computed angular velocity.
+\end{DoxyReturn}
+Comutation of the desired angular velocity for a dt.
+
+
+\begin{DoxyParams}{Parameters}
+{\em t} & Time parameter. \\
+\hline
+{\em phief} & Final end effector orientation angles. \\
+\hline
+{\em phie0} & Initial end effector orientation angles. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Desired end effector orientation. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{functions_8h_a05933f25d5ee713c823c9a185349e49c}\label{functions_8h_a05933f25d5ee713c823c9a185349e49c}} 
+\index{functions.h@{functions.h}!pseudoInverse@{pseudoInverse}}
+\index{pseudoInverse@{pseudoInverse}!functions.h@{functions.h}}
+\doxysubsubsection{\texorpdfstring{pseudoInverse()}{pseudoInverse()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{typedefs_8h_a16e6a0b9ee4501eb85564fa86b7011fa}{Matrix66d}} pseudo\+Inverse (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{typedefs_8h_a16e6a0b9ee4501eb85564fa86b7011fa}{Matrix66d}}}]{J }\end{DoxyParamCaption})}
+
+
+
+Comutation of the pseudo inverse of the UR5 robotic arm. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em J} & The jacobian of the UR5 robotic arm. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Matrix 6x6 with the result fo the computation.
+\end{DoxyReturn}
+Comutation of the pseudo inverse of the UR5 robotic arm.
+
+
+\begin{DoxyParams}{Parameters}
+{\em J} & Jacobian matrix (6x6). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Pseudo-\/inverse of the Jacobian matrix. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{functions_8h_a1c1653c3fd3b7edc544233023617db24}\label{functions_8h_a1c1653c3fd3b7edc544233023617db24}} 
+\index{functions.h@{functions.h}!repulForce@{repulForce}}
+\index{repulForce@{repulForce}!functions.h@{functions.h}}
+\doxysubsubsection{\texorpdfstring{repulForce()}{repulForce()}}
+{\footnotesize\ttfamily Eigen\+::\+Vector3d repul\+Force (\begin{DoxyParamCaption}\item[{Eigen\+::\+Vector3d}]{xe }\end{DoxyParamCaption})}
+
+
+
+Comutation of the repulsive force in order to keep the end effector away from the shoulder singularity. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em xe} & actual end effector posiiton. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Vector x3 with the result of the computation of the repulsive force.
+\end{DoxyReturn}
+Comutation of the repulsive force in order to keep the end effector away from the shoulder singularity.
+
+
+\begin{DoxyParams}{Parameters}
+{\em xe} & End effector position vector. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Repulsive force vector. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{functions_8h_adf563da6aa6fa51b2b4a64c4e696e8df}\label{functions_8h_adf563da6aa6fa51b2b4a64c4e696e8df}} 
+\index{functions.h@{functions.h}!rotMatToEuler@{rotMatToEuler}}
+\index{rotMatToEuler@{rotMatToEuler}!functions.h@{functions.h}}
+\doxysubsubsection{\texorpdfstring{rotMatToEuler()}{rotMatToEuler()}}
+{\footnotesize\ttfamily Eigen\+::\+Vector3d rot\+Mat\+To\+Euler (\begin{DoxyParamCaption}\item[{Eigen\+::\+Matrix3d}]{rot\+Matrix }\end{DoxyParamCaption})}
+
+
+
+Comutation of the transformation from the rotation matrix to the euler angles. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em R} & Matrix 3x3 with the roatation matrix. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Vector x3 with the computed euler angles.
+\end{DoxyReturn}
+Comutation of the transformation from the rotation matrix to the euler angles.
+
+
+\begin{DoxyParams}{Parameters}
+{\em rot\+Matrix} & Rotation matrix. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Vector of Euler angles (roll, pitch, yaw). 
+\end{DoxyReturn}
+\mbox{\Hypertarget{functions_8h_af2fb858d55167799814120e6022aba9e}\label{functions_8h_af2fb858d55167799814120e6022aba9e}} 
+\index{functions.h@{functions.h}!rotmToAngleAxis@{rotmToAngleAxis}}
+\index{rotmToAngleAxis@{rotmToAngleAxis}!functions.h@{functions.h}}
+\doxysubsubsection{\texorpdfstring{rotmToAngleAxis()}{rotmToAngleAxis()}}
+{\footnotesize\ttfamily Eigen\+::\+Vector3d rotm\+To\+Angle\+Axis (\begin{DoxyParamCaption}\item[{Eigen\+::\+Matrix3d}]{R }\end{DoxyParamCaption})}
+
+
+
+Comutation of the transformation from the rotation matrix to the euler angles. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em R} & Matrix 3x3 with the roatation matrix. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Vector x3 with the computed euler angles.
+\end{DoxyReturn}
+Comutation of the transformation from the rotation matrix to the euler angles.
+
+
+\begin{DoxyParams}{Parameters}
+{\em R} & Rotation matrix. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Axis-\/angle representation vector. 
+\end{DoxyReturn}
+
+
+\doxysubsection{Variable Documentation}
+\mbox{\Hypertarget{functions_8h_abef19d0091b013c246a9427f9787f1cc}\label{functions_8h_abef19d0091b013c246a9427f9787f1cc}} 
+\index{functions.h@{functions.h}!deltaT@{deltaT}}
+\index{deltaT@{deltaT}!functions.h@{functions.h}}
+\doxysubsubsection{\texorpdfstring{deltaT}{deltaT}}
+{\footnotesize\ttfamily const double deltaT = 0.\+001}
+

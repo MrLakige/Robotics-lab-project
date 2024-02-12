@@ -1,0 +1,119 @@
+\hypertarget{inverseDifferentialKinematics_8h}{}\doxysection{kinematics/include/inverse\+Differential\+Kinematics.h File Reference}
+\label{inverseDifferentialKinematics_8h}\index{kinematics/include/inverseDifferentialKinematics.h@{kinematics/include/inverseDifferentialKinematics.h}}
+
+
+Header file for inverse differential kinematics functions.  
+
+
+{\ttfamily \#include \char`\"{}typedefs.\+h\char`\"{}}\newline
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+Eigen\+::\+Matrix\+Xd \mbox{\hyperlink{inverseDifferentialKinematics_8h_abaa99e7c6f6970639b97612650fb7a9f}{inverse\+Diff\+Kinematics}} (Eigen\+::\+Vector\+Xd th, Eigen\+::\+Vector3d end\+Pos, Eigen\+::\+Vector3d end\+Orientation)
+\begin{DoxyCompactList}\small\item\em Function that compute the inverse differential kinematics for UR5 robotic arm. \end{DoxyCompactList}\item 
+Eigen\+::\+Matrix\+Xd \mbox{\hyperlink{inverseDifferentialKinematics_8h_a5d4f34d9d6a27d76fc4d99a9344387d5}{inverse\+Diff\+Kinematics\+Control\+Complete}} (\mbox{\hyperlink{typedefs_8h_a13a6330b4a41b96b124a1ab827e22be8}{Vector6d}} th, Eigen\+::\+Vector3d end\+Pos, Eigen\+::\+Vector3d end\+Orientation)
+\begin{DoxyCompactList}\small\item\em Function that compute the inverse differential kinematics for UR5 robotic arm for a complete control motion. \end{DoxyCompactList}\item 
+Eigen\+::\+Matrix\+Xd \mbox{\hyperlink{inverseDifferentialKinematics_8h_a3cad1bf587d1f13f8c1c4a6704f3e725}{inverse\+Diff\+Kinematics\+Control\+Complete\+Angles\+Axis}} (\mbox{\hyperlink{typedefs_8h_a13a6330b4a41b96b124a1ab827e22be8}{Vector6d}} th, Eigen\+::\+Vector3d end\+Pos, Eigen\+::\+Vector3d end\+Orientation)
+\begin{DoxyCompactList}\small\item\em Function that compute the inverse differential kinematics for UR5 robotic arm for a complete anglular axis motion. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Header file for inverse differential kinematics functions. 
+
+
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{inverseDifferentialKinematics_8h_abaa99e7c6f6970639b97612650fb7a9f}\label{inverseDifferentialKinematics_8h_abaa99e7c6f6970639b97612650fb7a9f}} 
+\index{inverseDifferentialKinematics.h@{inverseDifferentialKinematics.h}!inverseDiffKinematics@{inverseDiffKinematics}}
+\index{inverseDiffKinematics@{inverseDiffKinematics}!inverseDifferentialKinematics.h@{inverseDifferentialKinematics.h}}
+\doxysubsubsection{\texorpdfstring{inverseDiffKinematics()}{inverseDiffKinematics()}}
+{\footnotesize\ttfamily Eigen\+::\+Matrix\+Xd inverse\+Diff\+Kinematics (\begin{DoxyParamCaption}\item[{Eigen\+::\+Vector\+Xd}]{th,  }\item[{Eigen\+::\+Vector3d}]{end\+Pos,  }\item[{Eigen\+::\+Vector3d}]{end\+Orientation }\end{DoxyParamCaption})}
+
+
+
+Function that compute the inverse differential kinematics for UR5 robotic arm. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em th} & Actual joints configuration of the robot \\
+\hline
+{\em end\+Pos} & Deisred target position of the end effector \\
+\hline
+{\em end\+Orientation} & Deisred target rotation of the end effector \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Matrix\+Xd filled with the via points (joint configurations) to achieve the desired position and orientation
+\end{DoxyReturn}
+Function that compute the inverse differential kinematics for UR5 robotic arm.
+
+
+\begin{DoxyParams}{Parameters}
+{\em th} & Initial joint configuration. \\
+\hline
+{\em end\+Pos} & Desired end effector position. \\
+\hline
+{\em end\+Orientation} & Desired end effector orientation. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Matrix containing joint configurations over time. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{inverseDifferentialKinematics_8h_a5d4f34d9d6a27d76fc4d99a9344387d5}\label{inverseDifferentialKinematics_8h_a5d4f34d9d6a27d76fc4d99a9344387d5}} 
+\index{inverseDifferentialKinematics.h@{inverseDifferentialKinematics.h}!inverseDiffKinematicsControlComplete@{inverseDiffKinematicsControlComplete}}
+\index{inverseDiffKinematicsControlComplete@{inverseDiffKinematicsControlComplete}!inverseDifferentialKinematics.h@{inverseDifferentialKinematics.h}}
+\doxysubsubsection{\texorpdfstring{inverseDiffKinematicsControlComplete()}{inverseDiffKinematicsControlComplete()}}
+{\footnotesize\ttfamily Eigen\+::\+Matrix\+Xd inverse\+Diff\+Kinematics\+Control\+Complete (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{typedefs_8h_a13a6330b4a41b96b124a1ab827e22be8}{Vector6d}}}]{th,  }\item[{Eigen\+::\+Vector3d}]{end\+Pos,  }\item[{Eigen\+::\+Vector3d}]{end\+Orientation }\end{DoxyParamCaption})}
+
+
+
+Function that compute the inverse differential kinematics for UR5 robotic arm for a complete control motion. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em th} & Actual joints configuration of the robot \\
+\hline
+{\em end\+Pos} & Deisred target position of the end effector \\
+\hline
+{\em end\+Orientation} & Deisred target rotation of the end effector \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Matrix\+Xd filled with the via points (joint configurations) to achieve the desired position and orientation
+\end{DoxyReturn}
+Function that compute the inverse differential kinematics for UR5 robotic arm for a complete control motion.
+
+
+\begin{DoxyParams}{Parameters}
+{\em th} & Initial joint configuration. \\
+\hline
+{\em end\+Pos} & Desired end effector position. \\
+\hline
+{\em end\+Orientation} & Desired end effector orientation. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Matrix containing joint configurations over time. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{inverseDifferentialKinematics_8h_a3cad1bf587d1f13f8c1c4a6704f3e725}\label{inverseDifferentialKinematics_8h_a3cad1bf587d1f13f8c1c4a6704f3e725}} 
+\index{inverseDifferentialKinematics.h@{inverseDifferentialKinematics.h}!inverseDiffKinematicsControlCompleteAnglesAxis@{inverseDiffKinematicsControlCompleteAnglesAxis}}
+\index{inverseDiffKinematicsControlCompleteAnglesAxis@{inverseDiffKinematicsControlCompleteAnglesAxis}!inverseDifferentialKinematics.h@{inverseDifferentialKinematics.h}}
+\doxysubsubsection{\texorpdfstring{inverseDiffKinematicsControlCompleteAnglesAxis()}{inverseDiffKinematicsControlCompleteAnglesAxis()}}
+{\footnotesize\ttfamily Eigen\+::\+Matrix\+Xd inverse\+Diff\+Kinematics\+Control\+Complete\+Angles\+Axis (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{typedefs_8h_a13a6330b4a41b96b124a1ab827e22be8}{Vector6d}}}]{th,  }\item[{Eigen\+::\+Vector3d}]{end\+Pos,  }\item[{Eigen\+::\+Vector3d}]{end\+Orientation }\end{DoxyParamCaption})}
+
+
+
+Function that compute the inverse differential kinematics for UR5 robotic arm for a complete anglular axis motion. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em th} & Actual joints configuration of the robot \\
+\hline
+{\em end\+Pos} & Deisred target position of the end effector \\
+\hline
+{\em end\+Orientation} & Deisred target rotation of the end effector \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Matrix\+Xd filled with the via points (joint configurations) to achieve the desired position and orientation 
+\end{DoxyReturn}
