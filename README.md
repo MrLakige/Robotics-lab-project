@@ -6,7 +6,7 @@ Repository of robotics laboratory project
 Project based on ROS, <br>
 The goal of this project is recognize certain Mega Bloks bricks using zed2 stereo camera, and then move the robotic arm to take the bricks and move to another position<br>
 framework used: [ROS-noetic](https://wiki.ros.org/noetic)<br>
-####Documentation
+#### Documentation
 Project documentation [here](https://mrlakige.github.io/Robotics-lab-project/)
 ___
 ## Video
