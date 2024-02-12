@@ -9,7 +9,7 @@ framework used: [ROS-noetic](https://wiki.ros.org/noetic)
 ___
 ## Video
 
-[![Watch the video](https://i3.ytimg.com/vi/kgfko_N8W6o/maxresdefault.jpg)](https://youtu.be/kgfko_N8W6o)
+[![Watch the video](https://i3.ytimg.com/vi/Jikigpxwn9s/maxresdefault.jpg)](https://www.youtube.com/watch?v=Jikigpxwn9s)
 ___
 ## Installation and Requirements <br>
 download and install ROS [(guide here)](https://github.com/mfocchi/locosim) <br>
