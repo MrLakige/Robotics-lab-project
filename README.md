@@ -54,20 +54,42 @@ source devel/setup.bash
     python3 ur5_generic.py
     ```
 2. Bricks spawn, you can choose the difficult type level<br>
-        Levels: spawner1Default.py, spawner2Default.py, spawner1.py, spawner2.py 
+   LEVELS: <br>
+   Level 1 
+   ```bash
+   rosrun spawner spawner1.py
+   ```
+    Level 2
     ```bash
-    rosrun spawner spawner_level
+    rosrun spawner spawner2.py
     ```
-3. Run kinematics, 2 levels are available<br>
-    level 1
+    Level 3
     ```bash
-    rosrun kinematics kinematics 1
+    rosrun spawner spawner3.py
     ```
-    level 2
+    Level 4
     ```bash
-    rosrun kinematics kinematics 2
+    rosrun spawner spawner4.py
     ```
-4. Run bricks vision recognition<br>
+4. Run kinematics, 2 levels are available<br>
+    LEVELS: <br>
+    Level 1
+   ```bash
+   rosrun kinematics kinematics 1
+   ```
+    Level 2
+   ```bash
+   rosrun kinematics kinematics 2
+   ```
+    Level 3
+   ```bash
+   rosrun kinematics kinematics 3
+   ```
+    Level 4
+   ```bash
+   rosrun kinematics kinematics 4
+   ```
+5. Run bricks vision recognition<br>
     without graphical output
     ```bash
     rosrun vision vision_node.py
