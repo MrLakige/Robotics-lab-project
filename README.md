@@ -5,14 +5,16 @@ Repository of robotics laboratory project
 ## Description
 Project based on ROS, <br>
 The goal of this project is recognize certain Mega Bloks bricks using zed2 stereo camera, and then move the robotic arm to take the bricks and move to another position<br>
-framework used: [ROS-noetic](https://wiki.ros.org/noetic)
+framework used: [ROS-noetic](https://wiki.ros.org/noetic)<br>
+####Documentation
+Project documentation [here](https://mrlakige.github.io/Robotics-lab-project/)
 ___
 ## Video
 
 [![Watch the video](https://i3.ytimg.com/vi/Jikigpxwn9s/maxresdefault.jpg)](https://www.youtube.com/watch?v=Jikigpxwn9s)
 ___
 ## Installation and Requirements <br>
-download and install ROS [(guide here)](https://github.com/mfocchi/locosim) <br>
+Download and install ROS [(guide here)](https://github.com/mfocchi/locosim) <br>
 #### Kinematics part
 Install `eigen` library
 ```bash
